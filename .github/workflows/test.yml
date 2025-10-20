@@ -31,7 +31,7 @@ jobs:
       - name: Check Formatting
         if: always()
         run: npm run check:formatting
-      
+
       - name: Lint check
         if: always()
         run: npm run check:lint
@@ -39,4 +39,3 @@ jobs:
       - name: Type check
         if: always()
         run: npm run check:types
-
