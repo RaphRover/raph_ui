@@ -1,12 +1,62 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>raph_ui</title>
+    <title>Raph Rover UI</title>
   </head>
+  <style>
+    body {
+      background-color: black;
+    }
+    noscript {
+      font-family:
+        -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      color: white;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      margin-top: 10rem;
+    }
+    noscript img {
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+    }
+    noscript p {
+      font-size: larger;
+      margin: 0 0.5rem 0 0.5rem;
+    }
+  </style>
   <body>
+    <noscript>
+      <img
+        src="/favicon/favicon-96x96.png"
+        alt="Raph rover UI"
+        width="96"
+        height="96"
+      />
+      <p>
+        Raph Rover UI requires JavaScript to run. Please enable JavaScript in
+        your browser settings and reload the page.
+      </p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
