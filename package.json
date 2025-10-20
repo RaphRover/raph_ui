@@ -14,8 +14,14 @@
     "check": "npm run check:lint && npm run check:types && npm run check:formatting"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
+    "clsx": "^2.1.1",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.1.1",
+    "react-joystick-component": "^6.2.1",
+    "react-toastify": "^11.0.5",
+    "roslib": "^1.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
