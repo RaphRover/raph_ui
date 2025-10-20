@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,mdx,css}\"",
-    "formatcheck": "prettier --check \"**/*.{js,jsx,ts,tsx,mdx,css}\""
+    "format": "prettier --write .",
+    "check:lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "check:types": "tsc --noEmit",
+    "check:formatting": "prettier --check .",
+    "check": "npm run check:lint && npm run check:types && npm run check:formatting"
   },
   "dependencies": {
     "react": "^19.1.1",

@@ -13,17 +13,30 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
       - name: Test build UI
         run: npm run build
+
       - name: Check Formatting
-        run: npm run formatcheck
-      - name: Lint Code
-        run: npm run lint
+        if: always()
+        run: npm run check:formatting
+      
+      - name: Lint check
+        if: always()
+        run: npm run check:lint
+
+      - name: Type check
+        if: always()
+        run: npm run check:types
+
