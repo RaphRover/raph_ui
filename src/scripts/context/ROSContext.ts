@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import * as ROSLIB from 'roslib';
 
 interface ROSContextProps {
-  ros: ROSLIB.Ros;
+  ros: ROSLIB.Ros|null;
 }
 
 export const ROSContext = createContext<ROSContextProps | undefined>(undefined);

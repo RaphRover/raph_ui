@@ -1,28 +1,25 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as ROSLIB from 'roslib';
 import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
 
 export default function useROS(
   ip: string,
   reconnectInterval = 6000,
-): ROSLIB.Ros {
+): ROSLIB.Ros|null {
+  const [ros, setRos] = useState<ROSLIB.Ros | null>(null);
+
   const url = `ws://${ip}:9090`;
   const toastId = 'ros';
-  const ros = useMemo(
-    () =>
-      new ROSLIB.Ros({
-        url,
-      }),
-    [url],
-  );
   const isInitialDisconnect = useRef(false);
 
   useEffect(() => {
     console.debug('[useROS] Setting up ROS connection effect');
-    const connectToROS = () => {
-      ros.connect(url);
+    const rosInstance = new ROSLIB.Ros({ url });
 
-      console.log('Connecting to ROS at:', url);
+    const connectToROS = () => {
+      rosInstance.connect(url);
+
+      console.log('[useROS] Connecting to ROS at:', url);
       showOrUpdateToast('Connecting to ROS...', {
         isLoading: true,
         toastId,
@@ -32,13 +29,14 @@ export default function useROS(
     // ROS events
 
     const connectionListener = () => {
-      console.info('Connected to ROS');
+      console.info('[useROS] Connected to ROS');
       showOrUpdateToast('Connection to ROS established', {
         type: 'success',
         isLoading: false,
         toastId,
       });
       isInitialDisconnect.current = true;
+      setRos(rosInstance);
     };
 
     const errorListener = () => {
@@ -48,6 +46,7 @@ export default function useROS(
         isLoading: false,
         toastId,
       });
+      setRos(null);
     };
 
     const disconnectListener = () => {
@@ -59,23 +58,25 @@ export default function useROS(
           toastId,
         });
       isInitialDisconnect.current = false;
+      setRos(null);
       setTimeout(() => connectToROS(), reconnectInterval);
     };
 
-    ros.on('connection', connectionListener);
-    ros.on('error', errorListener);
-    ros.on('close', disconnectListener);
+    rosInstance.on('connection', connectionListener);
+    rosInstance.on('error', errorListener);
+    rosInstance.on('close', disconnectListener);
 
     connectToROS();
 
     return () => {
       console.debug('[useROS] Cleaning up ROS connection effect');
-      ros.close();
-      ros.off('connection', connectionListener);
-      ros.off('error', errorListener);
-      ros.off('close', disconnectListener);
+      rosInstance.close();
+      rosInstance.off('connection', connectionListener);
+      rosInstance.off('error', errorListener);
+      rosInstance.off('close', disconnectListener);
+      setRos(null);
     };
-  }, [reconnectInterval, ros, url]);
+  }, [reconnectInterval, url]);
 
   return ros;
 }
