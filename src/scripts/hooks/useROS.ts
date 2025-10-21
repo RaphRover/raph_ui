@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as ROSLIB from 'roslib';
 import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
 
-export default function useROS(
+export default function useRos(
   ip: string,
   reconnectInterval = 6000,
 ): ROSLIB.Ros | null {
