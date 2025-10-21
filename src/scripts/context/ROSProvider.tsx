@@ -10,11 +10,10 @@ export const ROSProvider: React.FC<{ children: React.ReactNode }> = ({
   const { rosIp, intervals } = config;
   const ros = useRos(rosIp, intervals.rosReconnect);
   const topicManager = useRosTopicManager(ros);
-  const topicList = useRosTopicList( ros );
-  console.debug('[ROSProvider] Rendering ROSProvider' , topicList);
+  const topicList = useRosTopicList(ros);
 
   return (
-    <ROSContext.Provider value={{ ros, topicList , topicManager }}>
+    <ROSContext.Provider value={{ ros, topicList, topicManager }}>
       {children}
     </ROSContext.Provider>
   );
