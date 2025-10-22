@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import ROSStatus from '@components/ROSStatus';
+import BatteryStatus from '@components/BatteryStatus';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 850 });
@@ -28,10 +29,7 @@ export default function RaphNavbar() {
         }}
       >
         <ROSStatus />
-        <Frame>
-          <div>Battery 1: 100%</div>
-          <div>Battery 2: 100%</div>
-        </Frame>
+        <BatteryStatus />
         <Frame>
           <div>IMU readings: Roll: 180.00</div>
           <div>Pitch: 180.00 | Yaw: 180.00</div>
