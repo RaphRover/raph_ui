@@ -9,8 +9,8 @@ import {
   Row,
   Stack,
 } from 'react-bootstrap';
-import Dummy from '@root/public/favicon/favicon.svg';
 import { useMediaQuery } from 'react-responsive';
+import ROSStatus from '@components/ROSStatus';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 850 });
@@ -24,20 +24,10 @@ export default function RaphNavbar() {
           justifySelf: 'left',
           width: !isDesktop ? '100%' : 'auto',
           marginTop: !isDesktop ? '0.5rem' : 0,
+          alignItems: 'stretch',
         }}
       >
-        <Frame style={{ height: '100%', alignContent: 'center' }}>
-          ROS Status:
-          <img
-            src={Dummy}
-            alt="ROS Status"
-            style={{
-              marginLeft: '0.5rem',
-              width: '21px',
-              marginBottom: '0.2rem',
-            }}
-          />
-        </Frame>
+        <ROSStatus />
         <Frame>
           <div>Battery 1: 100%</div>
           <div>Battery 2: 100%</div>
