@@ -1,0 +1,27 @@
+.frame {
+  min-width: 158.5px;
+}
+
+.blinkRed {
+  animation: blinkRedAnimation 1.5s steps(1, end) infinite;
+}
+
+.solidGreen {
+  color: var(--fl-green);
+}
+
+.solidYellow {
+  color: var(--fl-yellow);
+}
+
+@keyframes blinkRedAnimation {
+  0% {
+    color: var(--fl-red);
+  }
+  50% {
+    color: inherit;
+  }
+  100% {
+    color: var(--fl-red);
+  }
+}
