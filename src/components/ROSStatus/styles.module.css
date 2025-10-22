@@ -10,9 +10,9 @@
 }
 
 .green path {
-  fill: #4caf50;
+  fill: var(--fl-green);
 }
 
 .red path {
-  fill: #f44336;
+  fill: var(--fl-red);
 }
