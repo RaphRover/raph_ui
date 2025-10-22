@@ -29,13 +29,13 @@ export default function BatteryStatus() {
   return (
     <Frame className={styles.frame}>
       <div>
-        Battery 1:{' '}
+        <span>Battery 1: </span>
         <span className={batteryStyle(battery1Level)}>
           {battery1Level ? battery1Level.toFixed(2) + '%' : '-'}
         </span>
       </div>
       <div>
-        Battery 2:{' '}
+        <span>Battery 2: </span>
         <span className={batteryStyle(battery2Level)}>
           {battery2Level ? battery2Level.toFixed(2) + '%' : '-'}
         </span>
