@@ -1,6 +1,17 @@
+:root {
+  --fl-main: #c57b2c;
+  --fl-secondary: #2f302f;
+
+  --fl-background: #1c1c1c;
+
+  --fl-red: #d32f2f;
+  --fl-green: #388e3c;
+  --fl-yellow: darkgoldenrod;
+}
+
 [data-bs-theme='dark'] {
   color-scheme: dark;
-  --bs-body-bg: #1c1c1c;
+  --bs-body-bg: var(--fl-background-color);
   --bs-body-bg-rgb: 28, 28, 28;
   --bs-secondary-bg: #303030;
   --bs-secondary-bg-rgb: 30, 30, 30;
