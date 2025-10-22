@@ -10,11 +10,49 @@ import {
   Stack,
 } from 'react-bootstrap';
 import Dummy from '@root/public/favicon/favicon.svg';
+import { useMediaQuery } from 'react-responsive';
 
 export default function RaphNavbar() {
+  const isDesktop = useMediaQuery({ minWidth: 850 });
+
+  const infoPanel = () => {
+    return (
+      <Stack
+        direction={isDesktop ? 'horizontal' : 'vertical'}
+        gap={2}
+        style={{
+          justifySelf: 'left',
+          width: !isDesktop ? '100%' : 'auto',
+          marginTop: !isDesktop ? '0.5rem' : 0,
+        }}
+      >
+        <Frame style={{ height: '100%', alignContent: 'center' }}>
+          ROS Status:
+          <img
+            src={Dummy}
+            alt="ROS Status"
+            style={{
+              marginLeft: '0.5rem',
+              width: '21px',
+              marginBottom: '0.2rem',
+            }}
+          />
+        </Frame>
+        <Frame>
+          <div>Battery 1: 100%</div>
+          <div>Battery 2: 100%</div>
+        </Frame>
+        <Frame>
+          <div>IMU readings: Roll: 180.00</div>
+          <div>Pitch: 180.00 | Yaw: 180.00</div>
+        </Frame>
+      </Stack>
+    );
+  };
+
   return (
     <Navbar className="bg-body" expand="false" sticky="top">
-      <Container fluid>
+      <Container fluid className="justify-content-start">
         <Navbar.Brand href="/">
           <img
             alt="Raph Rover Logo"
@@ -27,32 +65,24 @@ export default function RaphNavbar() {
             Raph Rover
           </span>
         </Navbar.Brand>
-        <Navbar.Toggle // TEMP icon with rover steering mode
-          className="ms-auto"
-        />
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Stack direction="vertical" gap={2} style={{ justifySelf: 'left' }}>
-          <Frame>
-            ROS Status:
+        {isDesktop && infoPanel()}
+        <Stack direction="horizontal" gap={2} className="ms-auto">
+          <Frame style={{ height: '64px' }}>
             <img
-              src={Dummy}
-              alt="ROS Status"
-              style={{
-                marginLeft: '0.5rem',
-                width: '21px',
-                marginBottom: '0.2rem',
-              }}
+              alt="Raph Rover Logo"
+              src="/favicon/favicon.svg"
+              width="auto"
+              height="100%"
+              className="d-inline-block align-top"
             />
           </Frame>
-          <Frame>
-            <div>Battery 1: 100%</div>
-            <div>Battery 2: 100%</div>
-          </Frame>
-          <Frame>
-            <div>IMU readings: Roll: 180.00</div>
-            <div>Pitch: 180.00 | Yaw: 180.00</div>
-          </Frame>
+          <Navbar.Toggle
+            aria-controls="responsive-navbar-nav"
+            style={{ height: '100%' }}
+          />
         </Stack>
+
+        {!isDesktop && infoPanel()}
         <Navbar.Offcanvas
           placement="end"
           aria-labelledby="offcanvasNavbarLabel"
@@ -65,7 +95,7 @@ export default function RaphNavbar() {
               <Button variant="outline-secondary">Toggle Fullscreen</Button>
               <Button variant="outline-success">Toggle driving</Button>
               <Button variant="outline-info">Toggle steering mode</Button>
-              <Dropdown drop="start">
+              <Dropdown drop={isDesktop ? 'start' : 'down'}>
                 <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
                   Camera Streams
                 </Dropdown.Toggle>
