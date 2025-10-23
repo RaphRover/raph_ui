@@ -1,3 +1,5 @@
+import { Quaternion, Vector3 } from 'roslib';
+
 export interface BatteryModeMsg {
   charging: boolean;
   draining: boolean;
@@ -17,4 +19,25 @@ export interface PowerSystemStateMsg {
   energy: number;
   bat1_state: BatteryStateMsg;
   bat2_state: BatteryStateMsg;
+}
+
+type CovarianceArray = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+];
+
+export interface ImuMsg {
+  orientation: Quaternion;
+  orientation_covariance: CovarianceArray;
+  angular_velocity: Vector3;
+  angular_velocity_covariance: CovarianceArray;
+  linear_acceleration: Vector3;
+  linear_acceleration_covariance: CovarianceArray;
 }
