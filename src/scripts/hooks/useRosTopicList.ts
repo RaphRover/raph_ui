@@ -1,7 +1,6 @@
 import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
 import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import { Ros } from 'roslib';
-import { config } from '@scripts/config/config';
 
 export interface RosTopic {
   name: string;
@@ -28,9 +27,11 @@ function areTopicMapsEqual(
   return true;
 }
 
-export default function useRosStreams(ros: Ros | null): RosTopic[] {
+export default function useRosStreams(
+  ros: Ros | null,
+  refreshInterval: number = 10000,
+): RosTopic[] {
   const [topicMap, setTopicMap] = useState<Map<string, string>>(new Map());
-  const intervalConfig = config.intervals.rosTopicsPoll;
 
   const mapSize = useEffectEvent(() => topicMap.size);
 
@@ -71,12 +72,12 @@ export default function useRosStreams(ros: Ros | null): RosTopic[] {
 
     fetchTopics();
 
-    const intervalId = setInterval(fetchTopics, intervalConfig);
+    const intervalId = setInterval(fetchTopics, refreshInterval);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [intervalConfig, mapSize, ros]);
+  }, [refreshInterval, mapSize, ros]);
 
   const topicList = useMemo(() => {
     return Array.from(topicMap.entries()).map(([name, type]) => ({

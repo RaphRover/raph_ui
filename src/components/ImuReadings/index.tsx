@@ -1,6 +1,7 @@
 import Frame from '@components/ui/Frame';
 import useRosTopicSubscription from '@scripts/hooks/useRosTopicSubscription';
 import { clsx } from 'clsx';
+import { IMU_CONFIG } from '@scripts/config/config';
 
 import type { Quaternion } from 'roslib';
 import type { ImuMsg } from 'types/rosInterfaces';
@@ -14,10 +15,11 @@ interface Euler {
 }
 
 export default function ImuReadings() {
+  const { REFRESH_INTERVAL_MS, DISPLAY_PRECISION } = IMU_CONFIG;
   const imuReadings = useRosTopicSubscription<ImuMsg>(
     'controller/imu/data_raw',
     'sensor_msgs/msg/Imu',
-    10000,
+    REFRESH_INTERVAL_MS,
   );
 
   const quaternionToEuler = (q: Quaternion): Euler => {
@@ -55,13 +57,13 @@ export default function ImuReadings() {
       <div>IMU readings:</div>
       <div>
         <span className={styles.angle}>
-          Roll: {euler ? euler.roll.toFixed(2) : '-'}
+          Roll: {euler ? euler.roll.toFixed(DISPLAY_PRECISION) : '-'}
         </span>
         <span className={clsx(styles.angle, styles.spacing)}>
-          Pitch: {euler ? euler.pitch.toFixed(2) : '-'}
+          Pitch: {euler ? euler.pitch.toFixed(DISPLAY_PRECISION) : '-'}
         </span>
         <span className={styles.angle}>
-          Yaw: {euler ? euler.yaw.toFixed(2) : '-'}
+          Yaw: {euler ? euler.yaw.toFixed(DISPLAY_PRECISION) : '-'}
         </span>
       </div>
     </Frame>
