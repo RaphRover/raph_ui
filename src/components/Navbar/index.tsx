@@ -15,7 +15,7 @@ import BatteryStatus from '@components/BatteryStatus';
 import ImuReadings from '@components/ImuReadings';
 
 export default function RaphNavbar() {
-  const isDesktop = useMediaQuery({ minWidth: 850 });
+  const isDesktop = useMediaQuery({ minWidth: 950 });
 
   const infoPanel = () => {
     return (
