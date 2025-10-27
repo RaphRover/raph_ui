@@ -3,12 +3,12 @@ import * as ROSLIB from 'roslib';
 import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
 
 export default function useRos(
-  ip: string,
+  hostname: string,
   reconnectInterval = 6000,
 ): ROSLIB.Ros | null {
   const [ros, setRos] = useState<ROSLIB.Ros | null>(null);
 
-  const url = `ws://${ip}:9090`;
+  const url = `ws://${hostname}:9090`;
   const toastId = 'ros';
   const isInitialDisconnect = useRef(false);
 

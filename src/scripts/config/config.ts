@@ -1,5 +1,5 @@
 export const config = {
-  rosIp: '10.10.0.2',
+  rosHostname: import.meta.env.VITE_ROBOT_HOSTNAME || location.hostname,
   intervals: {
     // in milliseconds
     rosReconnect: 5000,

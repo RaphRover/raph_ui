@@ -7,8 +7,8 @@ import useRosTopicList from '@scripts/hooks/useRosTopicList';
 export const ROSProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { rosIp, intervals } = config;
-  const ros = useRos(rosIp, intervals.rosReconnect);
+  const { rosHostname: rosHostname, intervals } = config;
+  const ros = useRos(rosHostname, intervals.rosReconnect);
   const topicManager = useRosTopicManager(ros);
   const topicList = useRosTopicList(ros);
 
