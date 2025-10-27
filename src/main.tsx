@@ -11,22 +11,25 @@ import RaphNavbar from './components/Navbar/index.tsx';
 import { ROSProvider } from '@scripts/context/ROSProvider.tsx';
 import { Slide, ToastContainer } from 'react-toastify';
 import StreamWindow from '@components/StreamWindow/index.tsx';
+import { AppProvider } from '@scripts/context/AppProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ROSProvider>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        newestOnTop={true}
-        closeOnClick
-        draggable
-        theme="dark"
-        transition={Slide}
-        limit={5}
-      />
-      <RaphNavbar />
-      <StreamWindow />
+      <AppProvider>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          newestOnTop={true}
+          closeOnClick
+          draggable
+          theme="dark"
+          transition={Slide}
+          limit={5}
+        />
+        <RaphNavbar />
+        <StreamWindow />
+      </AppProvider>
     </ROSProvider>
   </StrictMode>,
 );
