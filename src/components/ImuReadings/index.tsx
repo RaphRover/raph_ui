@@ -17,10 +17,12 @@ interface Euler {
 export default function ImuReadings() {
   const { REFRESH_INTERVAL_MS, DISPLAY_PRECISION } = IMU_CONFIG;
   const imuReadings = useRosTopicSubscription<ImuMsg>(
-    'controller/imu/data_raw',
+    'controller/imu/data',
     'sensor_msgs/msg/Imu',
     REFRESH_INTERVAL_MS,
   );
+
+  const radToDeg = (rad: number) => (rad * 180) / Math.PI;
 
   const quaternionToEuler = (q: Quaternion): Euler => {
     const { x, y, z, w } = q;
@@ -57,13 +59,14 @@ export default function ImuReadings() {
       <div>IMU readings:</div>
       <div>
         <span className={styles.angle}>
-          Roll: {euler ? euler.roll.toFixed(DISPLAY_PRECISION) : '-'}
+          Roll: {euler ? radToDeg(euler.roll).toFixed(DISPLAY_PRECISION) : '-'}°
         </span>
         <span className={clsx(styles.angle, styles.spacing)}>
-          Pitch: {euler ? euler.pitch.toFixed(DISPLAY_PRECISION) : '-'}
+          Pitch:{' '}
+          {euler ? radToDeg(euler.pitch).toFixed(DISPLAY_PRECISION) : '-'}°
         </span>
         <span className={styles.angle}>
-          Yaw: {euler ? euler.yaw.toFixed(DISPLAY_PRECISION) : '-'}
+          Yaw: {euler ? radToDeg(euler.yaw).toFixed(DISPLAY_PRECISION) : '-'}°
         </span>
       </div>
     </Frame>
