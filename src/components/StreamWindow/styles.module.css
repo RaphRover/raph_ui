@@ -1,0 +1,19 @@
+.streamWrapper {
+  width: 100%;
+  text-align: center;
+  max-height: calc(100vh - 80px);
+}
+
+.stream {
+  height: 100%;
+  max-width: 100%;
+  max-height: calc(100vh - 80px);
+  object-fit: contain;
+  object-position: middle right;
+}
+
+@media screen and (max-width: 950px) {
+  .stream {
+    max-height: calc(100vh - 272px);
+  }
+}

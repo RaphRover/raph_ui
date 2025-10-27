@@ -10,6 +10,7 @@ import './index.css';
 import RaphNavbar from './components/Navbar/index.tsx';
 import { ROSProvider } from '@scripts/context/ROSProvider.tsx';
 import { Slide, ToastContainer } from 'react-toastify';
+import StreamWindow from '@components/StreamWindow/index.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
         limit={5}
       />
       <RaphNavbar />
+      <StreamWindow />
     </ROSProvider>
   </StrictMode>,
 );
