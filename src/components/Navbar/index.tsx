@@ -9,11 +9,13 @@ import {
   Row,
   Stack,
 } from 'react-bootstrap';
-import Dummy from '@root/public/favicon/favicon.svg';
 import { useMediaQuery } from 'react-responsive';
+import ROSStatus from '@components/ROSStatus';
+import BatteryStatus from '@components/BatteryStatus';
+import ImuReadings from '@components/ImuReadings';
 
 export default function RaphNavbar() {
-  const isDesktop = useMediaQuery({ minWidth: 850 });
+  const isDesktop = useMediaQuery({ minWidth: 950 });
 
   const infoPanel = () => {
     return (
@@ -24,28 +26,12 @@ export default function RaphNavbar() {
           justifySelf: 'left',
           width: !isDesktop ? '100%' : 'auto',
           marginTop: !isDesktop ? '0.5rem' : 0,
+          alignItems: 'stretch',
         }}
       >
-        <Frame style={{ height: '100%', alignContent: 'center' }}>
-          ROS Status:
-          <img
-            src={Dummy}
-            alt="ROS Status"
-            style={{
-              marginLeft: '0.5rem',
-              width: '21px',
-              marginBottom: '0.2rem',
-            }}
-          />
-        </Frame>
-        <Frame>
-          <div>Battery 1: 100%</div>
-          <div>Battery 2: 100%</div>
-        </Frame>
-        <Frame>
-          <div>IMU readings: Roll: 180.00</div>
-          <div>Pitch: 180.00 | Yaw: 180.00</div>
-        </Frame>
+        <ROSStatus />
+        <BatteryStatus />
+        <ImuReadings />
       </Stack>
     );
   };

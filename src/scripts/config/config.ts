@@ -1,8 +1,18 @@
-export const config = {
-  rosHostname: import.meta.env.VITE_ROBOT_HOSTNAME || location.hostname,
-  intervals: {
-    // in milliseconds
-    rosReconnect: 5000,
-    rosTopicsPoll: 5000,
-  },
+export const ROS_CONFIG = {
+  HOSTNAME: import.meta.env.VITE_ROBOT_HOSTNAME || location.hostname,
+  PORT: 9090,
+  RECONNECT_INTERVAL_MS: 5000,
+  TOPIC_POLL_INTERVAL_MS: 5000,
+};
+
+export const BATTERY_CONFIG = {
+  REFRESH_INTERVAL_MS: 1000,
+  DISPLAY_PRECISION: 2,
+  CRITICAL_LEVEL_PERCENT: 20,
+  WARNING_LEVEL_PERCENT: 60,
+};
+
+export const IMU_CONFIG = {
+  REFRESH_INTERVAL_MS: 1000,
+  DISPLAY_PRECISION: 2,
 };

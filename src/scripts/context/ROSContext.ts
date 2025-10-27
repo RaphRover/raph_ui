@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
-import * as ROSLIB from 'roslib';
+import { Ros } from 'roslib';
 import type { TopicManager } from '@scripts/hooks/useRosTopicManager';
 import type { RosTopic } from '@scripts/hooks/useRosTopicList';
 
 interface ROSContextProps {
-  ros: ROSLIB.Ros | null;
+  ros: Ros | null;
   topicManager: TopicManager;
   topicList: RosTopic[];
 }
