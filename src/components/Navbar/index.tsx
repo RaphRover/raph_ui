@@ -1,4 +1,4 @@
-import { Container, Navbar } from 'react-bootstrap'
+import { Container, Navbar } from 'react-bootstrap';
 
 export default function RaphNavbar() {
   return (
@@ -16,5 +16,5 @@ export default function RaphNavbar() {
         </Navbar.Brand>
       </Container>
     </Navbar>
-  )
+  );
 }

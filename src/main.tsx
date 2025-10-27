@@ -1,16 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 
 // CSS styles
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'react-toastify/dist/ReactToastify.css'
-import './index.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './index.css';
 
 // Other imports
-import RaphNavbar from './components/Navbar/index.tsx'
+import RaphNavbar from './components/Navbar/index.tsx';
+import { ROSProvider } from '@scripts/context/ROSProvider.tsx';
+import { Slide, ToastContainer } from 'react-toastify';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RaphNavbar />
-  </StrictMode>
-)
+    <ROSProvider>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        newestOnTop={true}
+        closeOnClick
+        draggable
+        theme="dark"
+        transition={Slide}
+        limit={5}
+      />
+      <RaphNavbar />
+    </ROSProvider>
+  </StrictMode>,
+);

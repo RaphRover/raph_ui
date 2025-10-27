@@ -1,11 +1,11 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import pluginReact from 'eslint-plugin-react'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import eslintConfigPrettier from 'eslint-config-prettier/flat'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import pluginReact from 'eslint-plugin-react';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
+import tseslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -30,7 +30,8 @@ export default defineConfig([
       },
     },
     rules: {
-      'react/react-in-jsx-scope': 'off',
+      'react/react-in-jsx-scope': 'off', // not needed with React 17+
+      'react/prop-types': 'off', // not needed when using typescript
     },
   },
-])
+]);
