@@ -5,7 +5,7 @@ export const ROS_CONFIG = {
   TOPIC_POLL_INTERVAL_MS: 5000,
 };
 
-export const DEFAULT_STREAM_NAME = "/oak/rgb/image_raw/compressed";
+export const DEFAULT_STREAM_NAME = '/oak/rgb/image_raw/compressed';
 
 export const BATTERY_CONFIG = {
   REFRESH_INTERVAL_MS: 1000,

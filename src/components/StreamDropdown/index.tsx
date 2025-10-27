@@ -16,7 +16,7 @@ export default function StreamDropdown(props: StreamDropdownProps) {
     const stream = streamList.find((stream) => stream.name === eventKey);
     if (stream) {
       selectStream(stream);
-      console.debug( '[StreamDropdown] Selected stream:', stream.name );
+      console.debug('[StreamDropdown] Selected stream:', stream.name);
     }
   };
 
