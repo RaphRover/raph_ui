@@ -28,11 +28,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         DEFAULT_STREAM_NAME,
       );
     }
-
-    return () => {
-      selectStream(null);
-    };
-  }, [selectedStream, streamList, streamList.length]);
+  }, [selectedStream, streamList]);
 
   return (
     <AppContext.Provider
