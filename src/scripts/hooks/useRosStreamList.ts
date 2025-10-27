@@ -10,7 +10,7 @@ export interface StreamTopic extends RosTopic {
 
 export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
   const [streamList, SetStreamList] = useState<StreamTopic[]>([]);
-  const IP = ROS_CONFIG.IP;
+  const HOSTNAME = ROS_CONFIG.HOSTNAME;
 
   useEffect(() => {
     const localStreamList: StreamTopic[] = [];
@@ -27,7 +27,7 @@ export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
       const topicName = topic.name.replace('/compressed', '');
       const url =
         'http://' +
-        IP +
+        HOSTNAME +
         ':8080/stream?topic=' +
         topicName +
         '&type=ros_compressed';
@@ -48,7 +48,7 @@ export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
     return () => {
       SetStreamList([]);
     };
-  }, [IP, topicList]);
+  }, [HOSTNAME, topicList]);
 
   return streamList;
 }
