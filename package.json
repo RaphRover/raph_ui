@@ -22,7 +22,7 @@
     "react-joystick-component": "^6.2.1",
     "react-responsive": "^10.0.1",
     "react-toastify": "^11.0.5",
-    "roslib": "github:fictionlab/roslibjs#ibis",
+    "roslib": "github:RobotWebTools/roslibjs#develop",
     "vite-plugin-svgr": "^4.5.0"
   },
   "devDependencies": {
