@@ -1,0 +1,13 @@
+.streamWrapper {
+  width: 100%;
+  text-align: center;
+  height: calc(100vh - 80px);
+}
+
+.stream {
+  height: inherit;
+  max-width: 100%;
+  max-height: calc(100vh - 80px);
+  object-fit: contain;
+  object-position: top;
+}
