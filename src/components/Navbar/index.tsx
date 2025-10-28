@@ -3,7 +3,6 @@ import {
   Button,
   Col,
   Container,
-  Dropdown,
   Navbar,
   Offcanvas,
   Row,
@@ -13,6 +12,7 @@ import { useMediaQuery } from 'react-responsive';
 import ROSStatus from '@components/ROSStatus';
 import BatteryStatus from '@components/BatteryStatus';
 import ImuReadings from '@components/ImuReadings';
+import StreamDropdown from '@components/StreamDropdown';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });
@@ -81,17 +81,7 @@ export default function RaphNavbar() {
               <Button variant="outline-secondary">Toggle Fullscreen</Button>
               <Button variant="outline-success">Toggle driving</Button>
               <Button variant="outline-info">Toggle steering mode</Button>
-              <Dropdown drop={isDesktop ? 'start' : 'down'}>
-                <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                  Camera Streams
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Camera 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Camera 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Camera 3</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <StreamDropdown desktopLayout={isDesktop} />
               <Button variant="outline-secondary">Settings</Button>
 
               <Row className="mt-auto">
