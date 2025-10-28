@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { Ros, Topic } from 'roslib';
 
-type RosMessage = Record<string, unknown>;
+export type RosMessage = Record<string, unknown>;
 type SubscriptionCallback = (message: RosMessage) => void;
 
 export type TopicManager = {
@@ -12,11 +12,59 @@ export type TopicManager = {
     updateInterval?: number,
   ) => void;
   unsubscribe: (topicName: string, callback: SubscriptionCallback) => void;
+  publish: (
+    topicName: string,
+    messageType: string,
+    message: RosMessage,
+  ) => void;
+  removePublisher: (topicName: string) => void;
 };
 
 export default function useRosTopicManager(ros: Ros | null): TopicManager {
-  const subscriptions = useRef<{ [key: string]: Topic<RosMessage> }>({});
+  const topics = useRef<{ [key: string]: Topic<RosMessage> }>({});
   const callbacks = useRef<{ [key: string]: Set<SubscriptionCallback> }>({});
+
+  // Helper function to retrieve or create topic
+  const getOrCreateTopic = useCallback(
+    (topicName: string, messageType: string) => {
+      if (!ros) return null;
+
+      if (!topics.current[topicName]) {
+        topics.current[topicName] = new Topic({
+          ros,
+          name: topicName,
+          messageType,
+        });
+        console.debug(
+          `[useRosTopicManager] Created Topic instance for: ${topicName}`,
+        );
+      }
+      return topics.current[topicName];
+    },
+    [ros],
+  );
+
+  const cleanupTopic = useCallback((topicName: string) => {
+    const topic = topics.current[topicName];
+    if (!topic) {
+      console.error(
+        '[useRosTopicManager] Tried to cleanup non existing topic',
+        topicName,
+      );
+      return;
+    }
+    const isSubscribed = (callbacks.current[topicName]?.size ?? 0) > 0;
+    const isAdvertised = topic.isAdvertised;
+
+    if (!isSubscribed && !isAdvertised) {
+      topics.current[topicName]?.unsubscribe();
+      delete topics.current[topicName];
+      delete callbacks.current[topicName];
+      console.debug(
+        `[useRosTopicManager] Deleted Topic instance for: ${topicName}`,
+      );
+    }
+  }, []);
 
   const subscribe = useCallback(
     (
@@ -25,23 +73,23 @@ export default function useRosTopicManager(ros: Ros | null): TopicManager {
       callback: SubscriptionCallback,
       updateInterval: number = 100,
     ) => {
-      if (!ros) return;
+      const topic = getOrCreateTopic(topicName, messageType);
+      if (!topic) {
+        console.warn('[useRosTopicManager] Unable to get topic', topicName);
+        return;
+      }
+
+      topic.throttle_rate = updateInterval;
 
       // First subscription for this topic
-      if (!subscriptions.current[topicName]) {
-        const topic = new Topic<RosMessage>({
-          ros,
-          name: topicName,
-          messageType,
-          throttle_rate: updateInterval,
-        });
-
+      if (
+        !callbacks.current[topicName] ||
+        callbacks.current[topicName].size === 0
+      ) {
+        callbacks.current[topicName] = new Set();
         topic.subscribe((message: RosMessage) => {
           callbacks.current[topicName]?.forEach((cb) => cb(message));
         });
-
-        subscriptions.current[topicName] = topic;
-        callbacks.current[topicName] = new Set();
         console.debug(
           `[useRosTopicManager] Created ROS subscription for: ${topicName}`,
         );
@@ -52,29 +100,45 @@ export default function useRosTopicManager(ros: Ros | null): TopicManager {
         `[useRosTopicManager] Added consumer for topic: ${topicName}`,
       );
     },
-    [ros],
+    [getOrCreateTopic],
   );
 
   const unsubscribe = useCallback(
     (topicName: string, callback: SubscriptionCallback) => {
-      if (!ros || !callbacks.current[topicName]) return;
+      const callbackSet = callbacks.current[topicName];
+      if (!ros || !callbackSet) return;
 
-      callbacks.current[topicName].delete(callback);
+      callbackSet.delete(callback);
       console.debug(
         `[useRosTopicManager] Removed consumer for topic: ${topicName}`,
       );
 
-      if (callbacks.current[topicName].size === 0) {
-        subscriptions.current[topicName]?.unsubscribe();
-        delete subscriptions.current[topicName];
-        delete callbacks.current[topicName];
-        console.debug(
-          `[useRosTopicManager] Closed ROS subscription for: ${topicName}`,
-        );
-      }
+      cleanupTopic(topicName);
     },
-    [ros],
+    [cleanupTopic, ros],
   );
 
-  return { subscribe, unsubscribe };
+  const publish = useCallback(
+    (topicName: string, messageType: string, message: RosMessage) => {
+      const topic = getOrCreateTopic(topicName, messageType);
+      if (!topic) return;
+
+      topic.publish(message);
+    },
+    [getOrCreateTopic],
+  );
+
+  const removePublisher = useCallback(
+    (topicName: string) => {
+      const topic = topics.current[topicName];
+      if (!topic) return;
+
+      if (topic.isAdvertised) topic.unadvertise();
+
+      cleanupTopic(topicName);
+    },
+    [cleanupTopic],
+  );
+
+  return { subscribe, unsubscribe, publish, removePublisher };
 }
