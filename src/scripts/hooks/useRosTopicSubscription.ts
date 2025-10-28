@@ -1,5 +1,5 @@
 import { useROSContext } from '@scripts/context/ROSContext';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function useRosTopicSubscription<T>(
   name: string,
@@ -7,23 +7,36 @@ export default function useRosTopicSubscription<T>(
   updateInterval: number = 100,
 ): T | null {
   const { ros, topicManager } = useROSContext();
-  const { topicData, subscribe, unsubscribe } = topicManager;
+  const { subscribe, unsubscribe } = topicManager;
+
+  const [topicData, setTopicData] = useState<T | null>(null);
+
+  const handleMessage = useCallback((message: unknown) => {
+    setTopicData(message as T);
+  }, []);
 
   useEffect(() => {
     if (!ros) return;
 
-    subscribe(name, messageType, updateInterval);
+    subscribe(name, messageType, handleMessage, updateInterval);
     console.debug(`[useRosTopicSubscription] Subscribed to topic: ${name}`);
 
     return () => {
-      unsubscribe(name);
+      unsubscribe(name, handleMessage);
+      setTopicData(null);
       console.debug(
         `[useRosTopicSubscription] Unsubscribed from topic: ${name}`,
       );
     };
-  }, [ros, name, messageType, updateInterval, subscribe, unsubscribe]);
+  }, [
+    ros,
+    name,
+    messageType,
+    updateInterval,
+    subscribe,
+    unsubscribe,
+    handleMessage,
+  ]);
 
-  const data = (topicData[name] as T) ?? null;
-
-  return data;
+  return topicData;
 }
