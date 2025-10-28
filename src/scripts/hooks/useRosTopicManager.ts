@@ -1,98 +1,80 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { Ros, Topic } from 'roslib';
 
 type RosMessage = Record<string, unknown>;
+type SubscriptionCallback = (message: RosMessage) => void;
 
 export type TopicManager = {
-  topicData: { [key: string]: unknown };
   subscribe: (
     topicName: string,
     messageType: string,
+    callback: SubscriptionCallback,
     updateInterval?: number,
   ) => void;
-  unsubscribe: (topicName: string) => void;
+  unsubscribe: (topicName: string, callback: SubscriptionCallback) => void;
 };
 
 export default function useRosTopicManager(ros: Ros | null): TopicManager {
-  const [topicData, setTopicData] = useState<{ [key: string]: unknown }>({});
-  const consumerCounts = useRef<{ [key: string]: number }>({});
   const subscriptions = useRef<{ [key: string]: Topic<RosMessage> }>({});
+  const callbacks = useRef<{ [key: string]: Set<SubscriptionCallback> }>({});
 
   const subscribe = useCallback(
-    (topicName: string, messageType: string, updateInterval: number = 100) => {
+    (
+      topicName: string,
+      messageType: string,
+      callback: SubscriptionCallback,
+      updateInterval: number = 100,
+    ) => {
       if (!ros) return;
 
-      const currentCount = consumerCounts.current[topicName] || 0;
-      consumerCounts.current[topicName] = currentCount + 1;
+      // First subscription for this topic
+      if (!subscriptions.current[topicName]) {
+        const topic = new Topic<RosMessage>({
+          ros,
+          name: topicName,
+          messageType,
+          throttle_rate: updateInterval,
+        });
 
-      if (currentCount > 0) {
+        topic.subscribe((message: RosMessage) => {
+          callbacks.current[topicName]?.forEach((cb) => cb(message));
+        });
+
+        subscriptions.current[topicName] = topic;
+        callbacks.current[topicName] = new Set();
         console.debug(
-          `[useRosTopicManager] Added consumer for topic: ${topicName}, total consumers: ${
-            consumerCounts.current[topicName]
-          }`,
+          `[useRosTopicManager] Created ROS subscription for: ${topicName}`,
         );
-        return;
       }
 
-      const topic = new Topic<RosMessage>({
-        ros,
-        name: topicName,
-        messageType,
-        throttle_rate: updateInterval,
-      });
-
-      topic.subscribe((message: RosMessage) => {
-        setTopicData((prevData) => ({
-          ...prevData,
-          [topicName]: message,
-        }));
-      });
-
-      subscriptions.current[topicName] = topic;
+      callbacks.current[topicName].add(callback);
       console.debug(
-        `[useRosTopicManager] Subscribed to ROS topic: ${topicName}, total consumers: ${
-          consumerCounts.current[topicName]
-        }`,
+        `[useRosTopicManager] Added consumer for topic: ${topicName}`,
       );
     },
     [ros],
   );
 
   const unsubscribe = useCallback(
-    (topicName: string) => {
-      if (!ros) return;
+    (topicName: string, callback: SubscriptionCallback) => {
+      if (!ros || !callbacks.current[topicName]) return;
 
-      const currentCount = consumerCounts.current[topicName] || 0;
-      if (currentCount <= 0) return;
-
-      consumerCounts.current[topicName] = currentCount - 1;
-
-      if (consumerCounts.current[topicName] > 0) {
-        console.debug(
-          `[useRosTopicManager] Removed consumer for topic: ${topicName}, remaining consumers: ${
-            consumerCounts.current[topicName]
-          }`,
-        );
-        return;
-      }
-
-      const topic = subscriptions.current[topicName];
-      if (!topic) {
-        console.warn(
-          `[useRosTopicManager] No active subscription found for topic: ${topicName}`,
-        );
-        return;
-      }
-
-      topic.unsubscribe();
-      delete subscriptions.current[topicName];
-      delete consumerCounts.current[topicName];
+      callbacks.current[topicName].delete(callback);
       console.debug(
-        `[useRosTopicManager] Unsubscribed from ROS topic: ${topicName}`,
+        `[useRosTopicManager] Removed consumer for topic: ${topicName}`,
       );
+
+      if (callbacks.current[topicName].size === 0) {
+        subscriptions.current[topicName]?.unsubscribe();
+        delete subscriptions.current[topicName];
+        delete callbacks.current[topicName];
+        console.debug(
+          `[useRosTopicManager] Closed ROS subscription for: ${topicName}`,
+        );
+      }
     },
     [ros],
   );
 
-  return { topicData, subscribe, unsubscribe };
+  return { subscribe, unsubscribe };
 }
