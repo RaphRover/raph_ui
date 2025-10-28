@@ -12,8 +12,8 @@ export default function useRosTopicSubscription<T>(
   const [topicData, setTopicData] = useState<T | null>(null);
 
   const handleMessage = useCallback((message: unknown) => {
-      setTopicData(message as T);
-    }, []);
+    setTopicData(message as T);
+  }, []);
 
   useEffect(() => {
     if (!ros) return;
@@ -22,13 +22,21 @@ export default function useRosTopicSubscription<T>(
     console.debug(`[useRosTopicSubscription] Subscribed to topic: ${name}`);
 
     return () => {
-      unsubscribe(name , handleMessage);
+      unsubscribe(name, handleMessage);
       setTopicData(null);
       console.debug(
         `[useRosTopicSubscription] Unsubscribed from topic: ${name}`,
       );
     };
-  }, [ros, name, messageType, updateInterval, subscribe, unsubscribe, handleMessage]);
+  }, [
+    ros,
+    name,
+    messageType,
+    updateInterval,
+    subscribe,
+    unsubscribe,
+    handleMessage,
+  ]);
 
   return topicData;
 }
