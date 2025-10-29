@@ -122,9 +122,7 @@ export default function useRosParam<K extends keyof RosParamType>(
       const timeoutPromise = new Promise<valueType>((_, reject) => {
         timer = setTimeout(() => {
           reject(
-            new Error(
-              `Set call to ${paramName} timed out after ${timeout}ms.`,
-            ),
+            new Error(`Set call to ${paramName} timed out after ${timeout}ms.`),
           );
         }, timeout);
       });
