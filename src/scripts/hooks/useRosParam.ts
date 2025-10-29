@@ -31,12 +31,12 @@ export default function useRosParam<K extends keyof RosParamType>(
   const paramRef = useRef<Param | null>(null);
   const isCallingRef = useRef<boolean>(false);
 
-  const getParam = useCallback(async () => {
+  const getParam = useCallback(async (): Promise<valueType> => {
     if (!paramRef.current) {
       return Promise.reject(new Error('Param not initialized.'));
     }
 
-    if (!isCallingRef.current) {
+    if (isCallingRef.current) {
       const errorMessage = `Param call to ${paramName} is already in progress.`;
       console.warn('[useRosParam] ' + errorMessage);
       return Promise.reject(new Error(errorMessage));
@@ -57,28 +57,30 @@ export default function useRosParam<K extends keyof RosParamType>(
       );
     });
 
+    let timer: number | undefined;
     const timeoutPromise = new Promise<valueType>((_, reject) => {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         reject(
-          new Error(`Get call to ${paramName} timed out after ${timeout} ms.`),
+          new Error(`Get call to ${paramName} timed out after ${timeout}ms.`),
         );
       }, timeout);
     });
 
     try {
-      return Promise.race([paramGetPromise, timeoutPromise]);
+      return await Promise.race([paramGetPromise, timeoutPromise]);
     } finally {
       isCallingRef.current = false;
+      clearTimeout(timer);
     }
   }, [paramName, timeout]);
 
   const setRosParam = useCallback(
-    (value: valueType) => {
+    async (value: valueType): Promise<valueType> => {
       if (!paramRef.current) {
         return Promise.reject(new Error('Param not initialized.'));
       }
 
-      if (!isCallingRef.current) {
+      if (isCallingRef.current) {
         const errorMessage = `Param call to ${paramName} is already in progress.`;
         console.warn('[useRosParam] ' + errorMessage);
         return Promise.reject(new Error(errorMessage));
@@ -88,7 +90,7 @@ export default function useRosParam<K extends keyof RosParamType>(
 
       const param = paramRef.current;
 
-      let parsedValue: string;
+      let parsedValue: string = '';
 
       switch (paramType) {
         case 'int':
@@ -115,19 +117,24 @@ export default function useRosParam<K extends keyof RosParamType>(
         );
       });
 
+      let timer: number | undefined;
+
       const timeoutPromise = new Promise<valueType>((_, reject) => {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           reject(
             new Error(
-              `Set call to ${paramName} timed out after ${timeout} ms.`,
+              `Set call to ${paramName} timed out after ${timeout}ms.`,
             ),
           );
         }, timeout);
       });
 
-      return Promise.race([paramSetPromise, timeoutPromise]).finally(() => {
+      try {
+        return await Promise.race([paramSetPromise, timeoutPromise]);
+      } finally {
         isCallingRef.current = false;
-      });
+        clearTimeout(timer);
+      }
     },
 
     [paramName, paramType, timeout],
@@ -144,7 +151,9 @@ export default function useRosParam<K extends keyof RosParamType>(
       });
       console.debug(`[useRosParam] ROS param ${paramName} initialized`);
     }
-    getParam();
+    getParam().catch((err) =>
+      console.debug('[useRosParam] getParam failed', err),
+    );
     return () => {
       paramRef.current = null;
       setParamValue(null);
