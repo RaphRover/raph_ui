@@ -1,14 +1,23 @@
 import { useROSContext } from '@scripts/context/ROSContext';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Service } from 'roslib';
 
-export default function useRosService<TRequest, TResponse>(
+/**
+ * @param serviceName Service name string
+ * @param serviceType Service type string
+ * @param timeout Service call timeout, defaults to `5000` ms
+ * @returns Promise 
+ */
+export default function useRosService<Request, Response>(
   serviceName: string,
   serviceType: string,
   timeout: number = 5000,
 ) {
   const { ros } = useROSContext();
-  const serviceRef = useRef<Service<TRequest, TResponse> | null>(null);
+
+  const serviceRef = useRef<Service<Request, Response> | null>(null);
+  const isCallingRef = useRef<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Service initialization & clean up
   useEffect(() => {
@@ -18,7 +27,7 @@ export default function useRosService<TRequest, TResponse>(
       return;
     }
 
-    const service = new Service<TRequest, TResponse>({
+    const service = new Service<Request, Response>({
       ros,
       name: serviceName,
       serviceType,
@@ -33,17 +42,26 @@ export default function useRosService<TRequest, TResponse>(
   }, [ros, serviceName, serviceType]);
 
   const callService = useCallback(
-    (request: TRequest): Promise<TResponse> => {
+    (request: Request): Promise<Response> => {
+      if (isCallingRef.current) {
+        const errorMessage = `Service call to ${serviceName} is already in progress.`;
+        console.warn('[useRosService] ' + errorMessage);
+        return Promise.reject(new Error(errorMessage));
+      }
+
       if (!serviceRef.current) {
         return Promise.reject(new Error('Service not initialized.'));
       }
 
+      isCallingRef.current = true;
+      setIsLoading(true);
+
       const service = serviceRef.current;
 
-      const serviceCallPromise = new Promise<TResponse>((resolve, reject) => {
+      const serviceCallPromise = new Promise<Response>((resolve, reject) => {
         service.callService(
           request,
-          (response: TResponse) => {
+          (response: Response) => {
             resolve(response);
           },
           (error: string) => {
@@ -52,7 +70,7 @@ export default function useRosService<TRequest, TResponse>(
         );
       });
 
-      const timeoutPromise = new Promise<TResponse>((_, reject) => {
+      const timeoutPromise = new Promise<Response>((_, reject) => {
         setTimeout(() => {
           reject(
             new Error(
@@ -62,10 +80,13 @@ export default function useRosService<TRequest, TResponse>(
         }, timeout);
       });
 
-      return Promise.race([serviceCallPromise, timeoutPromise]);
+      return Promise.race([serviceCallPromise, timeoutPromise]).finally(() => {
+        isCallingRef.current = false;
+        setIsLoading(false);
+      });
     },
     [serviceName, timeout],
   );
 
-  return { callService };
+  return { callService , isLoading };
 }
