@@ -6,7 +6,7 @@ import { Service } from 'roslib';
  * @param serviceName Service name string
  * @param serviceType Service type string
  * @param timeout Service call timeout, defaults to `5000` ms
- * @returns Promise 
+ * @returns Promise
  */
 export default function useRosService<Request, Response>(
   serviceName: string,
@@ -88,5 +88,5 @@ export default function useRosService<Request, Response>(
     [serviceName, timeout],
   );
 
-  return { callService , isLoading };
+  return { callService, isLoading };
 }
