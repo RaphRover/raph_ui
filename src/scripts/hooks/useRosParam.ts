@@ -1,5 +1,11 @@
 import { FLOAT_PRECISION } from '@scripts/config/config';
-import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from 'react';
 import { Param, Ros } from 'roslib';
 
 export interface RosParam<T> {
@@ -98,7 +104,8 @@ export default function useRosParam<K extends keyof RosParamType>(
           if (typeof value === 'number') parsedValue = value.toFixed(0);
           break;
         case 'float':
-          if (typeof value === 'number') parsedValue = value.toPrecision(FLOAT_PRECISION);
+          if (typeof value === 'number')
+            parsedValue = value.toPrecision(FLOAT_PRECISION);
           break;
         default:
           parsedValue = value.toString();
@@ -140,7 +147,7 @@ export default function useRosParam<K extends keyof RosParamType>(
   );
 
   // We use useEffectEvent as we don't want to fire useEffect on getParam change
-  const getParamEffect = useEffectEvent( getParam );
+  const getParamEffect = useEffectEvent(getParam);
 
   useEffect(() => {
     if (!ros) {
