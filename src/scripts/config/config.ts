@@ -7,6 +7,8 @@ export const ROS_CONFIG = {
 
 export const DEFAULT_STREAM_NAME = '/oak/rgb/image_raw/compressed';
 
+export const FLOAT_PRECISION = 4;
+
 export const BATTERY_CONFIG = {
   REFRESH_INTERVAL_MS: 1000,
   DISPLAY_PRECISION: 2,

@@ -1,3 +1,4 @@
+import { FLOAT_PRECISION } from '@scripts/config/config';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Param, Ros } from 'roslib';
 
@@ -97,7 +98,7 @@ export default function useRosParam<K extends keyof RosParamType>(
           if (typeof value === 'number') parsedValue = value.toFixed(0);
           break;
         case 'float':
-          if (typeof value === 'number') parsedValue = value.toPrecision(4);
+          if (typeof value === 'number') parsedValue = value.toPrecision(FLOAT_PRECISION);
           break;
         default:
           parsedValue = value.toString();
