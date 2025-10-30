@@ -38,8 +38,6 @@ export default function useRosParam<K extends keyof RosParamType>(
   const paramRef = useRef<Param | null>(null);
   const isCallingRef = useRef<boolean>(false);
 
-  const { PARAM_FLOAT_PRECISION: floatPrecision } = ROS_CONFIG;
-
   const getParam = useCallback(async (): Promise<valueType> => {
     if (!paramRef.current) {
       return Promise.reject(new Error('Param not initialized.'));
@@ -98,6 +96,7 @@ export default function useRosParam<K extends keyof RosParamType>(
       isCallingRef.current = true;
 
       const param = paramRef.current;
+      const { PARAM_FLOAT_PRECISION: floatPrecision } = ROS_CONFIG;
 
       let parsedValue: string = '';
 
