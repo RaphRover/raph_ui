@@ -169,8 +169,7 @@ export default function useRosParam<K extends keyof RosParamType>(
       setParamValue(null);
       console.debug(`[useRosParam] ROS param ${paramName} uninitialized`);
     };
-  }, [getParamEffect, paramName, paramNode, ros]);
-  // getParamEffect shouldn't be in the dependency array but eslint is not updated for the react 19.2
+  }, [paramName, paramNode, ros]);
 
   // TODO in future - add subscription to /parameter_events topics with param-specific callback
 
