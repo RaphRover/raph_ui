@@ -42,6 +42,7 @@ interface BatteryConfig {
 
 /**
  * Configuration for battery status display.
+ * @type {BatteryConfig}
  */
 export const BATTERY_CONFIG: BatteryConfig = {
   REFRESH_INTERVAL_MS: 1000,
@@ -59,6 +60,7 @@ interface ImuConfig {
 
 /**
  * Configuration for IMU status display.
+ * @type {ImuConfig}
  */
 export const IMU_CONFIG: ImuConfig = {
   REFRESH_INTERVAL_MS: 1000,
