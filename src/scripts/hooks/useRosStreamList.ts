@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { ROS_CONFIG } from '@scripts/config/config';
 import type { RosTopic } from './useRosTopicList';
 import { NAME_MAPPINGS } from '@scripts/config/streamMapping';
@@ -9,18 +9,10 @@ export interface StreamTopic extends RosTopic {
 }
 
 export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
-  const [streamList, SetStreamList] = useState<StreamTopic[]>([]);
   const HOSTNAME = ROS_CONFIG.HOSTNAME;
 
-  useEffect(() => {
-    const localStreamList: StreamTopic[] = [];
-
-    // Empty topic list idicates no ROS connection
-    // We should clear stream list when there is no ROS connection
-    if (topicList.length === 0) {
-      SetStreamList([]);
-      return;
-    }
+  const streamList = useMemo(() => {
+    const list: StreamTopic[] = [];
 
     topicList.forEach((topic) => {
       if (!topic.type.includes('CompressedImage')) return;
@@ -42,12 +34,10 @@ export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
         url,
         ...mapping,
       };
-      localStreamList.push(streamTopic);
+      list.push(streamTopic);
     });
-    SetStreamList(localStreamList);
-    return () => {
-      SetStreamList([]);
-    };
+
+    return list;
   }, [HOSTNAME, topicList]);
 
   return streamList;

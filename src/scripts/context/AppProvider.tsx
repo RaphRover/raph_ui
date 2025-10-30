@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AppContext } from './AppContext';
 import type { StreamTopic } from '@scripts/hooks/useRosStreamList';
 import { useROSContext } from './ROSContext';
@@ -12,27 +12,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const { streamList } = useROSContext();
 
-  // Default stream selection
-  useEffect(() => {
-    if (selectedStream || streamList.length === 0) return;
+  const effectiveSelectedStream = useMemo(() => {
     const defaultStream = streamList.find(
       (stream) => stream.name === DEFAULT_STREAM_NAME,
     );
-
-    if (defaultStream) {
-      console.debug('[AppProvider] Default stream set:', defaultStream.name);
-      selectStream(defaultStream);
-    } else {
-      console.warn(
-        '[AppProvider] Could not find defaut stream:',
-        DEFAULT_STREAM_NAME,
-      );
-    }
+    return selectedStream ?? defaultStream ?? null;
   }, [selectedStream, streamList]);
 
   return (
     <AppContext.Provider
-      value={{ isMenuVisible, setMenuVisible, selectedStream, selectStream }}
+      value={{
+        isMenuVisible,
+        setMenuVisible,
+        selectedStream: effectiveSelectedStream,
+        selectStream,
+      }}
     >
       {children}
     </AppContext.Provider>

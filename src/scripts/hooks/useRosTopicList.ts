@@ -33,13 +33,10 @@ export default function useRosStreams(
 ): RosTopic[] {
   const [topicMap, setTopicMap] = useState<Map<string, string>>(new Map());
 
-  const mapSize = useEffectEvent(() => topicMap.size);
+  const mapSizeEffect = useEffectEvent(() => topicMap.size);
 
   useEffect(() => {
-    if (!ros) {
-      if (mapSize() > 0) setTopicMap(new Map());
-      return;
-    }
+    if (!ros) return;
 
     const fetchTopics = () => {
       const callback = (response: TopicsFromRos) => {
@@ -76,8 +73,9 @@ export default function useRosStreams(
 
     return () => {
       clearInterval(intervalId);
+      if (mapSizeEffect() > 0) setTopicMap(new Map());
     };
-  }, [refreshInterval, mapSize, ros]);
+  }, [refreshInterval, ros]);
 
   const topicList = useMemo(() => {
     return Array.from(topicMap.entries()).map(([name, type]) => ({
