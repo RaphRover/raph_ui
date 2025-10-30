@@ -1,5 +1,5 @@
 import { FLOAT_PRECISION } from '@scripts/config/config';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react';
 import { Param, Ros } from 'roslib';
 
 export interface RosParam<T> {
@@ -139,6 +139,9 @@ export default function useRosParam<K extends keyof RosParamType>(
     [paramName, paramType, timeout],
   );
 
+  // We use useEffectEvent as we don't want to fire useEffect on getParam change
+  const getParamEffect = useEffectEvent( getParam );
+
   useEffect(() => {
     if (!ros) {
       return;
@@ -150,7 +153,7 @@ export default function useRosParam<K extends keyof RosParamType>(
       });
       console.debug(`[useRosParam] ROS param ${paramName} initialized`);
     }
-    getParam().catch((err) =>
+    getParamEffect().catch((err) =>
       console.debug('[useRosParam] getParam failed', err),
     );
     return () => {
@@ -158,7 +161,8 @@ export default function useRosParam<K extends keyof RosParamType>(
       setParamValue(null);
       console.debug(`[useRosParam] ROS param ${paramName} uninitialized`);
     };
-  }, [getParam, paramName, paramNode, ros]);
+  }, [getParamEffect, paramName, paramNode, ros]);
+  // getParamEffect shouldn't be in the dependency array but eslint is not updated for the react 19.2
 
   // TODO in future - add subscription to /parameter_events topics with param-specific callback
 
