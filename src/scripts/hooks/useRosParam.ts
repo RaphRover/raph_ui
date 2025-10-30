@@ -1,4 +1,4 @@
-import { FLOAT_PRECISION } from '@scripts/config/config';
+import { ROS_CONFIG } from '@scripts/config/config';
 import {
   useCallback,
   useEffect,
@@ -37,6 +37,8 @@ export default function useRosParam<K extends keyof RosParamType>(
   const [paramValue, setParamValue] = useState<valueType | null>(null);
   const paramRef = useRef<Param | null>(null);
   const isCallingRef = useRef<boolean>(false);
+
+  const { PARAM_FLOAT_PRECISION: floatPrecision } = ROS_CONFIG;
 
   const getParam = useCallback(async (): Promise<valueType> => {
     if (!paramRef.current) {
@@ -105,7 +107,7 @@ export default function useRosParam<K extends keyof RosParamType>(
           break;
         case 'float':
           if (typeof value === 'number')
-            parsedValue = value.toPrecision(FLOAT_PRECISION);
+            parsedValue = value.toPrecision(floatPrecision);
           break;
         default:
           parsedValue = value.toString();
