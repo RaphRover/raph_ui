@@ -42,7 +42,7 @@ export default function useRosService<Request, Response>(
   }, [ros, serviceName, serviceType]);
 
   const callService = useCallback(
-    (request: Request): Promise<Response> => {
+    async (request: Request): Promise<Response> => {
       if (isCallingRef.current) {
         const errorMessage = `Service call to ${serviceName} is already in progress.`;
         console.warn('[useRosService] ' + errorMessage);
@@ -70,8 +70,9 @@ export default function useRosService<Request, Response>(
         );
       });
 
+      let timer: number | undefined;
       const timeoutPromise = new Promise<Response>((_, reject) => {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           reject(
             new Error(
               `Service call to ${serviceName} timed out after ${timeout}ms.`,
@@ -80,10 +81,13 @@ export default function useRosService<Request, Response>(
         }, timeout);
       });
 
-      return Promise.race([serviceCallPromise, timeoutPromise]).finally(() => {
+      try {
+        return await Promise.race([serviceCallPromise, timeoutPromise]);
+      } finally {
         isCallingRef.current = false;
         setIsLoading(false);
-      });
+        clearTimeout(timer);
+      }
     },
     [serviceName, timeout],
   );
