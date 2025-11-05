@@ -1,4 +1,3 @@
-import Frame from '@components/ui/Frame';
 import {
   Button,
   Col,
@@ -13,6 +12,7 @@ import ROSStatus from '@components/ROSStatus';
 import BatteryStatus from '@components/BatteryStatus';
 import ImuReadings from '@components/ImuReadings';
 import StreamDropdown from '@components/StreamDropdown';
+import SteeringModeSwitch from '@components/SteeringModeSwitch';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });
@@ -53,15 +53,7 @@ export default function RaphNavbar() {
         </Navbar.Brand>
         {isDesktop && infoPanel()}
         <Stack direction="horizontal" gap={2} className="ms-auto">
-          <Frame style={{ height: '64px' }}>
-            <img
-              alt="Raph Rover Logo"
-              src="/favicon/favicon.svg"
-              width="auto"
-              height="100%"
-              className="d-inline-block align-top"
-            />
-          </Frame>
+          <SteeringModeSwitch />
           <Navbar.Toggle
             aria-controls="responsive-navbar-nav"
             style={{ height: '100%' }}

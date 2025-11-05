@@ -41,3 +41,15 @@ export interface ImuMsg {
   linear_acceleration: Vector3;
   linear_acceleration_covariance: CovarianceArray;
 }
+
+export interface ServiceResponse {
+  success: boolean;
+  status_message: string;
+}
+
+export const SteeringModes = {
+  ACKERMANN: 0,
+  TURN_IN_PLACE: 1,
+} as const
+
+export type SteeringModeRequest = typeof SteeringModes[keyof typeof SteeringModes];
