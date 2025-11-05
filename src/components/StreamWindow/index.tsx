@@ -8,8 +8,8 @@ export default function StreamWindow() {
   return (
     <div className={styles.streamWrapper}>
       <Image
-        title='Stream window'
-        alt='Stream window'
+        title="Stream window"
+        alt="Stream window"
         src={selectedStream?.url}
         className={styles.stream}
       />
