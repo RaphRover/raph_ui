@@ -27,8 +27,10 @@ createRoot(document.getElementById('root')!).render(
           transition={Slide}
           limit={5}
         />
-        <RaphNavbar />
-        <StreamWindow />
+        <div className="app-wrapper">
+          <RaphNavbar />
+          <StreamWindow />
+        </div>
       </AppProvider>
     </ROSProvider>
   </StrictMode>,
