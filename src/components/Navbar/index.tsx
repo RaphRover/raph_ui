@@ -37,7 +37,7 @@ export default function RaphNavbar() {
   };
 
   return (
-    <Navbar className="bg-body" expand="false" sticky="top">
+    <Navbar className="bg-body flex-shrink-0" expand="false" sticky="top">
       <Container fluid className="justify-content-start">
         <Navbar.Brand href="/">
           <img
