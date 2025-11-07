@@ -4,14 +4,14 @@ import type { RobotVelocityControl } from '@scripts/hooks/useRobotVelocityContro
 
 interface AppContext {
   isMenuVisible: boolean;
-  setMenuVisible: (status: boolean) => void;
+  setMenuVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedStream: StreamTopic | null;
-  selectStream: (status: StreamTopic | null) => void;
+  selectStream: React.Dispatch<React.SetStateAction<StreamTopic | null>>;
   robotVelocityControl: RobotVelocityControl;
   isKeyboardControlEnabled: boolean;
-  setKeyboardControlEnabled: (status: boolean) => void;
+  setKeyboardControlEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   isVirtualJoystickEnabled: boolean;
-  setVirtualJoystickEnabled: (status: boolean) => void;
+  setVirtualJoystickEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<AppContext | undefined>(undefined);

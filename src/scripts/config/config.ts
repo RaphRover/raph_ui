@@ -78,6 +78,12 @@ interface DriveConfig {
   JOYSTICK_DEADZONE: number;
   /** Gamepad fetch interval in milliseconds */
   GAMEPAD_INTERVAL_MS: number;
+  /** Default value for the `steering_angle_velocity` in AckermannMsg */
+  ACKERMANN_STEERING_ANGLE_VELOCITY: number;
+  /** Default value for the `acceleration` in AckermannMsg */
+  ACKERMANN_ACCELERATION: number;
+  /** Default value for the `jerk` in AckermannMsg */
+  ACKERMANN_JERK: number;
 }
 
 /**
@@ -90,4 +96,7 @@ export const DRIVE_CONFIG: DriveConfig = {
   ANGULAR_VELOCITY_LIMIT_RADPS: 1,
   JOYSTICK_DEADZONE: 0.1,
   GAMEPAD_INTERVAL_MS: 50,
+  ACKERMANN_STEERING_ANGLE_VELOCITY: 3,
+  ACKERMANN_ACCELERATION: 2,
+  ACKERMANN_JERK: 2
 };

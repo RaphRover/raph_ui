@@ -13,6 +13,12 @@ export default function useRobotVelocityControl(): RobotVelocityControl {
   const [isDrivingEnabled, setDrivingEnabled] = useState(false);
   const publishInterval = DRIVE_CONFIG.VELOCITY_PUBLISH_INTERVAL_MS;
 
+  const {
+    ACKERMANN_STEERING_ANGLE_VELOCITY,
+    ACKERMANN_ACCELERATION,
+    ACKERMANN_JERK,
+  } = DRIVE_CONFIG;
+
   const publishVelocity = useRosTopicPublisher<AckermannDriveMsg>(
     'controller/cmd_ackermann',
     'ackermann_msgs/msg/AckermannDrive',
@@ -20,10 +26,10 @@ export default function useRobotVelocityControl(): RobotVelocityControl {
 
   const robotVelocityRef = useRef<AckermannDriveMsg>({
     steering_angle: 0,
-    steering_angle_velocity: 0,
+    steering_angle_velocity: ACKERMANN_STEERING_ANGLE_VELOCITY,
     speed: 0,
-    acceleration: 0,
-    jerk: 0,
+    acceleration: ACKERMANN_ACCELERATION,
+    jerk: ACKERMANN_JERK,
   });
 
   const setRobotVelocity = useCallback(

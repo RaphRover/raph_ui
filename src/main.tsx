@@ -12,6 +12,7 @@ import { ROSProvider } from '@scripts/context/ROSProvider.tsx';
 import { Slide, ToastContainer } from 'react-toastify';
 import StreamWindow from '@components/StreamWindow/index.tsx';
 import { AppProvider } from '@scripts/context/AppProvider.tsx';
+import RobotController from '@components/RobotController/index.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
           transition={Slide}
           limit={5}
         />
+        <RobotController />
         <div className="app-wrapper">
           <RaphNavbar />
           <StreamWindow />

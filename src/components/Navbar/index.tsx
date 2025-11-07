@@ -6,6 +6,7 @@ import {
   Offcanvas,
   Row,
   Stack,
+  ToggleButton,
 } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import ROSStatus from '@components/ROSStatus';
@@ -13,9 +14,18 @@ import BatteryStatus from '@components/BatteryStatus';
 import ImuReadings from '@components/ImuReadings';
 import StreamDropdown from '@components/StreamDropdown';
 import SteeringModeSwitch from '@components/SteeringModeSwitch';
+import { useAppContext } from '@scripts/context/AppContext';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });
+  const {
+    isKeyboardControlEnabled,
+    isVirtualJoystickEnabled,
+    setKeyboardControlEnabled,
+    setVirtualJoystickEnabled,
+    robotVelocityControl,
+  } = useAppContext();
+  const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
 
   const infoPanel = () => {
     return (
@@ -71,21 +81,44 @@ export default function RaphNavbar() {
           <Offcanvas.Body style={{ overflow: 'visible' }}>
             <Stack gap={2} style={{ height: '100%' }}>
               <Button variant="outline-secondary">Toggle Fullscreen</Button>
-              <Button variant="outline-success">Toggle driving</Button>
+              <ToggleButton
+                id="enable-driving"
+                type="checkbox"
+                checked={isDrivingEnabled}
+                value={""}
+                onClick={() => setDrivingEnabled((prev) => !prev)}
+                variant="outline-success"
+              >
+                Toggle driving
+              </ToggleButton>
               <Button variant="outline-info">Toggle steering mode</Button>
               <StreamDropdown desktopLayout={isDesktop} />
               <Button variant="outline-secondary">Settings</Button>
 
               <Row className="mt-auto">
                 <Col>
-                  <Button variant="outline-secondary">
+                  <ToggleButton
+                    id="toggle-keyboard-control"
+                    type="checkbox"
+                    checked={isVirtualJoystickEnabled}
+                    value={""}
+                    onClick={() => setVirtualJoystickEnabled((prev) => !prev)}
+                    variant="outline-secondary"
+                  >
                     Toggle virtual joystick
-                  </Button>
+                  </ToggleButton>
                 </Col>
                 <Col>
-                  <Button variant="outline-secondary">
+                  <ToggleButton
+                    id="toggle-keyboard-control"
+                    type="checkbox"
+                    checked={isKeyboardControlEnabled}
+                    value={""}
+                    onClick={() => setKeyboardControlEnabled((prev) => !prev)}
+                    variant="outline-secondary"
+                  >
                     Toggle keyboard control
-                  </Button>
+                  </ToggleButton>
                 </Col>
               </Row>
               <Button variant="outline-warning">Service menu</Button>
