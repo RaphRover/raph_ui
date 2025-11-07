@@ -50,6 +50,7 @@ export interface ServiceResponse {
 export const SteeringModes = {
   ACKERMANN: 0,
   TURN_IN_PLACE: 1,
-} as const
+} as const;
 
-export type SteeringModeRequest = typeof SteeringModes[keyof typeof SteeringModes];
+export type SteeringModeRequest =
+  (typeof SteeringModes)[keyof typeof SteeringModes];
