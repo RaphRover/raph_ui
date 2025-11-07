@@ -85,7 +85,7 @@ export default function RaphNavbar() {
                 id="enable-driving"
                 type="checkbox"
                 checked={isDrivingEnabled}
-                value={""}
+                value={''}
                 onClick={() => setDrivingEnabled((prev) => !prev)}
                 variant="outline-success"
               >
@@ -101,7 +101,7 @@ export default function RaphNavbar() {
                     id="toggle-keyboard-control"
                     type="checkbox"
                     checked={isVirtualJoystickEnabled}
-                    value={""}
+                    value={''}
                     onClick={() => setVirtualJoystickEnabled((prev) => !prev)}
                     variant="outline-secondary"
                   >
@@ -113,7 +113,7 @@ export default function RaphNavbar() {
                     id="toggle-keyboard-control"
                     type="checkbox"
                     checked={isKeyboardControlEnabled}
-                    value={""}
+                    value={''}
                     onClick={() => setKeyboardControlEnabled((prev) => !prev)}
                     variant="outline-secondary"
                   >
