@@ -66,3 +66,28 @@ export const IMU_CONFIG: ImuConfig = {
   REFRESH_INTERVAL_MS: 1000,
   DISPLAY_PRECISION: 2,
 };
+
+interface DriveConfig {
+  /** Ackermann velocity publish interval in milliseconds */
+  VELOCITY_PUBLISH_INTERVAL_MS: number;
+  /** Robot linear velocity limit (physical) in meters per second */
+  LINEAR_VELOCITY_LIMIT_MPS: number;
+  /** Robot angular velocity limit (physical) in radians per second */
+  ANGULAR_VELOCITY_LIMIT_RADPS: number;
+  /** Joystick deadzone percentage */
+  JOYSTICK_DEADZONE: number;
+  /** Gamepad fetch interval in milliseconds */
+  GAMEPAD_INTERVAL_MS: number;
+}
+
+/**
+ * Configuration for robot drive system.
+ * @type {ImuConfig}
+ */
+export const DRIVE_CONFIG: DriveConfig = {
+  VELOCITY_PUBLISH_INTERVAL_MS: 100,
+  LINEAR_VELOCITY_LIMIT_MPS: 2,
+  ANGULAR_VELOCITY_LIMIT_RADPS: 1,
+  JOYSTICK_DEADZONE: 0.1,
+  GAMEPAD_INTERVAL_MS: 50,
+};

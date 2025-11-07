@@ -54,3 +54,11 @@ export const SteeringModes = {
 
 export type SteeringModeRequest =
   (typeof SteeringModes)[keyof typeof SteeringModes];
+
+export interface AckermannDriveMsg {
+  steering_angle: number;
+  steering_angle_velocity: number;
+  speed: number;
+  acceleration: number;
+  jerk: number;
+}
