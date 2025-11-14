@@ -83,24 +83,47 @@ export default function RobotController() {
 
   // Gamepad connection handlers
   useEffect(() => {
-    const connectHandler = () => {
+    const connectHandler = (event: GamepadEvent) => {
+      if (event.gamepad.index !== 0) {
+        console.warn(
+          '[RobotController] Multiple gamepads detected:',
+          event.gamepad,
+        );
+        showOrUpdateToast(
+          <span>
+            Multiple gamepads detected. <br /> UI only supports one gamepad.
+          </span>,
+          {
+            type: 'warning',
+            toastId: gamepadToastId,
+          },
+        );
+        return;
+      }
+
       setGamepadConnected(true);
-      console.info(
-        '[RobotController] Gamepad connected',
-        navigator.getGamepads(),
-      );
+      console.info('[RobotController] Gamepad connected:', event.gamepad);
       showOrUpdateToast('Gamepad connected', {
         type: 'info',
         toastId: gamepadToastId,
       });
     };
 
-    const disconnectHandler = () => {
+    const disconnectHandler = (event: GamepadEvent) => {
+      const gamepad = event.gamepad;
+      if (gamepad.index !== 0) {
+        console.info(
+          '[RobotController] Disconnected non-primary gamepad:',
+          gamepad,
+        );
+        showOrUpdateToast(<span>Additional gamepad disconnected.</span>, {
+          type: 'info',
+          toastId: gamepadToastId,
+        });
+        return;
+      }
       setGamepadConnected(false);
-      console.info(
-        '[RobotController] Gamepad disconnected',
-        navigator.getGamepads(),
-      );
+      console.info('[RobotController] Gamepad disconnected', gamepad);
       showOrUpdateToast('Gamepad disconnected', {
         type: 'info',
         toastId: gamepadToastId,
@@ -122,13 +145,14 @@ export default function RobotController() {
 
     const handleGamepad = () => {
       const gamepads = navigator.getGamepads();
-      if (gamepads.length > 1) {
-        console.warn('[handleGamepad] Multiple gamepads detected!', gamepads);
-      }
       const gamepad = gamepads[0];
       if (gamepad === null) return;
 
-      const threshold = DRIVE_CONFIG.JOYSTICK_DEADZONE;
+      const {
+        JOYSTICK_DEADZONE: threshold,
+        LINEAR_VELOCITY_LIMIT_MPS: maxVelocity,
+        STEERING_ANGLE_LIMIT_RAD: maxSteeringAngle,
+      } = DRIVE_CONFIG;
 
       const leftStickY = gamepad.axes[1];
       const rightStickX = gamepad.axes[2];
@@ -140,9 +164,11 @@ export default function RobotController() {
       };
       if (drivingDeadmanPressed) {
         velocityObject.speed =
-          Math.abs(leftStickY) > threshold ? -leftStickY : 0;
+          Math.abs(leftStickY) > threshold ? -leftStickY * maxVelocity : 0;
         velocityObject.steering_angle =
-          Math.abs(rightStickX) > threshold ? -rightStickX : 0;
+          Math.abs(rightStickX) > threshold
+            ? -rightStickX * maxSteeringAngle
+            : 0;
       }
       setRobotVelocity(velocityObject);
     };

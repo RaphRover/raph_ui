@@ -72,8 +72,8 @@ interface DriveConfig {
   VELOCITY_PUBLISH_INTERVAL_MS: number;
   /** Robot linear velocity limit (physical) in meters per second */
   LINEAR_VELOCITY_LIMIT_MPS: number;
-  /** Robot angular velocity limit (physical) in radians per second */
-  ANGULAR_VELOCITY_LIMIT_RADPS: number;
+  /** Robot maximum angular limit (physical) in radians */
+  STEERING_ANGLE_LIMIT_RAD: number;
   /** Joystick deadzone percentage */
   JOYSTICK_DEADZONE: number;
   /** Gamepad fetch interval in milliseconds */
@@ -93,7 +93,7 @@ interface DriveConfig {
 export const DRIVE_CONFIG: DriveConfig = {
   VELOCITY_PUBLISH_INTERVAL_MS: 100,
   LINEAR_VELOCITY_LIMIT_MPS: 2,
-  ANGULAR_VELOCITY_LIMIT_RADPS: 1,
+  STEERING_ANGLE_LIMIT_RAD: 1.1,
   JOYSTICK_DEADZONE: 0.1,
   GAMEPAD_INTERVAL_MS: 50,
   ACKERMANN_STEERING_ANGLE_VELOCITY: 3,
