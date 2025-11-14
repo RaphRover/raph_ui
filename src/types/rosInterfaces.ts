@@ -52,8 +52,9 @@ export const SteeringModes = {
   TURN_IN_PLACE: 1,
 } as const;
 
-export type SteeringModeRequest =
-  (typeof SteeringModes)[keyof typeof SteeringModes];
+export type SteeringModeRequest = {
+  steering_mode: { data: (typeof SteeringModes)[keyof typeof SteeringModes] };
+};
 
 export interface AckermannDriveMsg {
   steering_angle: number;

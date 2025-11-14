@@ -18,11 +18,13 @@ export default function useRosService<Request, Response>(
   const serviceRef = useRef<Service<Request, Response> | null>(null);
   const isCallingRef = useRef<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [ isInitialized, setIsInitialized ] = useState(false);
 
   // Service initialization & clean up
   useEffect(() => {
     if (!ros) {
       console.debug(`[useRosService] Service ${serviceName} uninitialized`);
+      setIsInitialized(false);
       serviceRef.current = null;
       return;
     }
@@ -34,9 +36,11 @@ export default function useRosService<Request, Response>(
     });
     serviceRef.current = service;
     console.debug(`[useRosService] Service ${serviceName} initialized`);
+    setIsInitialized(true);
 
     return () => {
       console.debug(`[useRosService] Service ${serviceName} uninitialized`);
+      setIsInitialized(false);  
       serviceRef.current = null;
     };
   }, [ros, serviceName, serviceType]);
@@ -92,5 +96,5 @@ export default function useRosService<Request, Response>(
     [serviceName, timeout],
   );
 
-  return { callService, isLoading };
+  return { callService, isLoading, isInitialized };
 }
