@@ -74,8 +74,6 @@ interface DriveConfig {
   LINEAR_VELOCITY_LIMIT_MPS: number;
   /** Robot maximum angular limit (physical) in radians */
   STEERING_ANGLE_LIMIT_RAD: number;
-  /** Joystick deadzone percentage */
-  JOYSTICK_DEADZONE: number;
   /** Gamepad fetch interval in milliseconds */
   GAMEPAD_INTERVAL_MS: number;
   /** Default value for the `steering_angle_velocity` in AckermannMsg */
@@ -94,9 +92,40 @@ export const DRIVE_CONFIG: DriveConfig = {
   VELOCITY_PUBLISH_INTERVAL_MS: 100,
   LINEAR_VELOCITY_LIMIT_MPS: 2,
   STEERING_ANGLE_LIMIT_RAD: 1.1,
-  JOYSTICK_DEADZONE: 0.1,
   GAMEPAD_INTERVAL_MS: 50,
   ACKERMANN_STEERING_ANGLE_VELOCITY: 3,
   ACKERMANN_ACCELERATION: 2,
   ACKERMANN_JERK: 2,
+};
+
+/**
+ * Configuration for gamepad buttons.
+ * For reference, see: https://www.w3.org/TR/gamepad/#remapping
+ */
+interface GamepadConfig {
+  /** Index of the button used to calibrate wheels */
+  CALIBRATION_BUTTON_INDEX: number;
+  /** Index of the button used to toggle steering mode */
+  STEERING_MODE_BUTTON_INDEX: number;
+  /** Index of the button used as driving deadman switch */
+  DRIVING_DEADMAN_BUTTON_INDEX: number;
+  /** Index of the axis used for forward/backward control */
+  FORWARD_AXIS_INDEX: number;
+  /** Index of the axis used for steering control */
+  STEERING_AXIS_INDEX: number;
+  /** Joystick deadzone threshold (0.0 - 1.0) */
+  JOYSTICK_DEADZONE: number;
+}
+
+/**
+ * Configuration for gamepad control.
+ * @type {GamepadConfig}
+ */
+export const GAMEPAD_CONFIG: GamepadConfig = {
+  CALIBRATION_BUTTON_INDEX: 2,
+  STEERING_MODE_BUTTON_INDEX: 1,
+  DRIVING_DEADMAN_BUTTON_INDEX: 5,
+  FORWARD_AXIS_INDEX: 1,
+  STEERING_AXIS_INDEX: 2,
+  JOYSTICK_DEADZONE: 0.1,
 };

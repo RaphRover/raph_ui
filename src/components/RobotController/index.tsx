@@ -1,14 +1,18 @@
 import { useAppContext } from '@scripts/context/AppContext';
-import { useEffect, useState } from 'react';
-import { DRIVE_CONFIG } from '@scripts/config/config';
+import { useEffect, useRef, useState } from 'react';
+import { DRIVE_CONFIG, GAMEPAD_CONFIG } from '@scripts/config/config';
 import type { AckermannDriveMsg } from 'types/rosInterfaces';
 import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
 
 export default function RobotController() {
   const [isGamepadConnected, setGamepadConnected] = useState(false);
+  const prevGamepadRef = useRef<Gamepad | null>(null);
 
-  const { isKeyboardControlEnabled, robotVelocityControl } = useAppContext();
+  const { isKeyboardControlEnabled, robotVelocityControl, wheelCalibration , steeringMode } =
+    useAppContext();
   const { setRobotVelocity } = robotVelocityControl;
+  const { calibrateWheels } = wheelCalibration;
+  const { toggleSteeringMode } = steeringMode;
   const keyboardControlToastId = 'keyboardControlToast';
   const gamepadToastId = 'gamepadConnectionToast';
 
@@ -146,17 +150,47 @@ export default function RobotController() {
     const handleGamepad = () => {
       const gamepads = navigator.getGamepads();
       const gamepad = gamepads[0];
+      const prevGamepad = prevGamepadRef.current;
       if (gamepad === null) return;
 
       const {
-        JOYSTICK_DEADZONE: threshold,
         LINEAR_VELOCITY_LIMIT_MPS: maxVelocity,
         STEERING_ANGLE_LIMIT_RAD: maxSteeringAngle,
       } = DRIVE_CONFIG;
 
-      const leftStickY = gamepad.axes[1];
-      const rightStickX = gamepad.axes[2];
-      const drivingDeadmanPressed = gamepad.buttons[5].pressed;
+      const {
+        JOYSTICK_DEADZONE: threshold,
+        CALIBRATION_BUTTON_INDEX,
+        STEERING_MODE_BUTTON_INDEX,
+        DRIVING_DEADMAN_BUTTON_INDEX,
+        FORWARD_AXIS_INDEX,
+        STEERING_AXIS_INDEX,
+      } = GAMEPAD_CONFIG;
+
+      const steeringModeButton =
+        gamepad.buttons[STEERING_MODE_BUTTON_INDEX].pressed;
+      const prevSteeringModeButton =
+        prevGamepad?.buttons[STEERING_MODE_BUTTON_INDEX].pressed;
+      if (steeringModeButton && !prevSteeringModeButton) {
+        // Steering mode button pressed
+        console.info('[RobotController] Toggle steering mode button pressed');
+        toggleSteeringMode();
+      }
+
+      const calibrationButton =
+        gamepad.buttons[CALIBRATION_BUTTON_INDEX].pressed;
+      const prevCalibrationButton =
+        prevGamepad?.buttons[CALIBRATION_BUTTON_INDEX].pressed;
+      if (calibrationButton && !prevCalibrationButton) {
+        // Calibration button pressed
+        console.info('[RobotController] Calibrate wheels button pressed');
+        calibrateWheels();
+      }
+
+      const leftStickY = gamepad.axes[FORWARD_AXIS_INDEX];
+      const rightStickX = gamepad.axes[STEERING_AXIS_INDEX];
+      const drivingDeadmanPressed =
+        gamepad.buttons[DRIVING_DEADMAN_BUTTON_INDEX].pressed;
 
       const velocityObject: Partial<AckermannDriveMsg> = {
         speed: 0,
@@ -171,6 +205,7 @@ export default function RobotController() {
             : 0;
       }
       setRobotVelocity(velocityObject);
+      prevGamepadRef.current = gamepad;
     };
 
     let animationFrame: number;
@@ -184,7 +219,7 @@ export default function RobotController() {
       cancelAnimationFrame(animationFrame);
       console.debug('[RobotController] Gamepad controller unmounted');
     };
-  }, [isGamepadConnected, setRobotVelocity]);
+  }, [calibrateWheels, isGamepadConnected, setRobotVelocity, toggleSteeringMode]);
 
   return null;
 }
