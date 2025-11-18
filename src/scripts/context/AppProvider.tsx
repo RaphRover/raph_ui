@@ -5,6 +5,7 @@ import { useROSContext } from './ROSContext';
 import { DEFAULT_STREAM_NAME } from '@scripts/config/config';
 import useRobotVelocityControl from '@scripts/hooks/useRobotVelocityControl';
 import useSteeringMode from '@scripts/hooks/useSteeringMode';
+import useWheelCalibration from '@scripts/hooks/useWheelCalibration';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -29,6 +30,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   const robotVelocityControl = useRobotVelocityControl();
 
   const steeringMode = useSteeringMode();
+  const wheelCalibration = useWheelCalibration();
 
   return (
     <AppContext.Provider
@@ -43,6 +45,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         isVirtualJoystickEnabled,
         setVirtualJoystickEnabled,
         steeringMode,
+        wheelCalibration,
       }}
     >
       {children}

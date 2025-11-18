@@ -2,6 +2,10 @@ import { useROSContext } from '@scripts/context/ROSContext';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Service } from 'roslib';
 
+type CallService<Request, Response> = Request extends undefined
+  ? () => Promise<Response>
+  : (request: Request) => Promise<Response>;
+
 /**
  * @param serviceName Service name string
  * @param serviceType Service type string
@@ -46,7 +50,7 @@ export default function useRosService<Request, Response>(
   }, [ros, serviceName, serviceType]);
 
   const callService = useCallback(
-    async (request: Request): Promise<Response> => {
+    async (request?: Request) => {
       if (isCallingRef.current) {
         const errorMessage = `Service call to ${serviceName} is already in progress.`;
         console.warn('[useRosService] ' + errorMessage);
@@ -64,7 +68,7 @@ export default function useRosService<Request, Response>(
 
       const serviceCallPromise = new Promise<Response>((resolve, reject) => {
         service.callService(
-          request,
+          request ?? ({} as Request),
           (response: Response) => {
             resolve(response);
           },
@@ -94,7 +98,7 @@ export default function useRosService<Request, Response>(
       }
     },
     [serviceName, timeout],
-  );
+  ) as CallService<Request, Response>;
 
   return { callService, isLoading, isInitialized };
 }
