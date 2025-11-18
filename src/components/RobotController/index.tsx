@@ -8,8 +8,12 @@ export default function RobotController() {
   const [isGamepadConnected, setGamepadConnected] = useState(false);
   const prevGamepadRef = useRef<Gamepad | null>(null);
 
-  const { isKeyboardControlEnabled, robotVelocityControl, wheelCalibration , steeringMode } =
-    useAppContext();
+  const {
+    isKeyboardControlEnabled,
+    robotVelocityControl,
+    wheelCalibration,
+    steeringMode,
+  } = useAppContext();
   const { setRobotVelocity } = robotVelocityControl;
   const { calibrateWheels } = wheelCalibration;
   const { toggleSteeringMode } = steeringMode;
@@ -219,7 +223,12 @@ export default function RobotController() {
       cancelAnimationFrame(animationFrame);
       console.debug('[RobotController] Gamepad controller unmounted');
     };
-  }, [calibrateWheels, isGamepadConnected, setRobotVelocity, toggleSteeringMode]);
+  }, [
+    calibrateWheels,
+    isGamepadConnected,
+    setRobotVelocity,
+    toggleSteeringMode,
+  ]);
 
   return null;
 }
