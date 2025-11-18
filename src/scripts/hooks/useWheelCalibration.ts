@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useRosService from './useRosService';
 import type { ServiceResponse } from 'types/rosInterfaces';
+import { toast } from 'react-toastify';
 
 export interface WheelCalibration {
   isCalibrated: boolean;
@@ -18,8 +19,24 @@ export default function useWheelCalibration(): WheelCalibration {
   >('controller/calibrate_servos', 'std_srvs/srv/Trigger');
 
   const calibrateWheels = async () => {
+    const promise = callService();
+    toast.promise(
+      promise,
+      {
+        pending: 'Calibrating wheels...',
+        success: 'Wheels calibrated successfully!',
+        error: {
+          render({ data }: { data: Error }) {
+            return `Failed to calibrate wheels: ${data.message}`;
+          },
+        },
+      },
+      {
+        toastId: 'calibrate-wheels',
+      },
+    );
     try {
-      const response = await callService();
+      const response = await promise;
       if (response.success) {
         setIsCalibrated(true);
       }

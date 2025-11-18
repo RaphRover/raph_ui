@@ -34,7 +34,9 @@ export default function useSteeringMode(): SteeringModeHook {
         promise,
         {
           success: `Steering mode set to: ${newSteeringMode === SteeringModes.ACKERMANN ? 'Ackermann' : 'Turn in place'}`,
-          error: 'Failed to change steering mode',
+          error: { render({ data }: { data: Error }) {
+              return `Failed to change steering mode: ${data.message}`;
+            } },
           pending: 'Changing steering mode...',
         },
         { toastId: 'steering-mode-switch' },
