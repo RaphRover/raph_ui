@@ -159,3 +159,12 @@ export const VIRTUAL_JOYSTICK_CONFIG: VirtualJoystickConfig = {
   COLOR_STICK_DISABLED: "rgba(255,255,255, 0.2)",
   THROTTLE_MS: 50,
 };
+
+interface ToastConfig {
+  /** Default duration for auto-closing toasts in milliseconds */
+  AUTO_CLOSE_MS: number;
+}
+
+export const TOAST_CONFIG: ToastConfig = {
+  AUTO_CLOSE_MS: 3000,
+};

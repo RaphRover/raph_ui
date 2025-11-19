@@ -1,0 +1,15 @@
+.PortraitMobile {
+  width: calc(100% - 2 * var(--toastify-toast-offset)) !important;
+  top: 84px;  
+  left: var(--toastify-toast-offset);
+  right : var(--toastify-toast-offset);
+  opacity: 0.95;
+}
+
+.ToastMobile {
+  border-radius: var(--toastify-toast-bd-radius);
+}
+
+.LandscapeMobile {
+  width: var(--toastify-toast-width);
+}
