@@ -129,3 +129,33 @@ export const GAMEPAD_CONFIG: GamepadConfig = {
   STEERING_AXIS_INDEX: 2,
   JOYSTICK_DEADZONE: 0.1,
 };
+
+interface VirtualJoystickConfig {
+  /** Joystick size in pixels */
+  SIZE_PX: number;
+  /** Joystick size in pixels for mobile devices */
+  MOBILE_SIZE_PX: number;
+    /** Joystick stick size ratio relative to base size (0.0 - 1.0) */
+  STICK_SIZE_RATIO: number;
+  /** Joystick base color */
+  COLOR_BASE: string;
+  /** Joystick stick color */
+  COLOR_STICK: string;
+  /** Joystick base color when disabled */
+  COLOR_BASE_DISABLED: string;
+  /** Joystick stick color when disabled */
+  COLOR_STICK_DISABLED: string;
+  /** Joystick throttle in ms */
+  THROTTLE_MS: number;
+};
+
+export const VIRTUAL_JOYSTICK_CONFIG: VirtualJoystickConfig = {
+  SIZE_PX: 250,
+  MOBILE_SIZE_PX: 150,
+  STICK_SIZE_RATIO: 0.5,
+  COLOR_BASE: "rgba(255,255,255, 0.3)",
+  COLOR_STICK: "rgba(255,255,255, 0.5)",
+  COLOR_BASE_DISABLED: "rgba(255,255,255, 0.1)",
+  COLOR_STICK_DISABLED: "rgba(255,255,255, 0.2)",
+  THROTTLE_MS: 50,
+};
