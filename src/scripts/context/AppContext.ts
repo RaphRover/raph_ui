@@ -12,8 +12,8 @@ interface AppContext {
   robotVelocityControl: RobotVelocityControl;
   isKeyboardControlEnabled: boolean;
   setKeyboardControlEnabled: React.Dispatch<React.SetStateAction<boolean>>;
-  isVirtualJoystickEnabled: boolean;
-  setVirtualJoystickEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  isVirtualGamepadEnabled: boolean;
+  setVirtualGamepadEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   steeringMode: SteeringModeHook;
   wheelCalibration: WheelCalibration;
 }

@@ -14,7 +14,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Driving
   const [isKeyboardControlEnabled, setKeyboardControlEnabled] = useState(false);
-  const [isVirtualJoystickEnabled, setVirtualJoystickEnabled] = useState(false);
+  const [isVirtualGamepadEnabled, setVirtualGamepadEnabled] = useState(false);
 
   const [selectedStream, selectStream] = useState<StreamTopic | null>(null);
 
@@ -44,8 +44,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         robotVelocityControl,
         isKeyboardControlEnabled,
         setKeyboardControlEnabled,
-        isVirtualJoystickEnabled,
-        setVirtualJoystickEnabled,
+        isVirtualGamepadEnabled,
+        setVirtualGamepadEnabled,
         steeringMode,
         wheelCalibration,
       }}

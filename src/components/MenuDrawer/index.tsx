@@ -13,9 +13,9 @@ import { useMediaQuery } from 'react-responsive';
 export default function MenuDrawer() {
   const {
     isKeyboardControlEnabled,
-    isVirtualJoystickEnabled,
+    isVirtualGamepadEnabled,
     setKeyboardControlEnabled,
-    setVirtualJoystickEnabled,
+    setVirtualGamepadEnabled,
     wheelCalibration,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
@@ -66,9 +66,9 @@ export default function MenuDrawer() {
               <ToggleButton
                 id="toggle-keyboard-control"
                 type="checkbox"
-                checked={isVirtualJoystickEnabled}
+                checked={isVirtualGamepadEnabled}
                 value={''}
-                onClick={() => setVirtualJoystickEnabled((prev) => !prev)}
+                onClick={() => setVirtualGamepadEnabled((prev) => !prev)}
                 variant="outline-secondary"
               >
                 Toggle virtual joystick

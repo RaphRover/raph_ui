@@ -130,7 +130,7 @@ export const GAMEPAD_CONFIG: GamepadConfig = {
   JOYSTICK_DEADZONE: 0.1,
 };
 
-interface VirtualJoystickConfig {
+interface VirtualGamepadConfig {
   /** Joystick size in pixels */
   SIZE_PX: number;
   /** Joystick size in pixels for mobile devices */
@@ -149,7 +149,7 @@ interface VirtualJoystickConfig {
   THROTTLE_MS: number;
 }
 
-export const VIRTUAL_JOYSTICK_CONFIG: VirtualJoystickConfig = {
+export const VIRTUAL_JOYSTICK_CONFIG: VirtualGamepadConfig = {
   SIZE_PX: 250,
   MOBILE_SIZE_PX: 150,
   STICK_SIZE_RATIO: 0.5,

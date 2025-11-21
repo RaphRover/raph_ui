@@ -5,10 +5,10 @@ import styles from './styles.module.css';
 import { VIRTUAL_JOYSTICK_CONFIG } from '@scripts/config/config';
 import { useMediaQuery } from 'react-responsive';
 
-export default function VirtualJoystick() {
+export default function VirtualGamepad() {
   const {
     robotVelocityControl,
-    isVirtualJoystickEnabled,
+    isVirtualGamepadEnabled,
     steeringMode,
     wheelCalibration,
   } = useAppContext();
@@ -64,7 +64,7 @@ export default function VirtualJoystick() {
     });
   };
 
-  if (!isVirtualJoystickEnabled) return null;
+  if (!isVirtualGamepadEnabled) return null;
   return (
     <>
       <div
@@ -105,7 +105,7 @@ export default function VirtualJoystick() {
           B
         </button>
       </div>
-      <div className={styles.virtualJoystickContainer}>
+      <div className={styles.VirtualJoystickContainer}>
         <Joystick
           disabled={!isDrivingEnabled}
           size={joystickSize}

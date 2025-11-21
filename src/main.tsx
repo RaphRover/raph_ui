@@ -13,7 +13,7 @@ import ToastContainerWrapper from '@components/ToastContainerWrapper';
 import StreamWindow from '@components/StreamWindow';
 import { AppProvider } from '@scripts/context/AppProvider.tsx';
 import RobotController from '@components/RobotController';
-import VirtualJoystick from '@components/VirtualJoystick';
+import VirtualGamepad from '@components/VirtualGamepad';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
       <AppProvider>
         <ToastContainerWrapper />
         <RobotController />
-        <VirtualJoystick />
+        <VirtualGamepad />
         <div className="app-wrapper">
           <RaphNavbar />
           <StreamWindow />

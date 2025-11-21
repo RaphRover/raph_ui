@@ -6,7 +6,7 @@ import { TOAST_CONFIG } from '@scripts/config/config';
 import styles from './styles.module.css';
 
 export default function ToastContainerWrapper() {
-  // const { isMenuVisible, isVirtualJoystickEnabled } = useAppContext();
+  // const { isMenuVisible, isVirtualGamepadEnabled } = useAppContext();
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   // const { SIZE_PX, MOBILE_SIZE_PX } = VIRTUAL_JOYSTICK_CONFIG;
@@ -33,7 +33,7 @@ export default function ToastContainerWrapper() {
     hideProgressBar = true;
   }
 
-  // if (isVirtualJoystickEnabled) {
+  // if (isVirtualGamepadEnabled) {
   //   bottomOffset = `calc( var(--toastify-toast-bottom) + ${(isMobile ? MOBILE_SIZE_PX : SIZE_PX) + 20}px)`;
   // }
   // if (isMenuVisible && !isMobile) {
