@@ -19,12 +19,13 @@ export default function MenuDrawer() {
     wheelCalibration,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
-  const { robotVelocityControl, isMenuVisible , setMenuVisible } = useAppContext();
+  const { robotVelocityControl, isMenuVisible, setMenuVisible } =
+    useAppContext();
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
 
   const { isInitialized, isLoading, calibrateWheels } = wheelCalibration;
 
-    const handleClose = () => setMenuVisible(false);
+  const handleClose = () => setMenuVisible(false);
 
   return (
     <Offcanvas
@@ -34,9 +35,9 @@ export default function MenuDrawer() {
       aria-labelledby="offcanvasMenuLabel"
       scrollable={true}
     >
-      <Offcanvas.Header closeButton >Menu</Offcanvas.Header>
+      <Offcanvas.Header closeButton>Menu</Offcanvas.Header>
       <Offcanvas.Body>
-        <Stack gap={2} style={{ height: '100%'}}>
+        <Stack gap={2} style={{ height: '100%' }}>
           <Button variant="outline-secondary">Toggle Fullscreen</Button>
           <ToggleButton
             id="enable-driving"

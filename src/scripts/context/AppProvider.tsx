@@ -27,10 +27,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     return selectedStream ?? defaultStream ?? null;
   }, [selectedStream, streamList]);
 
-  const robotVelocityControl = useRobotVelocityControl();
-
   const steeringMode = useSteeringMode();
   const wheelCalibration = useWheelCalibration();
+
+  const robotVelocityControl = useRobotVelocityControl(
+    steeringMode.steeringMode,
+  );
 
   return (
     <AppContext.Provider

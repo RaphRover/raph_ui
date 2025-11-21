@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AckermannDriveMsg } from 'types/rosInterfaces';
 import useRosTopicPublisher from './useRosTopicPublisher';
 import { DRIVE_CONFIG } from '@scripts/config/config';
+import { SteeringModes } from '@root/src/types/rosInterfaces';
+import type { SteeringMode } from '@scripts/hooks/useSteeringMode';
 
 export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
@@ -9,7 +11,9 @@ export interface RobotVelocityControl {
   setRobotVelocity: (velocity: Partial<AckermannDriveMsg>) => void;
 }
 
-export default function useRobotVelocityControl(): RobotVelocityControl {
+export default function useRobotVelocityControl(
+  steeringMode: SteeringMode | null,
+): RobotVelocityControl {
   const [isDrivingEnabled, setDrivingEnabled] = useState(false);
   const publishInterval = DRIVE_CONFIG.VELOCITY_PUBLISH_INTERVAL_MS;
 
@@ -48,6 +52,11 @@ export default function useRobotVelocityControl(): RobotVelocityControl {
 
     const interval = setInterval(() => {
       const velocity = robotVelocityRef.current;
+      if (steeringMode === SteeringModes.TURN_IN_PLACE) {
+        const tempSpeed = velocity.speed;
+        velocity.speed = velocity.steering_angle;
+        velocity.steering_angle = tempSpeed;
+      }
       publishVelocity(velocity);
     }, publishInterval);
     console.debug('[useRobotVelocityControl] Velocity publish enabled');
@@ -56,7 +65,7 @@ export default function useRobotVelocityControl(): RobotVelocityControl {
       clearInterval(interval);
       console.debug('[useRobotVelocityControl] Velocity publish disabled');
     };
-  }, [isDrivingEnabled, publishInterval, publishVelocity]);
+  }, [isDrivingEnabled, publishInterval, publishVelocity, steeringMode]);
 
   return { isDrivingEnabled, setDrivingEnabled, setRobotVelocity };
 }

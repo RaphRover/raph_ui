@@ -14,7 +14,7 @@ export type SteeringModeHook = {
   isInitialized: boolean;
 };
 
-type SteeringMode = (typeof SteeringModes)[keyof typeof SteeringModes];
+export type SteeringMode = (typeof SteeringModes)[keyof typeof SteeringModes];
 
 export default function useSteeringMode(): SteeringModeHook {
   const [steeringMode, setSteeringMode] = useState<SteeringMode | null>(null);

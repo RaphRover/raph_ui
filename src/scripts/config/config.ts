@@ -135,7 +135,7 @@ interface VirtualJoystickConfig {
   SIZE_PX: number;
   /** Joystick size in pixels for mobile devices */
   MOBILE_SIZE_PX: number;
-    /** Joystick stick size ratio relative to base size (0.0 - 1.0) */
+  /** Joystick stick size ratio relative to base size (0.0 - 1.0) */
   STICK_SIZE_RATIO: number;
   /** Joystick base color */
   COLOR_BASE: string;
@@ -147,16 +147,16 @@ interface VirtualJoystickConfig {
   COLOR_STICK_DISABLED: string;
   /** Joystick throttle in ms */
   THROTTLE_MS: number;
-};
+}
 
 export const VIRTUAL_JOYSTICK_CONFIG: VirtualJoystickConfig = {
   SIZE_PX: 250,
   MOBILE_SIZE_PX: 150,
   STICK_SIZE_RATIO: 0.5,
-  COLOR_BASE: "rgba(255,255,255, 0.3)",
-  COLOR_STICK: "rgba(255,255,255, 0.5)",
-  COLOR_BASE_DISABLED: "rgba(255,255,255, 0.1)",
-  COLOR_STICK_DISABLED: "rgba(255,255,255, 0.2)",
+  COLOR_BASE: 'rgba(255,255,255, 0.3)',
+  COLOR_STICK: 'rgba(255,255,255, 0.5)',
+  COLOR_BASE_DISABLED: 'rgba(255,255,255, 0.1)',
+  COLOR_STICK_DISABLED: 'rgba(255,255,255, 0.2)',
   THROTTLE_MS: 50,
 };
 

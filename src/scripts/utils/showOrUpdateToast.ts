@@ -22,7 +22,8 @@ export function showOrUpdateToast(
 
   if (toastId && toast.isActive(toastId)) {
     const toastProps = { ...options, render: content };
-    if (toastProps.isLoading === false) toastProps.autoClose = TOAST_CONFIG.AUTO_CLOSE_MS;
+    if (toastProps.isLoading === false)
+      toastProps.autoClose = TOAST_CONFIG.AUTO_CLOSE_MS;
     toast.update(toastId, toastProps);
     return toastId;
   }
