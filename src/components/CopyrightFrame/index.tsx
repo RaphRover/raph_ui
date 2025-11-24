@@ -3,9 +3,7 @@ import Frame from '@components/ui/Frame';
 export default function CopyrightFrame() {
   return (
     <Frame>
-      <div style={{ marginBottom: '0.5rem' }}>
-        {__APP_DISPLAY_NAME__}
-      </div>
+      <div style={{ marginBottom: '0.5rem' }}>{__APP_DISPLAY_NAME__}</div>
       <div
         style={{
           display: 'flex',

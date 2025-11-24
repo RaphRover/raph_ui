@@ -8,8 +8,8 @@ export type FullscreenHook = {
 
 export default function useFullscreen(): FullscreenHook {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const isSupported = typeof document !== 'undefined' && 
-    'fullscreenEnabled' in document;
+  const isSupported =
+    typeof document !== 'undefined' && 'fullscreenEnabled' in document;
 
   useEffect(() => {
     if (!isSupported) return;

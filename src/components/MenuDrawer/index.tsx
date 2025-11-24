@@ -66,7 +66,12 @@ export default function MenuDrawer() {
             Calibrate wheels
           </Button>
           <StreamDropdown desktopLayout={isDesktop} />
-          <Button onClick={() => setConfigVisible(true)} variant="outline-secondary">Settings</Button>
+          <Button
+            onClick={() => setConfigVisible(true)}
+            variant="outline-secondary"
+          >
+            Settings
+          </Button>
           <ToggleButton
             className="mt-auto"
             id="toggle-fullscreen"

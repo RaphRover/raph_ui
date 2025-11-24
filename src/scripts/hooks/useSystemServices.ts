@@ -25,10 +25,10 @@ export default function useSystemServices(): SystemServices {
         pending: 'Rebooting system...',
         success: 'System rebooted successfully!',
         error: {
-            render({ data }: { data: Error }) {
-              return `Failed to reboot system: ${data.message}`;
-            },
+          render({ data }: { data: Error }) {
+            return `Failed to reboot system: ${data.message}`;
           },
+        },
       },
       {
         toastId: 'reboot-service-toast',
