@@ -79,7 +79,8 @@ export default function useSteeringMode(): SteeringModeHook {
     );
     promise
       .then((response) => {
-        if (response.success && !abortController.signal.aborted) setSteeringMode(SteeringModes.ACKERMANN);
+        if (response.success && !abortController.signal.aborted)
+          setSteeringMode(SteeringModes.ACKERMANN);
       })
       .catch((error) => {
         if (!abortController.signal.aborted) {
