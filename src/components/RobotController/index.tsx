@@ -20,6 +20,22 @@ export default function RobotController() {
   const keyboardControlToastId = 'keyboardControlToast';
   const gamepadToastId = 'gamepadConnectionToast';
 
+  // Reset velocity on window focus loss
+  useEffect(() => {
+    const handleBlur = () => {
+      console.debug('[RobotController] Window focus lost - stopping robot');
+      setRobotVelocity({ speed: 0, steering_angle: 0 });
+    };
+
+    window.addEventListener('blur', handleBlur);
+    console.debug('[RobotController] Added window blur handler');
+
+    return () => {
+      window.removeEventListener('blur', handleBlur);
+      console.debug('[RobotController] Removed window blur handler');
+    };
+  }, [setRobotVelocity]);
+
   // Keyboard control
   useEffect(() => {
     if (!isKeyboardControlEnabled) {
