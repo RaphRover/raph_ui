@@ -6,6 +6,7 @@ import { DEFAULT_STREAM_NAME } from '@scripts/config/config';
 import useRobotVelocityControl from '@scripts/hooks/useRobotVelocityControl';
 import useSteeringMode from '@scripts/hooks/useSteeringMode';
 import useWheelCalibration from '@scripts/hooks/useWheelCalibration';
+import useSystemServices from '@scripts/hooks/useSystemServices';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -34,6 +35,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     steeringMode.steeringMode,
   );
 
+  const systemServices = useSystemServices();
+
   return (
     <AppContext.Provider
       value={{
@@ -48,6 +51,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         setVirtualGamepadEnabled,
         steeringMode,
         wheelCalibration,
+        systemServices,
       }}
     >
       {children}

@@ -12,6 +12,7 @@ import {
 import CopyrightFrame from '@components/CopyrightFrame';
 
 import { useMediaQuery } from 'react-responsive';
+import ServiceOptions from '@components/ServiceOptions';
 
 export default function MenuDrawer() {
   const {
@@ -103,7 +104,7 @@ export default function MenuDrawer() {
               </ToggleButton>
             </Col>
           </Row>
-          <Button variant="outline-warning">Service menu</Button>
+          <ServiceOptions desktopLayout={isDesktop} />
           <CopyrightFrame />
         </Stack>
       </Offcanvas.Body>
