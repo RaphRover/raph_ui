@@ -1,4 +1,4 @@
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { SteeringModes } from '@root/src/types/rosInterfaces';
 
 import AckermannIcon from './ackermann.svg?react';
@@ -10,21 +10,39 @@ export default function SteeringModeSwitch() {
   const { steeringMode, toggleSteeringMode, isLoading } =
     useAppContext().steeringMode;
 
-  const buttonIcon = () => {
-    if (steeringMode === SteeringModes.ACKERMANN) return <AckermannIcon />;
-    if (steeringMode === SteeringModes.TURN_IN_PLACE)
-      return <TurnInPlaceIcon />;
-    return <>Unknown</>;
-  };
+  const steeringModesRadio = [
+    {
+      name: 'Ackermann',
+      icon: <AckermannIcon />,
+      value: SteeringModes.ACKERMANN,
+    },
+    {
+      name: 'Turn in Place',
+      icon: <TurnInPlaceIcon />,
+      value: SteeringModes.TURN_IN_PLACE,
+    },
+  ];
 
   return (
-    <Button
-      variant="outline-secondary"
-      className={styles.button}
-      disabled={steeringMode === null || isLoading}
-      onClick={toggleSteeringMode}
-    >
-      {buttonIcon()}
-    </Button>
+    <ButtonGroup>
+      {steeringModesRadio.map((mode) => (
+        <Button
+          key={mode.value}
+          variant={
+            steeringMode === mode.value ? 'primary' : 'outline-secondary'
+          }
+          className={styles.button}
+          disabled={isLoading}
+          onClick={() => {
+            if (steeringMode !== mode.value) {
+              toggleSteeringMode();
+            }
+          }}
+        >
+          <div>{mode.icon}</div>
+          <div className={styles.text}>{mode.name}</div>
+        </Button>
+      ))}
+    </ButtonGroup>
   );
 }
