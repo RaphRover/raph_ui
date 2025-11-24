@@ -36,7 +36,7 @@ export default function MenuDrawer() {
       scrollable={'true'}
     >
       <Offcanvas.Header closeButton>Menu</Offcanvas.Header>
-      <Offcanvas.Body>
+      <Offcanvas.Body style={{ overflow: 'visible'}}>
         <Stack gap={2} style={{ height: '100%' }}>
           <Button variant="outline-secondary">Toggle Fullscreen</Button>
           <ToggleButton
