@@ -1,14 +1,18 @@
 import { useROSContext } from '@scripts/context/ROSContext';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Service } from 'roslib';
+import type { ServiceResponse } from 'types/rosInterfaces';
 
-export type RosServiceHook<Request, Response> = {
+export type RosServiceHook<Request, Response extends ServiceResponse> = {
   callService: CallService<Request, Response>;
   isLoading: boolean;
   isInitialized: boolean;
 };
 
-type CallService<Request, Response> = Request extends undefined
+type CallService<
+  Request,
+  Response extends ServiceResponse,
+> = Request extends undefined
   ? () => Promise<Response>
   : (request: Request) => Promise<Response>;
 
@@ -18,7 +22,10 @@ type CallService<Request, Response> = Request extends undefined
  * @param timeout Service call timeout, defaults to `5000` ms
  * @returns Promise
  */
-export default function useRosService<Request, Response>(
+export default function useRosService<
+  Request,
+  Response extends ServiceResponse,
+>(
   serviceName: string,
   serviceType: string,
   timeout: number = 5000,
@@ -76,10 +83,19 @@ export default function useRosService<Request, Response>(
         service.callService(
           request ?? ({} as Request),
           (response: Response) => {
+            if (response.success === false) {
+              reject(
+                new Error(
+                  response.status_message ||
+                    'Unknown error during service call.',
+                ),
+              );
+              return;
+            }
             resolve(response);
           },
           (error: string) => {
-            reject(new Error(error));
+            reject(new Error(error || 'Unknown error during service call.'));
           },
         );
       });

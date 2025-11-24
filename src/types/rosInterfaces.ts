@@ -43,8 +43,8 @@ export interface ImuMsg {
 }
 
 export interface ServiceResponse {
-  success: boolean;
-  status_message: string;
+  success?: boolean;
+  status_message?: string;
 }
 
 export const SteeringModes = {
