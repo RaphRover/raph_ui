@@ -14,7 +14,7 @@ export default function SteeringModeSwitch() {
     if (steeringMode === SteeringModes.ACKERMANN) return <AckermannIcon />;
     if (steeringMode === SteeringModes.TURN_IN_PLACE)
       return <TurnInPlaceIcon />;
-    else return <>Unknown</>;
+    return <>Unknown</>;
   };
 
   return (

@@ -33,6 +33,8 @@ export default function RobotController() {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
+      const repeat = event.repeat;
+      if (repeat) return; // Ignore repeated events
       const velocityObject: Partial<AckermannDriveMsg> = {};
       switch (key) {
         case 'w':
@@ -145,7 +147,7 @@ export default function RobotController() {
       window.removeEventListener('gamepaddisconnected', disconnectHandler);
       console.debug('[RobotController] Removed gamepad control event handlers');
     };
-  });
+  }, []);
 
   // Gamepad control handlers
   useEffect(() => {
@@ -212,15 +214,20 @@ export default function RobotController() {
       prevGamepadRef.current = gamepad;
     };
 
-    let animationFrame: number;
-    const interval = setInterval(() => {
-      animationFrame = requestAnimationFrame(handleGamepad);
-    }, DRIVE_CONFIG.GAMEPAD_INTERVAL_MS);
+    let animationFrame: number | undefined;
+    let lastUpdate = 0;
+    const handleGamepadLoop = (timestamp: number) => {
+      if (timestamp - lastUpdate >= DRIVE_CONFIG.GAMEPAD_INTERVAL_MS) {
+        handleGamepad();
+        lastUpdate = timestamp;
+      }
+      animationFrame = requestAnimationFrame(handleGamepadLoop);
+    };
+    animationFrame = requestAnimationFrame(handleGamepadLoop);
     console.debug('[RobotController] Gamepad controller mounted');
 
     return () => {
-      clearInterval(interval);
-      cancelAnimationFrame(animationFrame);
+      if (animationFrame) cancelAnimationFrame(animationFrame);
       console.debug('[RobotController] Gamepad controller unmounted');
     };
   }, [

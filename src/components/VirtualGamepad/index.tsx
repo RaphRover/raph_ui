@@ -33,7 +33,7 @@ export default function VirtualGamepad() {
   } = steeringMode;
   const {
     isLoading: isCalibratingWheels,
-    isInitialized: isCalibareWheelsInitialized,
+    isInitialized: isCalibrateWheelsInitialized,
     calibrateWheels,
   } = wheelCalibration;
 
@@ -76,7 +76,7 @@ export default function VirtualGamepad() {
           disabled={
             !isDrivingEnabled ||
             isCalibratingWheels ||
-            !isCalibareWheelsInitialized
+            !isCalibrateWheelsInitialized
           }
           style={{
             width: buttonSize,

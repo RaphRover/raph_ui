@@ -86,7 +86,7 @@ interface DriveConfig {
 
 /**
  * Configuration for robot drive system.
- * @type {ImuConfig}
+ * @type {DriveConfig}
  */
 export const DRIVE_CONFIG: DriveConfig = {
   VELOCITY_PUBLISH_INTERVAL_MS: 100,

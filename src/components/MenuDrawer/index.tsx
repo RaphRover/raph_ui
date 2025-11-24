@@ -33,7 +33,7 @@ export default function MenuDrawer() {
       placement="end"
       onHide={handleClose}
       aria-labelledby="offcanvasMenuLabel"
-      scrollable={true}
+      scrollable={'true'}
     >
       <Offcanvas.Header closeButton>Menu</Offcanvas.Header>
       <Offcanvas.Body>
@@ -64,7 +64,7 @@ export default function MenuDrawer() {
           <Row className="mt-auto">
             <Col>
               <ToggleButton
-                id="toggle-keyboard-control"
+                id="toggle-virtual-gamepad"
                 type="checkbox"
                 checked={isVirtualGamepadEnabled}
                 value={''}

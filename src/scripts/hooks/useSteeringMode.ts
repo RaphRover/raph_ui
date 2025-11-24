@@ -59,6 +59,9 @@ export default function useSteeringMode(): SteeringModeHook {
   // Initialize steering mode on first load
   useEffect(() => {
     if (steeringModeEvent() !== null || !isInitialized) return;
+
+    const abortController = new AbortController();
+
     console.debug(
       '[SteeringModeSwitch] Setting initial steering mode to Ackermann',
     );
@@ -76,18 +79,19 @@ export default function useSteeringMode(): SteeringModeHook {
     );
     promise
       .then((response) => {
-        if (response.success) setSteeringMode(SteeringModes.ACKERMANN);
+        if (response.success && !abortController.signal.aborted) setSteeringMode(SteeringModes.ACKERMANN);
       })
       .catch((error) => {
-        console.error(
-          '[SteeringModeSwitch] Failed to set initial steering mode:',
-          error,
-        );
+        if (!abortController.signal.aborted) {
+          console.error(
+            '[SteeringModeSwitch] Failed to set initial steering mode:',
+            error,
+          );
+        }
       });
 
     return () => {
-      promise.catch(() => {}); // Prevent unhandled promise rejection on unmount
-      setSteeringMode(null);
+      abortController.abort();
     };
   }, [callService, isInitialized]);
 

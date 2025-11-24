@@ -7,5 +7,5 @@ export default function useFirstRender(callback: () => void) {
     const isFirstRender = ref.current;
     if (isFirstRender) callback();
     ref.current = false;
-  });
+  }, [callback]);
 }

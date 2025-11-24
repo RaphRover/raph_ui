@@ -51,7 +51,7 @@ export default function useRobotVelocityControl(
     if (!isDrivingEnabled) return;
 
     const interval = setInterval(() => {
-      const velocity = robotVelocityRef.current;
+      const velocity = { ...robotVelocityRef.current };
       if (steeringMode === SteeringModes.TURN_IN_PLACE) {
         const tempSpeed = velocity.speed;
         velocity.speed = velocity.steering_angle;
