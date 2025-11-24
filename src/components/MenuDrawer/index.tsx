@@ -1,5 +1,6 @@
 import StreamDropdown from '@components/StreamDropdown';
 import { useAppContext } from '@scripts/context/AppContext';
+import useFullscreen from '@scripts/hooks/useFullscreen';
 import {
   Button,
   Col,
@@ -19,6 +20,8 @@ export default function MenuDrawer() {
     wheelCalibration,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
+
   const { robotVelocityControl, isMenuVisible, setMenuVisible } =
     useAppContext();
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
@@ -35,10 +38,11 @@ export default function MenuDrawer() {
       aria-labelledby="offcanvasMenuLabel"
       scrollable={'true'}
     >
-      <Offcanvas.Header closeButton>Menu</Offcanvas.Header>
-      <Offcanvas.Body style={{ overflow: 'visible'}}>
+      <Offcanvas.Header closeButton>
+        <Offcanvas.Title>Menu</Offcanvas.Title>
+      </Offcanvas.Header>
+      <Offcanvas.Body style={{ overflow: 'visible' }}>
         <Stack gap={2} style={{ height: '100%' }}>
-          <Button variant="outline-secondary">Toggle Fullscreen</Button>
           <ToggleButton
             id="enable-driving"
             type="checkbox"
@@ -47,9 +51,8 @@ export default function MenuDrawer() {
             onClick={() => setDrivingEnabled((prev) => !prev)}
             variant="outline-success"
           >
-            Toggle driving
+            {isDrivingEnabled ? 'Disable Driving' : 'Enable Driving'}
           </ToggleButton>
-          <Button variant="outline-info">Toggle steering mode</Button>
           <Button
             id="calibrate-wheels"
             variant="outline-primary"
@@ -61,7 +64,18 @@ export default function MenuDrawer() {
           <StreamDropdown desktopLayout={isDesktop} />
           <Button variant="outline-secondary">Settings</Button>
 
-          <Row className="mt-auto">
+          <ToggleButton
+            className="mt-auto"
+            id="toggle-fullscreen"
+            type="checkbox"
+            checked={isFullscreen}
+            value={''}
+            onClick={toggleFullscreen}
+            variant="outline-secondary"
+          >
+            {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+          </ToggleButton>
+          <Row>
             <Col>
               <ToggleButton
                 id="toggle-virtual-gamepad"
