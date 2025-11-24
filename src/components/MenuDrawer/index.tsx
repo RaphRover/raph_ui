@@ -9,6 +9,8 @@ import {
   Stack,
   ToggleButton,
 } from 'react-bootstrap';
+import CopyrightFrame from '@components/CopyrightFrame';
+
 import { useMediaQuery } from 'react-responsive';
 
 export default function MenuDrawer() {
@@ -102,6 +104,7 @@ export default function MenuDrawer() {
             </Col>
           </Row>
           <Button variant="outline-warning">Service menu</Button>
+          <CopyrightFrame />
         </Stack>
       </Offcanvas.Body>
     </Offcanvas>
