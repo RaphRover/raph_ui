@@ -8,6 +8,8 @@ import type { SystemServices } from '@scripts/hooks/useSystemServices';
 interface AppContext {
   isMenuVisible: boolean;
   setMenuVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isConfigVisible: boolean;
+  setConfigVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedStream: StreamTopic | null;
   selectStream: React.Dispatch<React.SetStateAction<StreamTopic | null>>;
   robotVelocityControl: RobotVelocityControl;

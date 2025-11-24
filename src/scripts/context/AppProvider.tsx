@@ -12,6 +12,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
+  const [isConfigVisible, setConfigVisible] = useState(false);
 
   // Driving
   const [isKeyboardControlEnabled, setKeyboardControlEnabled] = useState(false);
@@ -42,6 +43,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         isMenuVisible,
         setMenuVisible,
+        isConfigVisible,
+        setConfigVisible,
         selectedStream: effectiveSelectedStream,
         selectStream,
         robotVelocityControl,

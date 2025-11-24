@@ -21,6 +21,7 @@ export default function MenuDrawer() {
     setKeyboardControlEnabled,
     setVirtualGamepadEnabled,
     wheelCalibration,
+    setConfigVisible,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
   const { isFullscreen, toggleFullscreen } = useFullscreen();
@@ -65,8 +66,7 @@ export default function MenuDrawer() {
             Calibrate wheels
           </Button>
           <StreamDropdown desktopLayout={isDesktop} />
-          <Button variant="outline-secondary">Settings</Button>
-
+          <Button onClick={() => setConfigVisible(true)} variant="outline-secondary">Settings</Button>
           <ToggleButton
             className="mt-auto"
             id="toggle-fullscreen"
