@@ -2,15 +2,16 @@ import { useMemo, useState } from 'react';
 import { AppContext } from './AppContext';
 import type { StreamTopic } from '@scripts/hooks/useRosStreamList';
 import { useROSContext } from './ROSContext';
-import { DEFAULT_STREAM_NAME } from '@scripts/config/config';
 import useRobotVelocityControl from '@scripts/hooks/useRobotVelocityControl';
 import useSteeringMode from '@scripts/hooks/useSteeringMode';
 import useWheelCalibration from '@scripts/hooks/useWheelCalibration';
 import useSystemServices from '@scripts/hooks/useSystemServices';
+import { useConfigContext } from './ConfigContext';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { initialStreamName } = useConfigContext();
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isConfigVisible, setConfigVisible] = useState(false);
 
@@ -24,10 +25,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const effectiveSelectedStream = useMemo(() => {
     const defaultStream = streamList.find(
-      (stream) => stream.name === DEFAULT_STREAM_NAME,
+      (stream) => stream.name === initialStreamName,
     );
     return selectedStream ?? defaultStream ?? null;
-  }, [selectedStream, streamList]);
+  }, [initialStreamName, selectedStream, streamList]);
 
   const steeringMode = useSteeringMode();
   const wheelCalibration = useWheelCalibration();

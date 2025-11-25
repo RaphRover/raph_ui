@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { ROS_CONFIG } from '@scripts/config/config';
 import type { RosTopic } from './useRosTopicList';
 import { NAME_MAPPINGS } from '@scripts/config/streamMapping';
+import { useConfigContext } from '@scripts/context/ConfigContext';
 
 export interface StreamTopic extends RosTopic {
   displayName: string;
@@ -9,7 +9,8 @@ export interface StreamTopic extends RosTopic {
 }
 
 export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
-  const HOSTNAME = ROS_CONFIG.HOSTNAME;
+  const { rosConfig } = useConfigContext();
+  const { HOSTNAME } = rosConfig;
 
   const streamList = useMemo(() => {
     const list: StreamTopic[] = [];

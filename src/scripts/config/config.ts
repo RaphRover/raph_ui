@@ -1,4 +1,4 @@
-interface RosConfig {
+export interface RosConfig {
   /** Robot hostname that UI will connect to (from .env or location.hostname) */
   HOSTNAME: string;
   /** WebSocket port for ROS connection */
@@ -15,7 +15,7 @@ interface RosConfig {
  * Configuration for ROS connection.
  * @type {RosConfig}
  */
-export const ROS_CONFIG: RosConfig = {
+export const DEFAULT_ROS_CONFIG: RosConfig = {
   HOSTNAME: import.meta.env.VITE_ROBOT_HOSTNAME || location.hostname,
   PORT: 9090,
   RECONNECT_INTERVAL_MS: 5000,
@@ -27,9 +27,9 @@ export const ROS_CONFIG: RosConfig = {
  * Default stream name used on first load of the UI.
  * @type {string}
  */
-export const DEFAULT_STREAM_NAME = '/oak/rgb/image_raw/compressed';
+export const DEFAULT_INITIAL_STREAM_NAME = '/oak/rgb/image_raw/compressed';
 
-interface BatteryConfig {
+export interface BatteryConfig {
   /** Battery status refresh interval in milliseconds */
   REFRESH_INTERVAL_MS: number;
   /** Decimal precision for battery percentage display */
@@ -44,14 +44,14 @@ interface BatteryConfig {
  * Configuration for battery status display.
  * @type {BatteryConfig}
  */
-export const BATTERY_CONFIG: BatteryConfig = {
+export const DEFAULT_BATTERY_CONFIG: BatteryConfig = {
   REFRESH_INTERVAL_MS: 1000,
   DISPLAY_PRECISION: 2,
   CRITICAL_LEVEL_PERCENT: 20,
   WARNING_LEVEL_PERCENT: 60,
 };
 
-interface ImuConfig {
+export interface ImuConfig {
   /** IMU status refresh interval in milliseconds */
   REFRESH_INTERVAL_MS: number;
   /** Decimal precision for IMU data display */
@@ -62,20 +62,18 @@ interface ImuConfig {
  * Configuration for IMU status display.
  * @type {ImuConfig}
  */
-export const IMU_CONFIG: ImuConfig = {
+export const DEFAULT_IMU_CONFIG: ImuConfig = {
   REFRESH_INTERVAL_MS: 1000,
   DISPLAY_PRECISION: 2,
 };
 
-interface DriveConfig {
+export interface DriveConfig {
   /** Ackermann velocity publish interval in milliseconds */
   VELOCITY_PUBLISH_INTERVAL_MS: number;
   /** Robot linear velocity limit (physical) in meters per second */
   LINEAR_VELOCITY_LIMIT_MPS: number;
   /** Robot maximum angular limit (physical) in radians */
   STEERING_ANGLE_LIMIT_RAD: number;
-  /** Gamepad fetch interval in milliseconds */
-  GAMEPAD_INTERVAL_MS: number;
   /** Default value for the `steering_angle_velocity` in AckermannMsg */
   ACKERMANN_STEERING_ANGLE_VELOCITY: number;
   /** Default value for the `acceleration` in AckermannMsg */
@@ -88,11 +86,10 @@ interface DriveConfig {
  * Configuration for robot drive system.
  * @type {DriveConfig}
  */
-export const DRIVE_CONFIG: DriveConfig = {
+export const DEFAULT_DRIVE_CONFIG: DriveConfig = {
   VELOCITY_PUBLISH_INTERVAL_MS: 100,
   LINEAR_VELOCITY_LIMIT_MPS: 2,
   STEERING_ANGLE_LIMIT_RAD: 1.1,
-  GAMEPAD_INTERVAL_MS: 50,
   ACKERMANN_STEERING_ANGLE_VELOCITY: 3,
   ACKERMANN_ACCELERATION: 2,
   ACKERMANN_JERK: 2,
@@ -102,7 +99,7 @@ export const DRIVE_CONFIG: DriveConfig = {
  * Configuration for gamepad buttons.
  * For reference, see: https://www.w3.org/TR/gamepad/#remapping
  */
-interface GamepadConfig {
+export interface GamepadConfig {
   /** Index of the button used to calibrate wheels */
   CALIBRATION_BUTTON_INDEX: number;
   /** Index of the button used to toggle steering mode */
@@ -115,22 +112,25 @@ interface GamepadConfig {
   STEERING_AXIS_INDEX: number;
   /** Joystick deadzone threshold (0.0 - 1.0) */
   JOYSTICK_DEADZONE: number;
+  /** Gamepad fetch interval in milliseconds */
+  GAMEPAD_INTERVAL_MS: number;
 }
 
 /**
  * Configuration for gamepad control.
  * @type {GamepadConfig}
  */
-export const GAMEPAD_CONFIG: GamepadConfig = {
+export const DEFAULT_GAMEPAD_CONFIG: GamepadConfig = {
   CALIBRATION_BUTTON_INDEX: 2,
   STEERING_MODE_BUTTON_INDEX: 1,
   DRIVING_DEADMAN_BUTTON_INDEX: 5,
   FORWARD_AXIS_INDEX: 1,
   STEERING_AXIS_INDEX: 2,
   JOYSTICK_DEADZONE: 0.1,
+  GAMEPAD_INTERVAL_MS: 50,
 };
 
-interface VirtualGamepadConfig {
+export interface VirtualGamepadConfig {
   /** Joystick size in pixels */
   SIZE_PX: number;
   /** Joystick size in pixels for mobile devices */
@@ -149,7 +149,7 @@ interface VirtualGamepadConfig {
   THROTTLE_MS: number;
 }
 
-export const VIRTUAL_JOYSTICK_CONFIG: VirtualGamepadConfig = {
+export const DEFAULT_VIRTUAL_GAMEPAD_CONFIG: VirtualGamepadConfig = {
   SIZE_PX: 250,
   MOBILE_SIZE_PX: 150,
   STICK_SIZE_RATIO: 0.5,
@@ -160,11 +160,11 @@ export const VIRTUAL_JOYSTICK_CONFIG: VirtualGamepadConfig = {
   THROTTLE_MS: 50,
 };
 
-interface ToastConfig {
+export interface ToastConfig {
   /** Default duration for auto-closing toasts in milliseconds */
   AUTO_CLOSE_MS: number;
 }
 
-export const TOAST_CONFIG: ToastConfig = {
+export const DEFAULT_TOAST_CONFIG: ToastConfig = {
   AUTO_CLOSE_MS: 3000,
 };

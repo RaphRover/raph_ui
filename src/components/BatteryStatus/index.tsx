@@ -1,18 +1,19 @@
 import Frame from '@components/ui/Frame';
 import useRosTopicSubscription from '@scripts/hooks/useRosTopicSubscription';
-import { BATTERY_CONFIG } from '@scripts/config/config';
 
 import type { PowerSystemStateMsg } from 'types/rosInterfaces';
 
 import styles from './styles.module.css';
+import { useConfigContext } from '@scripts/context/ConfigContext';
 
 export default function BatteryStatus() {
+  const { batteryConfig } = useConfigContext();
   const {
     REFRESH_INTERVAL_MS,
     DISPLAY_PRECISION,
     CRITICAL_LEVEL_PERCENT,
     WARNING_LEVEL_PERCENT,
-  } = BATTERY_CONFIG;
+  } = batteryConfig;
   const powerSystemState = useRosTopicSubscription<PowerSystemStateMsg>(
     'controller/power_system_state',
     'raph_interfaces/msg/PowerSystemState',

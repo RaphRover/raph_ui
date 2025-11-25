@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AckermannDriveMsg } from 'types/rosInterfaces';
 import useRosTopicPublisher from './useRosTopicPublisher';
-import { DRIVE_CONFIG } from '@scripts/config/config';
 import { SteeringModes } from '@root/src/types/rosInterfaces';
 import type { SteeringMode } from '@scripts/hooks/useSteeringMode';
+import { useConfigContext } from '@scripts/context/ConfigContext';
 
 export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
@@ -14,14 +14,15 @@ export interface RobotVelocityControl {
 export default function useRobotVelocityControl(
   steeringMode: SteeringMode | null,
 ): RobotVelocityControl {
+  const { driveConfig } = useConfigContext();
   const [isDrivingEnabled, setDrivingEnabled] = useState(false);
-  const publishInterval = DRIVE_CONFIG.VELOCITY_PUBLISH_INTERVAL_MS;
 
   const {
+    VELOCITY_PUBLISH_INTERVAL_MS: publishInterval,
     ACKERMANN_STEERING_ANGLE_VELOCITY,
     ACKERMANN_ACCELERATION,
     ACKERMANN_JERK,
-  } = DRIVE_CONFIG;
+  } = driveConfig;
 
   const publishVelocity = useRosTopicPublisher<AckermannDriveMsg>(
     'controller/cmd_ackermann',
@@ -54,7 +55,7 @@ export default function useRobotVelocityControl(
       const velocity = { ...robotVelocityRef.current };
       if (steeringMode === SteeringModes.TURN_IN_PLACE) {
         const tempSpeed = velocity.speed;
-        velocity.speed = velocity.steering_angle;
+        velocity.speed = -velocity.steering_angle;
         velocity.steering_angle = tempSpeed;
       }
       publishVelocity(velocity);

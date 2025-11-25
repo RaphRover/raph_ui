@@ -2,8 +2,8 @@ import { useAppContext } from '@scripts/context/AppContext';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import styles from './styles.module.css';
-import { VIRTUAL_JOYSTICK_CONFIG } from '@scripts/config/config';
 import { useMediaQuery } from 'react-responsive';
+import { useConfigContext } from '@scripts/context/ConfigContext';
 
 export default function VirtualGamepad() {
   const {
@@ -13,6 +13,8 @@ export default function VirtualGamepad() {
     wheelCalibration,
   } = useAppContext();
   const { isDrivingEnabled, setRobotVelocity } = robotVelocityControl;
+  const { virtualGamepadConfig } = useConfigContext();
+
   const {
     SIZE_PX,
     MOBILE_SIZE_PX,
@@ -22,7 +24,7 @@ export default function VirtualGamepad() {
     COLOR_BASE_DISABLED,
     COLOR_STICK_DISABLED,
     THROTTLE_MS,
-  } = VIRTUAL_JOYSTICK_CONFIG;
+  } = virtualGamepadConfig;
 
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const isMobile = useMediaQuery({ maxWidth: 767 });

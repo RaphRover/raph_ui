@@ -1,12 +1,12 @@
 import Frame from '@components/ui/Frame';
 import useRosTopicSubscription from '@scripts/hooks/useRosTopicSubscription';
 import { clsx } from 'clsx';
-import { IMU_CONFIG } from '@scripts/config/config';
 
 import type { Quaternion } from 'roslib';
 import type { ImuMsg } from 'types/rosInterfaces';
 
 import styles from './styles.module.css';
+import { useConfigContext } from '@scripts/context/ConfigContext';
 
 interface Euler {
   roll: number;
@@ -15,7 +15,8 @@ interface Euler {
 }
 
 export default function ImuReadings() {
-  const { REFRESH_INTERVAL_MS, DISPLAY_PRECISION } = IMU_CONFIG;
+  const { imuConfig } = useConfigContext();
+  const { REFRESH_INTERVAL_MS, DISPLAY_PRECISION } = imuConfig;
   const imuReadings = useRosTopicSubscription<ImuMsg>(
     'controller/imu/data',
     'sensor_msgs/msg/Imu',
