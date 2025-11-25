@@ -67,19 +67,33 @@ export const DEFAULT_IMU_CONFIG: ImuConfig = {
   DISPLAY_PRECISION: 2,
 };
 
+/**
+ * Defines range constraints for adjustable numeric values.
+ */
+export interface RangeConfig {
+  /** Default value */
+  DEFAULT: number;
+  /** Minimum allowed value */
+  MIN: number;
+  /** Maximum allowed value */
+  MAX: number;
+  /** Step increment for adjustments */
+  STEP: number;
+}
+
 export interface DriveConfig {
   /** Ackermann velocity publish interval in milliseconds */
   VELOCITY_PUBLISH_INTERVAL_MS: number;
-  /** Robot linear velocity limit (physical) in meters per second */
-  LINEAR_VELOCITY_LIMIT_MPS: number;
-  /** Robot maximum angular limit (physical) in radians */
+  /** Configuration for robot linear velocity in meters per second */
+  LINEAR_VELOCITY_MPS: RangeConfig;
+  /** Configuration for robot steering angle velocity in radians per second */
+  STEERING_ANGLE_VELOCITY_RADPS: RangeConfig;
+  /** Robot physical steering angle limit in radians */
   STEERING_ANGLE_LIMIT_RAD: number;
-  /** Default value for the `steering_angle_velocity` in AckermannMsg */
-  ACKERMANN_STEERING_ANGLE_VELOCITY: number;
-  /** Default value for the `acceleration` in AckermannMsg */
-  ACKERMANN_ACCELERATION: number;
-  /** Default value for the `jerk` in AckermannMsg */
-  ACKERMANN_JERK: number;
+  /** Configuration for acceleration in AckermannMsg (m/s^2) */
+  ACKERMANN_ACCELERATION: RangeConfig;
+  /** Configuration for jerk in AckermannMsg (m/s^3) */
+  ACKERMANN_JERK: RangeConfig;
 }
 
 /**
@@ -88,11 +102,31 @@ export interface DriveConfig {
  */
 export const DEFAULT_DRIVE_CONFIG: DriveConfig = {
   VELOCITY_PUBLISH_INTERVAL_MS: 100,
-  LINEAR_VELOCITY_LIMIT_MPS: 2,
+  LINEAR_VELOCITY_MPS: {
+    DEFAULT: 1.0,
+    MIN: 0.1,
+    MAX: 2.0,
+    STEP: 0.1,
+  },
+  STEERING_ANGLE_VELOCITY_RADPS: {
+    DEFAULT: 3.0,
+    MIN: 0.1,
+    MAX: 5.0,
+    STEP: 0.1,
+  },
   STEERING_ANGLE_LIMIT_RAD: 1.1,
-  ACKERMANN_STEERING_ANGLE_VELOCITY: 3,
-  ACKERMANN_ACCELERATION: 2,
-  ACKERMANN_JERK: 2,
+  ACKERMANN_ACCELERATION: {
+    DEFAULT: 1.0,
+    MIN: 0.0,
+    MAX: 3.0,
+    STEP: 0.1,
+  },
+  ACKERMANN_JERK: {
+    DEFAULT: 2.0,
+    MIN: 0.0,
+    MAX: 5.0,
+    STEP: 0.1,
+  },
 };
 
 /**
