@@ -3,11 +3,19 @@ import { AppContext } from './AppContext';
 import type { StreamTopic } from '@scripts/hooks/useRosStreamList';
 import { useROSContext } from './ROSContext';
 import { DEFAULT_STREAM_NAME } from '@scripts/config/config';
+import useRobotVelocityControl from '@scripts/hooks/useRobotVelocityControl';
+import useSteeringMode from '@scripts/hooks/useSteeringMode';
+import useWheelCalibration from '@scripts/hooks/useWheelCalibration';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
+
+  // Driving
+  const [isKeyboardControlEnabled, setKeyboardControlEnabled] = useState(false);
+  const [isVirtualGamepadEnabled, setVirtualGamepadEnabled] = useState(false);
+
   const [selectedStream, selectStream] = useState<StreamTopic | null>(null);
 
   const { streamList } = useROSContext();
@@ -19,6 +27,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     return selectedStream ?? defaultStream ?? null;
   }, [selectedStream, streamList]);
 
+  const steeringMode = useSteeringMode();
+  const wheelCalibration = useWheelCalibration();
+
+  const robotVelocityControl = useRobotVelocityControl(
+    steeringMode.steeringMode,
+  );
+
   return (
     <AppContext.Provider
       value={{
@@ -26,6 +41,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         setMenuVisible,
         selectedStream: effectiveSelectedStream,
         selectStream,
+        robotVelocityControl,
+        isKeyboardControlEnabled,
+        setKeyboardControlEnabled,
+        isVirtualGamepadEnabled,
+        setVirtualGamepadEnabled,
+        steeringMode,
+        wheelCalibration,
       }}
     >
       {children}

@@ -1,0 +1,29 @@
+.VirtualJoystickContainer {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 500;
+}
+
+.virtualButtonsContainer {
+  width: 30vw;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 500;
+  font-size: x-large;
+}
+
+.virtualButton {
+  display: block;
+  border-radius: 50%;
+  border: none;
+}
+
+.virtualButton:disabled {
+  cursor: not-allowed;
+}
