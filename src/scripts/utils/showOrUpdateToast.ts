@@ -6,21 +6,6 @@ import {
   type UpdateOptions,
 } from 'react-toastify';
 import { APP_CONFIG } from '@/config';
-import type { ConfigSetting } from '@/config';
-
-const parseToastConfig = () => {
-  const toastConfig = APP_CONFIG.toast;
-  const parsedToastConfig: Record<string, string | number> = {};
-
-  for (const key in toastConfig) {
-    const setting = toastConfig[key as keyof typeof toastConfig];
-    if (setting && typeof setting === 'object' && 'defaultValue' in setting) {
-      parsedToastConfig[key] = (setting as ConfigSetting).defaultValue;
-    }
-  }
-
-  return parsedToastConfig;
-};
 
 /**
  * Displays a new toast or updates an existing one if it's active.
@@ -34,18 +19,21 @@ export function showOrUpdateToast(
   content: ToastContent,
   options?: ToastOptions,
 ): Id {
-  const defaultToastConfig = parseToastConfig();
-  const toastOptions: ToastOptions = { ...defaultToastConfig, ...options };
+  const toastConfig = APP_CONFIG.toast;
   const toastId = options?.toastId;
 
   if (toastId && toast.isActive(toastId)) {
+    if (options?.type) {
+      options.isLoading = false;
+      options.autoClose =
+        options.autoClose ?? toastConfig.autoCloseMs.defaultValue;
+    }
     const toastUpdateOptions: UpdateOptions = {
-      ...toastOptions,
+      ...options,
       render: content,
     };
-    if (toastUpdateOptions.isLoading === false)
-      toast.update(toastId, toastUpdateOptions);
+    toast.update(toastId, toastUpdateOptions);
     return toastId;
   }
-  return toast(content, toastOptions);
+  return toast(content, options);
 }
