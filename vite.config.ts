@@ -7,7 +7,7 @@ import { execSync } from 'child_process';
 
 function getGitVersion() {
   try {
-    const version = execSync('git describe tags --always').toString().trim();
+    const version = execSync('git describe --tags --always').toString().trim();
     return version;
   } catch {
     console.warn('Could not get git version, falling back to package.json');
