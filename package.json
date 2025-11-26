@@ -1,5 +1,7 @@
 {
   "name": "raph_ui",
+  "displayName": "Raph Rover Web User Interface",
+  "repository": "https://github.com/RaphRover/raph_ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",

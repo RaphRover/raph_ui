@@ -23,7 +23,7 @@ export default function StreamDropdown(props: StreamDropdownProps) {
   return (
     <Dropdown
       onSelect={handleStreamSelection}
-      drop={desktopLayout ? 'start' : 'down'}
+      drop={desktopLayout ? 'start' : 'down-centered'}
     >
       <Dropdown.Toggle style={{ width: '100%' }}>
         Stream selection

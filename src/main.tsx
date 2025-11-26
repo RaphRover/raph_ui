@@ -14,6 +14,7 @@ import StreamWindow from '@components/StreamWindow';
 import { AppProvider } from '@scripts/context/AppProvider.tsx';
 import RobotController from '@components/RobotController';
 import VirtualGamepad from '@components/VirtualGamepad';
+import ConfigDrawer from '@components/ConfigDrawer';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
         <div className="app-wrapper">
           <RaphNavbar />
           <StreamWindow />
+          <ConfigDrawer />
         </div>
       </AppProvider>
     </ROSProvider>

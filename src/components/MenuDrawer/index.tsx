@@ -1,5 +1,6 @@
 import StreamDropdown from '@components/StreamDropdown';
 import { useAppContext } from '@scripts/context/AppContext';
+import useFullscreen from '@scripts/hooks/useFullscreen';
 import {
   Button,
   Col,
@@ -8,7 +9,10 @@ import {
   Stack,
   ToggleButton,
 } from 'react-bootstrap';
+import CopyrightFrame from '@components/CopyrightFrame';
+
 import { useMediaQuery } from 'react-responsive';
+import ServiceOptions from '@components/ServiceOptions';
 
 export default function MenuDrawer() {
   const {
@@ -17,8 +21,11 @@ export default function MenuDrawer() {
     setKeyboardControlEnabled,
     setVirtualGamepadEnabled,
     wheelCalibration,
+    setConfigVisible,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
+
   const { robotVelocityControl, isMenuVisible, setMenuVisible } =
     useAppContext();
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
@@ -35,10 +42,11 @@ export default function MenuDrawer() {
       aria-labelledby="offcanvasMenuLabel"
       scrollable={'true'}
     >
-      <Offcanvas.Header closeButton>Menu</Offcanvas.Header>
-      <Offcanvas.Body>
+      <Offcanvas.Header closeButton>
+        <Offcanvas.Title>Menu</Offcanvas.Title>
+      </Offcanvas.Header>
+      <Offcanvas.Body style={{ overflow: 'visible' }}>
         <Stack gap={2} style={{ height: '100%' }}>
-          <Button variant="outline-secondary">Toggle Fullscreen</Button>
           <ToggleButton
             id="enable-driving"
             type="checkbox"
@@ -47,9 +55,8 @@ export default function MenuDrawer() {
             onClick={() => setDrivingEnabled((prev) => !prev)}
             variant="outline-success"
           >
-            Toggle driving
+            {isDrivingEnabled ? 'Disable Driving' : 'Enable Driving'}
           </ToggleButton>
-          <Button variant="outline-info">Toggle steering mode</Button>
           <Button
             id="calibrate-wheels"
             variant="outline-primary"
@@ -59,9 +66,24 @@ export default function MenuDrawer() {
             Calibrate wheels
           </Button>
           <StreamDropdown desktopLayout={isDesktop} />
-          <Button variant="outline-secondary">Settings</Button>
-
-          <Row className="mt-auto">
+          <Button
+            onClick={() => setConfigVisible(true)}
+            variant="outline-secondary"
+          >
+            Settings
+          </Button>
+          <ToggleButton
+            className="mt-auto"
+            id="toggle-fullscreen"
+            type="checkbox"
+            checked={isFullscreen}
+            value={''}
+            onClick={toggleFullscreen}
+            variant="outline-secondary"
+          >
+            {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+          </ToggleButton>
+          <Row>
             <Col>
               <ToggleButton
                 id="toggle-virtual-gamepad"
@@ -87,7 +109,8 @@ export default function MenuDrawer() {
               </ToggleButton>
             </Col>
           </Row>
-          <Button variant="outline-warning">Service menu</Button>
+          <ServiceOptions desktopLayout={isDesktop} />
+          <CopyrightFrame />
         </Stack>
       </Offcanvas.Body>
     </Offcanvas>
