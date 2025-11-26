@@ -50,7 +50,7 @@ export default function RobotVelocityConfig() {
       },
     );
   };
-  
+
   const handleAckermannAccelerationSet = (
     e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
   ) => {
@@ -81,8 +81,7 @@ export default function RobotVelocityConfig() {
         type: 'info',
       },
     );
-  }
-
+  };
 
   return (
     <ConfigFrame title="Robot Velocity Config">
@@ -129,7 +128,7 @@ export default function RobotVelocityConfig() {
         onMouseUp={handleAckermannJerkSet}
         onTouchEnd={handleAckermannJerkSet}
         showLegend
-      />  
+      />
     </ConfigFrame>
   );
 }
