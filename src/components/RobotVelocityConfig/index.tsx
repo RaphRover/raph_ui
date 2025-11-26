@@ -1,36 +1,44 @@
 import ConfigFrame from '@/components/ui/ConfigFrame';
 import RangeWithLabel from '@/components/ui/RangeWithLabel';
 import { useConfigContext, APP_CONFIG } from '@/config';
+import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
 
 export default function RobotVelocityConfig() {
-  const { settings } = useConfigContext();
-  const { linearVelocityMps, steeringAngleLimitRad } = settings.driveConfig;
-  const { driveConfig: driveLimits } = APP_CONFIG;
+  const { settings, updateSettings } = useConfigContext();
+  const { linearVelocityMps } = settings.driveConfig;
+  const driveLimits = APP_CONFIG.driveConfig;
+  const { linearVelocityMps: linearVelocityLimits } = driveLimits;
 
   const handleVelocitySet = (
     e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
   ) => {
-    // setDriveConfig({
-    //   ...driveConfig,
-    //   linearVelocityMps: e.currentTarget.valueAsNumber,
-    // });
-    console.log('Velocity set to:', e.currentTarget.valueAsNumber);
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { linearVelocityMps: newValue },
+    });
+    showOrUpdateToast(
+      `Robot velocity set to: ${newValue} ${linearVelocityLimits.unit}`,
+      {
+        toastId: 'velocity-set',
+        type: 'info',
+      },
+    );
   };
 
   return (
     <ConfigFrame title="Robot Velocity Config">
       <RangeWithLabel
-        label="Linear Velocity Limit"
-        unit="m/s"
-        min={driveLimits.linearVelocityMps.min}
-        max={driveLimits.linearVelocityMps.max}
-        step={driveLimits.linearVelocityMps.step}
-        defaultValue={linearVelocityMps}
+        label={linearVelocityLimits.label}
+        unit={linearVelocityLimits.unit}
+        min={linearVelocityLimits.min}
+        max={linearVelocityLimits.max}
+        step={linearVelocityLimits.step}
+        value={linearVelocityMps}
         onMouseUp={handleVelocitySet}
         onTouchEnd={handleVelocitySet}
         showLegend
       />
-      <RangeWithLabel
+      {/* <RangeWithLabel
         label="Angular Velocity Limit"
         unit="rad/s"
         min={driveLimits.steeringAngleVelocityRadps.min}
@@ -40,7 +48,7 @@ export default function RobotVelocityConfig() {
         onMouseUp={handleVelocitySet}
         onTouchEnd={handleVelocitySet}
         showLegend
-      />
+      /> */}
     </ConfigFrame>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Form, FormGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import type { FormRangeProps } from 'react-bootstrap/esm/FormRange';
 import styles from './styles.module.css';
@@ -31,23 +31,6 @@ export default function RangeWithLabel(props: RangeWithLabelProps) {
     onTouchEnd,
     ...rangeProps
   } = props;
-  const [internalValue, setInternalValue] = useState(value);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [sliderWidth, setSliderWidth] = useState(0);
-  const rangeRef = useRef<HTMLInputElement>(null);
-
-  // Measure slider width on mount and resize
-  useEffect(() => {
-    const updateWidth = () => {
-      if (rangeRef.current) {
-        setSliderWidth(rangeRef.current.offsetWidth);
-      }
-    };
-
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
 
   // Compute range props for valueArray mode
   const computedRangeProps = useMemo(() => {
@@ -61,6 +44,9 @@ export default function RangeWithLabel(props: RangeWithLabelProps) {
     }
     return rangeProps;
   }, [valueArray, rangeProps]);
+
+  const [internalValue, setInternalValue] = useState(value);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const formatValue = (
     value: number | string | readonly string[] | undefined,
@@ -150,33 +136,15 @@ export default function RangeWithLabel(props: RangeWithLabelProps) {
     }
   };
 
-  const currentDisplayValue = valueArray
-    ? valueArray[currentIndex as number]
-    : internalValue;
+  const currentDisplayValue = useMemo(() => {
+    if (valueArray && currentIndex !== undefined) {
+      const idx = Number(currentIndex);
+      return valueArray[idx];
+    }
+    return internalValue;
+  }, [valueArray, currentIndex, internalValue]);
 
   const tooltipId = `range-tooltip-${label?.toLowerCase().replaceAll(' ', '-')}`;
-
-  // Calculate horizontal offset based on slider position
-  const horizontalOffset = useMemo(() => {
-    if (!sliderWidth) return 0;
-
-    const min = Number(computedRangeProps.min) || 0;
-    const max = Number(computedRangeProps.max) || 100;
-    const current = Number(currentIndex) || 0;
-
-    if (max === min) return 0;
-
-    // Calculate percentage position (0 to 1)
-    const percentage = (current - min) / (max - min);
-
-    // Convert to pixel offset from center based on actual slider width
-    return (percentage - 0.5) * sliderWidth;
-  }, [
-    computedRangeProps.min,
-    computedRangeProps.max,
-    currentIndex,
-    sliderWidth,
-  ]);
 
   return (
     <FormGroup>
@@ -196,20 +164,19 @@ export default function RangeWithLabel(props: RangeWithLabelProps) {
             {
               name: 'offset',
               options: {
-                offset: [horizontalOffset, 8],
+                offset: [0, 8],
               },
             },
           ],
         }}
         overlay={
           <Tooltip id={tooltipId} className={styles.tooltip}>
-            {currentDisplayValue}
+            {formatValue(currentDisplayValue)}
           </Tooltip>
         }
       >
         <Form.Range
           {...computedRangeProps}
-          ref={rangeRef}
           value={currentIndex}
           onChange={handleRangeChange}
           onMouseEnter={handleMouseEnter}
