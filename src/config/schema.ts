@@ -91,7 +91,7 @@ export const APP_CONFIG = {
   driveConfig: {
     velocityPublishIntervalMs: {
       type: 'number',
-      defaultValue: 100,
+      defaultValue: 50,
       label: 'Velocity Publish Interval (ms)',
       description: 'Interval to publish velocity commands to the robot',
       unit: 'ms',
@@ -131,8 +131,8 @@ export const APP_CONFIG = {
       description:
         'Maximum Ackermann acceleration in meters per second squared',
       unit: 'm/s²',
-      min: 0.0,
-      max: 3.0,
+      min: 0.1,
+      max: 10.0,
       step: 0.1,
     },
     ackermannJerk: {
@@ -141,8 +141,8 @@ export const APP_CONFIG = {
       label: 'Ackermann Jerk (m/s³)',
       description: 'Maximum Ackermann jerk in meters per second cubed',
       unit: 'm/s³',
-      min: 0.0,
-      max: 5.0,
+      min: 0.1,
+      max: 10.0,
       step: 0.1,
     },
   },
