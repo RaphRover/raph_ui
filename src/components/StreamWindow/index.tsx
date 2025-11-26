@@ -1,5 +1,5 @@
 import { Image } from 'react-bootstrap';
-import { useAppContext } from '@scripts/context/AppContext';
+import { useAppContext } from '@/scripts/context/AppContext';
 import styles from './styles.module.css';
 
 export default function StreamWindow() {

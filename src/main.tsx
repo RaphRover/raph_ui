@@ -8,19 +8,19 @@ import './index.css';
 
 // Other imports
 import RaphNavbar from './components/Navbar';
-import { ROSProvider } from '@scripts/context/ROSProvider.tsx';
-import ToastContainerWrapper from '@components/ToastContainerWrapper';
-import StreamWindow from '@components/StreamWindow';
-import { AppProvider } from '@scripts/context/AppProvider.tsx';
-import RobotController from '@components/RobotController';
-import VirtualGamepad from '@components/VirtualGamepad';
-import ConfigDrawer from '@components/ConfigDrawer';
-import { ConfigProvider } from '@scripts/context/ConfigProvider';
+import { RosProvider } from '@/scripts/context/RosProvider';
+import ToastContainerWrapper from '@/components/ToastContainerWrapper';
+import StreamWindow from '@/components/StreamWindow';
+import { AppProvider } from '@/scripts/context/AppProvider.tsx';
+import RobotController from '@/components/RobotController';
+import VirtualGamepad from '@/components/VirtualGamepad';
+import ConfigDrawer from '@/components/ConfigDrawer';
+import { ConfigProvider } from '@/config';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ConfigProvider>
-      <ROSProvider>
+      <RosProvider>
         <AppProvider>
           <ToastContainerWrapper />
           <RobotController />
@@ -31,7 +31,7 @@ createRoot(document.getElementById('root')!).render(
             <ConfigDrawer />
           </div>
         </AppProvider>
-      </ROSProvider>
+      </RosProvider>
     </ConfigProvider>
   </StrictMode>,
 );

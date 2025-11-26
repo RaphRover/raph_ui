@@ -1,9 +1,9 @@
-import { useAppContext } from '@scripts/context/AppContext';
+import { useAppContext } from '@/scripts/context/AppContext';
 import { Joystick } from 'react-joystick-component';
 import type { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import styles from './styles.module.css';
 import { useMediaQuery } from 'react-responsive';
-import { useConfigContext } from '@scripts/context/ConfigContext';
+import { useConfigContext } from '@/config';
 
 export default function VirtualGamepad() {
   const {
@@ -13,18 +13,18 @@ export default function VirtualGamepad() {
     wheelCalibration,
   } = useAppContext();
   const { isDrivingEnabled, setRobotVelocity } = robotVelocityControl;
-  const { virtualGamepadConfig } = useConfigContext();
+  const { settings } = useConfigContext();
 
   const {
-    SIZE_PX,
-    MOBILE_SIZE_PX,
-    STICK_SIZE_RATIO,
-    COLOR_BASE,
-    COLOR_STICK,
-    COLOR_BASE_DISABLED,
-    COLOR_STICK_DISABLED,
-    THROTTLE_MS,
-  } = virtualGamepadConfig;
+    sizePx,
+    mobileSizePx,
+    stickSizeRatio,
+    colorBase,
+    colorStick,
+    colorBaseDisabled,
+    colorStickDisabled,
+    throttleMs,
+  } = settings.VirtualGamepad;
 
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -39,10 +39,10 @@ export default function VirtualGamepad() {
     calibrateWheels,
   } = wheelCalibration;
 
-  const joystickSize = isMobile && isPortrait ? MOBILE_SIZE_PX : SIZE_PX;
+  const joystickSize = isMobile && isPortrait ? mobileSizePx : sizePx;
   const buttonSize = joystickSize / 2 - 10;
-  const baseColor = isDrivingEnabled ? COLOR_BASE : COLOR_BASE_DISABLED;
-  const stickColor = isDrivingEnabled ? COLOR_STICK : COLOR_STICK_DISABLED;
+  const baseColor = isDrivingEnabled ? colorBase : colorBaseDisabled;
+  const stickColor = isDrivingEnabled ? colorStick : colorStickDisabled;
 
   const handleMove = (event: IJoystickUpdateEvent) => {
     if (!isDrivingEnabled) {
@@ -111,10 +111,10 @@ export default function VirtualGamepad() {
         <Joystick
           disabled={!isDrivingEnabled}
           size={joystickSize}
-          stickSize={joystickSize * STICK_SIZE_RATIO}
+          stickSize={joystickSize * stickSizeRatio}
           baseColor={baseColor}
           stickColor={stickColor}
-          throttle={THROTTLE_MS}
+          throttle={throttleMs}
           move={handleMove}
           stop={handleStop}
         />

@@ -1,12 +1,12 @@
-import Frame from '@components/ui/Frame';
-import useRosTopicSubscription from '@scripts/hooks/useRosTopicSubscription';
+import Frame from '@/components/ui/Frame';
+import useRosTopicSubscription from '@/scripts/hooks/useRosTopicSubscription';
 import { clsx } from 'clsx';
 
 import type { Quaternion } from 'roslib';
-import type { ImuMsg } from 'types/rosInterfaces';
+import type { ImuMsg } from '@/types/rosInterfaces';
 
 import styles from './styles.module.css';
-import { useConfigContext } from '@scripts/context/ConfigContext';
+import { useConfigContext } from '@/config';
 
 interface Euler {
   roll: number;
@@ -15,12 +15,12 @@ interface Euler {
 }
 
 export default function ImuReadings() {
-  const { imuConfig } = useConfigContext();
-  const { REFRESH_INTERVAL_MS, DISPLAY_PRECISION } = imuConfig;
+  const { settings } = useConfigContext();
+  const { refreshIntervalMs, displayPrecision } = settings.imu;
   const imuReadings = useRosTopicSubscription<ImuMsg>(
     'controller/imu/data',
     'sensor_msgs/msg/Imu',
-    REFRESH_INTERVAL_MS,
+    refreshIntervalMs,
   );
 
   const radToDeg = (rad: number) => (rad * 180) / Math.PI;
@@ -60,14 +60,14 @@ export default function ImuReadings() {
       <div>IMU readings:</div>
       <div>
         <span className={styles.angle}>
-          Roll: {euler ? radToDeg(euler.roll).toFixed(DISPLAY_PRECISION) : '-'}°
+          Roll: {euler ? radToDeg(euler.roll).toFixed(displayPrecision) : '-'}°
         </span>
         <span className={clsx(styles.angle, styles.spacing)}>
-          Pitch:{' '}
-          {euler ? radToDeg(euler.pitch).toFixed(DISPLAY_PRECISION) : '-'}°
+          Pitch: {euler ? radToDeg(euler.pitch).toFixed(displayPrecision) : '-'}
+          °
         </span>
         <span className={styles.angle}>
-          Yaw: {euler ? radToDeg(euler.yaw).toFixed(DISPLAY_PRECISION) : '-'}°
+          Yaw: {euler ? radToDeg(euler.yaw).toFixed(displayPrecision) : '-'}°
         </span>
       </div>
     </Frame>

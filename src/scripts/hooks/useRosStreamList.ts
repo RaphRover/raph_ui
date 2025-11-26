@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import type { RosTopic } from './useRosTopicList';
-import { NAME_MAPPINGS } from '@scripts/config/streamMapping';
-import { useConfigContext } from '@scripts/context/ConfigContext';
+import { NAME_MAPPINGS, useConfigContext } from '@/config';
 
 export interface StreamTopic extends RosTopic {
   displayName: string;
@@ -9,8 +8,8 @@ export interface StreamTopic extends RosTopic {
 }
 
 export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
-  const { rosConfig } = useConfigContext();
-  const { HOSTNAME } = rosConfig;
+  const { settings } = useConfigContext();
+  const { hostname } = settings.ros;
 
   const streamList = useMemo(() => {
     const list: StreamTopic[] = [];
@@ -20,7 +19,7 @@ export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
       const topicName = topic.name.replace('/compressed', '');
       const url =
         'http://' +
-        HOSTNAME +
+        hostname +
         ':8080/stream?topic=' +
         topicName +
         '&type=ros_compressed';
@@ -39,7 +38,7 @@ export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
     });
 
     return list;
-  }, [HOSTNAME, topicList]);
+  }, [hostname, topicList]);
 
   return streamList;
 }

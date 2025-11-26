@@ -1,6 +1,6 @@
-import StreamDropdown from '@components/StreamDropdown';
-import { useAppContext } from '@scripts/context/AppContext';
-import useFullscreen from '@scripts/hooks/useFullscreen';
+import StreamDropdown from '@/components/StreamDropdown';
+import { useAppContext } from '@/scripts/context/AppContext';
+import useFullscreen from '@/scripts/hooks/useFullscreen';
 import {
   Button,
   Col,
@@ -9,10 +9,10 @@ import {
   Stack,
   ToggleButton,
 } from 'react-bootstrap';
-import CopyrightFrame from '@components/CopyrightFrame';
+import CopyrightFrame from '@/components/CopyrightFrame';
 
 import { useMediaQuery } from 'react-responsive';
-import ServiceOptions from '@components/ServiceOptions';
+import ServiceOptions from '@/components/ServiceOptions';
 
 export default function MenuDrawer() {
   const {

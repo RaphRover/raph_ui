@@ -1,5 +1,5 @@
-import { useROSContext } from '@scripts/context/ROSContext';
-import { useAppContext } from '@scripts/context/AppContext';
+import { useRosContext } from '@/scripts/context/RosContext';
+import { useAppContext } from '@/scripts/context/AppContext';
 import { Dropdown } from 'react-bootstrap';
 
 interface StreamDropdownProps {
@@ -7,7 +7,7 @@ interface StreamDropdownProps {
 }
 
 export default function StreamDropdown(props: StreamDropdownProps) {
-  const { streamList } = useROSContext();
+  const { streamList } = useRosContext();
   const { selectedStream, selectStream } = useAppContext();
 
   const { desktopLayout } = props;

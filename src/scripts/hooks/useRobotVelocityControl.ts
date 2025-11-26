@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { AckermannDriveMsg } from 'types/rosInterfaces';
+import type { AckermannDriveMsg } from '@/types/rosInterfaces';
 import useRosTopicPublisher from './useRosTopicPublisher';
-import { SteeringModes } from '@root/src/types/rosInterfaces';
-import type { SteeringMode } from '@scripts/hooks/useSteeringMode';
-import { useConfigContext } from '@scripts/context/ConfigContext';
+import { SteeringModes } from '@/types/rosInterfaces';
+import type { SteeringMode } from '@/scripts/hooks/useSteeringMode';
+import { useConfigContext } from '@/config';
 
 export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
@@ -14,15 +14,15 @@ export interface RobotVelocityControl {
 export default function useRobotVelocityControl(
   steeringMode: SteeringMode | null,
 ): RobotVelocityControl {
-  const { driveConfig } = useConfigContext();
-  const [isDrivingEnabled, setDrivingEnabled] = useState(false);
+  const { settings } = useConfigContext();
 
+  const [isDrivingEnabled, setDrivingEnabled] = useState(false);
   const {
-    VELOCITY_PUBLISH_INTERVAL_MS: publishInterval,
-    ACKERMANN_STEERING_ANGLE_VELOCITY,
-    ACKERMANN_ACCELERATION,
-    ACKERMANN_JERK,
-  } = driveConfig;
+    velocityPublishIntervalMs,
+    ackermannAcceleration,
+    ackermannJerk,
+    steeringAngleVelocityRadps,
+  } = settings.driveConfig;
 
   const publishVelocity = useRosTopicPublisher<AckermannDriveMsg>(
     'controller/cmd_ackermann',
@@ -31,10 +31,10 @@ export default function useRobotVelocityControl(
 
   const robotVelocityRef = useRef<AckermannDriveMsg>({
     steering_angle: 0,
-    steering_angle_velocity: ACKERMANN_STEERING_ANGLE_VELOCITY,
+    steering_angle_velocity: steeringAngleVelocityRadps,
     speed: 0,
-    acceleration: ACKERMANN_ACCELERATION,
-    jerk: ACKERMANN_JERK,
+    acceleration: ackermannAcceleration,
+    jerk: ackermannJerk,
   });
 
   const setRobotVelocity = useCallback(
@@ -59,14 +59,19 @@ export default function useRobotVelocityControl(
         velocity.steering_angle = tempSpeed;
       }
       publishVelocity(velocity);
-    }, publishInterval);
+    }, velocityPublishIntervalMs);
     console.debug('[useRobotVelocityControl] Velocity publish enabled');
 
     return () => {
       clearInterval(interval);
       console.debug('[useRobotVelocityControl] Velocity publish disabled');
     };
-  }, [isDrivingEnabled, publishInterval, publishVelocity, steeringMode]);
+  }, [
+    isDrivingEnabled,
+    publishVelocity,
+    steeringMode,
+    velocityPublishIntervalMs,
+  ]);
 
   return { isDrivingEnabled, setDrivingEnabled, setRobotVelocity };
 }

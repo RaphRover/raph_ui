@@ -1,24 +1,24 @@
-import useRos from '@scripts/hooks/useRos';
-import { ROSContext } from '@scripts/context/ROSContext';
-import useRosTopicManager from '@scripts/hooks/useRosTopicManager';
-import useRosTopicList from '@scripts/hooks/useRosTopicList';
-import useRosStreamList from '@scripts/hooks/useRosStreamList';
-import { useConfigContext } from './ConfigContext';
+import useRos from '@/scripts/hooks/useRos';
+import { RosContext } from '@/scripts/context/RosContext';
+import useRosTopicManager from '@/scripts/hooks/useRosTopicManager';
+import useRosTopicList from '@/scripts/hooks/useRosTopicList';
+import useRosStreamList from '@/scripts/hooks/useRosStreamList';
+import { useConfigContext } from '../../config/ConfigContext';
 
-export const ROSProvider: React.FC<{ children: React.ReactNode }> = ({
+export const RosProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { rosConfig } = useConfigContext();
-  const { HOSTNAME, PORT, RECONNECT_INTERVAL_MS, TOPIC_POLL_INTERVAL_MS } =
-    rosConfig;
-  const ros = useRos(HOSTNAME, PORT, RECONNECT_INTERVAL_MS);
+  const { settings } = useConfigContext();
+  const { hostname, port, reconnectIntervalMs, topicPollIntervalMs } =
+    settings.ros;
+  const ros = useRos(hostname, port, reconnectIntervalMs);
   const topicManager = useRosTopicManager(ros);
-  const topicList = useRosTopicList(ros, TOPIC_POLL_INTERVAL_MS);
+  const topicList = useRosTopicList(ros, topicPollIntervalMs);
   const streamList = useRosStreamList(topicList);
 
   return (
-    <ROSContext.Provider value={{ ros, topicList, topicManager, streamList }}>
+    <RosContext.Provider value={{ ros, topicList, topicManager, streamList }}>
       {children}
-    </ROSContext.Provider>
+    </RosContext.Provider>
   );
 };

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as ROSLIB from 'roslib';
-import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
+import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
 
 export default function useRos(
   hostname: string,

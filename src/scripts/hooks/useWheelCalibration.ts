@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useRosService from './useRosService';
-import type { ServiceResponse } from 'types/rosInterfaces';
+import type { ServiceResponse } from '@/types/rosInterfaces';
 import { toast } from 'react-toastify';
 
 export interface WheelCalibration {

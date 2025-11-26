@@ -1,5 +1,6 @@
 import { Offcanvas, Tabs, Tab } from 'react-bootstrap';
-import { useAppContext } from '@scripts/context/AppContext';
+import { useAppContext } from '@/scripts/context/AppContext';
+import RobotVelocityConfig from '@/components/RobotVelocityConfig';
 
 export default function ConfigDrawer() {
   const { isConfigVisible, setConfigVisible } = useAppContext();
@@ -24,7 +25,7 @@ export default function ConfigDrawer() {
           justify
         >
           <Tab eventKey="general" title="General">
-            <p>General settings will be available here.</p>
+            <RobotVelocityConfig />
           </Tab>
         </Tabs>
       </Offcanvas.Body>

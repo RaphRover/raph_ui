@@ -1,4 +1,4 @@
-import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
+import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
 import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import { Ros } from 'roslib';
 

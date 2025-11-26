@@ -1,23 +1,19 @@
-import Frame from '@components/ui/Frame';
-import useRosTopicSubscription from '@scripts/hooks/useRosTopicSubscription';
+import Frame from '@/components/ui/Frame';
+import useRosTopicSubscription from '@/scripts/hooks/useRosTopicSubscription';
 
-import type { PowerSystemStateMsg } from 'types/rosInterfaces';
+import type { PowerSystemStateMsg } from '@/types/rosInterfaces';
 
 import styles from './styles.module.css';
-import { useConfigContext } from '@scripts/context/ConfigContext';
+import { useConfigContext } from '@/config';
 
 export default function BatteryStatus() {
-  const { batteryConfig } = useConfigContext();
-  const {
-    REFRESH_INTERVAL_MS,
-    DISPLAY_PRECISION,
-    CRITICAL_LEVEL_PERCENT,
-    WARNING_LEVEL_PERCENT,
-  } = batteryConfig;
+  const { settings } = useConfigContext();
+  const { refreshIntervalMs, displayPrecision, warningLevel, criticalLevel } =
+    settings.battery;
   const powerSystemState = useRosTopicSubscription<PowerSystemStateMsg>(
     'controller/power_system_state',
     'raph_interfaces/msg/PowerSystemState',
-    REFRESH_INTERVAL_MS,
+    refreshIntervalMs,
   );
 
   const battery1Connected = powerSystemState?.bat1_connected;
@@ -31,8 +27,8 @@ export default function BatteryStatus() {
 
   const batteryStyle = (level: number | null) => {
     if (level === null) return;
-    if (level >= WARNING_LEVEL_PERCENT) return styles.solidGreen;
-    if (level >= CRITICAL_LEVEL_PERCENT) return styles.solidYellow;
+    if (level >= warningLevel) return styles.solidGreen;
+    if (level >= criticalLevel) return styles.solidYellow;
     return styles.blinkRed;
   };
 
@@ -41,13 +37,13 @@ export default function BatteryStatus() {
       <div>
         <span>Battery 1: </span>
         <span className={batteryStyle(battery1Level)}>
-          {battery1Level ? battery1Level.toFixed(DISPLAY_PRECISION) + '%' : '-'}
+          {battery1Level ? battery1Level.toFixed(displayPrecision) + '%' : '-'}
         </span>
       </div>
       <div>
         <span>Battery 2: </span>
         <span className={batteryStyle(battery2Level)}>
-          {battery2Level ? battery2Level.toFixed(DISPLAY_PRECISION) + '%' : '-'}
+          {battery2Level ? battery2Level.toFixed(displayPrecision) + '%' : '-'}
         </span>
       </div>
     </Frame>

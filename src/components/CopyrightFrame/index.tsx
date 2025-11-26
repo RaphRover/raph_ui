@@ -1,4 +1,4 @@
-import Frame from '@components/ui/Frame';
+import Frame from '@/components/ui/Frame';
 
 export default function CopyrightFrame() {
   return (

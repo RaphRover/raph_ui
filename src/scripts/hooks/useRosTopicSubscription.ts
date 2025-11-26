@@ -1,4 +1,4 @@
-import { useROSContext } from '@scripts/context/ROSContext';
+import { useRosContext } from '@/scripts/context/RosContext';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function useRosTopicSubscription<T>(
@@ -6,7 +6,7 @@ export default function useRosTopicSubscription<T>(
   messageType: string,
   updateInterval: number = 100,
 ): T | null {
-  const { ros, topicManager } = useROSContext();
+  const { ros, topicManager } = useRosContext();
   const { subscribe, unsubscribe } = topicManager;
 
   const [topicData, setTopicData] = useState<T | null>(null);

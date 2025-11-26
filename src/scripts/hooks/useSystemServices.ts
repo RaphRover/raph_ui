@@ -1,4 +1,4 @@
-import type { ServiceResponse } from 'types/rosInterfaces';
+import type { ServiceResponse } from '@/types/rosInterfaces';
 import useRosService, { type RosServiceHook } from './useRosService';
 import { toast } from 'react-toastify';
 
