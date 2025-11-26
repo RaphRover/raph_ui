@@ -48,7 +48,11 @@ type IsConfigSetting<T> = T extends {
   : false;
 
 // Helper type to extract the defaultValue type from a config setting
-type ExtractValue<T> = T extends { defaultValue: infer V } ? V : never;
+type ExtractValue<T> = T extends { type: 'number'; defaultValue: number }
+  ? number
+  : T extends { type: 'string'; defaultValue: string }
+    ? string
+    : never;
 
 // Recursive mapped type to transform the config schema into a values-only type
 type MapConfigToValues<T> = {
