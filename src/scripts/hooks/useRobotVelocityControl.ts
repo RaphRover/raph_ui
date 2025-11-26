@@ -52,7 +52,12 @@ export default function useRobotVelocityControl(
     if (!isDrivingEnabled) return;
 
     const interval = setInterval(() => {
-      const velocity = { ...robotVelocityRef.current };
+      const velocity = {
+        ...robotVelocityRef.current,
+        steering_angle_velocity: steeringAngleVelocityRadps,
+        acceleration: ackermannAcceleration,
+        jerk: ackermannJerk,
+      };
       if (steeringMode === SteeringModes.TURN_IN_PLACE) {
         const tempSpeed = velocity.speed;
         velocity.speed = -velocity.steering_angle;
@@ -67,8 +72,11 @@ export default function useRobotVelocityControl(
       console.debug('[useRobotVelocityControl] Velocity publish disabled');
     };
   }, [
+    ackermannAcceleration,
+    ackermannJerk,
     isDrivingEnabled,
     publishVelocity,
+    steeringAngleVelocityRadps,
     steeringMode,
     velocityPublishIntervalMs,
   ]);
