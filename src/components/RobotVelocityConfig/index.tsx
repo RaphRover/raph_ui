@@ -5,9 +5,19 @@ import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
 
 export default function RobotVelocityConfig() {
   const { settings, updateSettings } = useConfigContext();
-  const { linearVelocityMps } = settings.driveConfig;
+  const {
+    linearVelocityMps,
+    steeringAngleVelocityRadps,
+    ackermannAcceleration,
+    ackermannJerk,
+  } = settings.driveConfig;
   const driveLimits = APP_CONFIG.driveConfig;
-  const { linearVelocityMps: linearVelocityLimits } = driveLimits;
+  const {
+    linearVelocityMps: linearVelocityLimits,
+    steeringAngleVelocityRadps: steeringAngleLimits,
+    ackermannAcceleration: ackermannAccelerationLimits,
+    ackermannJerk: ackermannJerkLimits,
+  } = driveLimits;
 
   const handleVelocitySet = (
     e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
@@ -25,6 +35,55 @@ export default function RobotVelocityConfig() {
     );
   };
 
+  const handleSteeringAngleVelocitySet = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { steeringAngleVelocityRadps: newValue },
+    });
+    showOrUpdateToast(
+      `Steering angle velocity set to: ${newValue} ${steeringAngleLimits.unit}`,
+      {
+        toastId: 'steering-velocity-set',
+        type: 'info',
+      },
+    );
+  };
+  
+  const handleAckermannAccelerationSet = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { ackermannAcceleration: newValue },
+    });
+    showOrUpdateToast(
+      `Ackermann acceleration set to: ${newValue} ${ackermannAccelerationLimits.unit}`,
+      {
+        toastId: 'ackermann-acceleration-set',
+        type: 'info',
+      },
+    );
+  };
+
+  const handleAckermannJerkSet = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { ackermannJerk: newValue },
+    });
+    showOrUpdateToast(
+      `Ackermann jerk set to: ${newValue} ${ackermannJerkLimits.unit}`,
+      {
+        toastId: 'ackermann-jerk-set',
+        type: 'info',
+      },
+    );
+  }
+
+
   return (
     <ConfigFrame title="Robot Velocity Config">
       <RangeWithLabel
@@ -38,17 +97,39 @@ export default function RobotVelocityConfig() {
         onTouchEnd={handleVelocitySet}
         showLegend
       />
-      {/* <RangeWithLabel
-        label="Angular Velocity Limit"
-        unit="rad/s"
-        min={driveLimits.steeringAngleVelocityRadps.min}
-        max={driveLimits.steeringAngleVelocityRadps.max}
-        step={driveLimits.steeringAngleVelocityRadps.step}
-        defaultValue={steeringAngleLimitRad}
-        onMouseUp={handleVelocitySet}
-        onTouchEnd={handleVelocitySet}
+      <RangeWithLabel
+        label={steeringAngleLimits.label}
+        unit={steeringAngleLimits.unit}
+        min={steeringAngleLimits.min}
+        max={steeringAngleLimits.max}
+        step={steeringAngleLimits.step}
+        value={steeringAngleVelocityRadps}
+        onMouseUp={handleSteeringAngleVelocitySet}
+        onTouchEnd={handleSteeringAngleVelocitySet}
         showLegend
-      /> */}
+      />
+      <RangeWithLabel
+        label={ackermannAccelerationLimits.label}
+        unit={ackermannAccelerationLimits.unit}
+        min={ackermannAccelerationLimits.min}
+        max={ackermannAccelerationLimits.max}
+        step={ackermannAccelerationLimits.step}
+        value={ackermannAcceleration}
+        onMouseUp={handleAckermannAccelerationSet}
+        onTouchEnd={handleAckermannAccelerationSet}
+        showLegend
+      />
+      <RangeWithLabel
+        label={ackermannJerkLimits.label}
+        unit={ackermannJerkLimits.unit}
+        min={ackermannJerkLimits.min}
+        max={ackermannJerkLimits.max}
+        step={ackermannJerkLimits.step}
+        value={ackermannJerk}
+        onMouseUp={handleAckermannJerkSet}
+        onTouchEnd={handleAckermannJerkSet}
+        showLegend
+      />  
     </ConfigFrame>
   );
 }
