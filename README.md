@@ -1,4 +1,4 @@
-<picture style="display: flex; justify-content: center;">
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg">
   <source media="(prefers-color-scheme: light)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_grey.svg">
   <img alt="Raph Rover Logo" src="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg" style="width: 400px">
