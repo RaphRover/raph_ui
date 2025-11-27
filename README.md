@@ -1,7 +1,7 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_light.svg">
-  <img alt="Raph Rover Logo" src="https://docs.fictionlab.pl/img/robots/raph/logotype_light.svg" width="300">
+<picture style ="margin-left: auto; margin-right: auto; display: block;">
+  <source media="(prefers-color-scheme: dark)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_grey.svg">
+  <img alt="Raph Rover Logo" src="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg" width="300">
 </picture>
 
 # Raph Rover UI
@@ -26,6 +26,7 @@ Key features include robot status monitoring, movement control via keyboard or v
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - **Node.js** (version 18 or higher recommended)
 - **npm** (comes with Node.js) or another package manager
 - **Git** (for cloning the repository)
@@ -33,17 +34,20 @@ Before you begin, ensure you have the following installed:
 ### Installation Steps
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/RaphRover/raph_ui.git
    cd raph_ui
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Start the development server**
+
    ```bash
    npm run start
    ```
@@ -79,16 +83,16 @@ npm run serve
 We welcome contributions from developers of all skill levels. To contribute to Raph Rover UI, follow these steps:
 
 1. **Fork the repository**: Click on the "Fork" button at the top right of this page.
-2. **Create a new branch**: 
+2. **Create a new branch**:
    ```bash
    git checkout -b my-feature-branch
    ```
 3. **Make your changes**: Edit, add, and delete files as necessary.
-4. **Commit your changes**: 
+4. **Commit your changes**:
    ```bash
    git commit -m "Description of my changes"
    ```
-5. **Push to your fork**: 
+5. **Push to your fork**:
    ```bash
    git push origin my-feature-branch
    ```
