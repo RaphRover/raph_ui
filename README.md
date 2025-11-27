@@ -14,9 +14,9 @@
 
 ## About
 
-**Raph Rover UI** is a modern, responsive web-based user interface for controlling and monitoring the **Raph Rover** robot. Built with **React** and **TypeScript**, it provides real-time communication with **ROS** (Robot Operating System) through rosbridge.
+**Raph Rover UI** is, responsive web-based user interface for controlling and monitoring the **Raph Rover** robot. Built with **React** and **TypeScript**, it provides real-time communication with **ROS** (Robot Operating System) through rosbridge.
 
-Key features include robot status monitoring, movement control via keyboard, virtual gamepad, or any Gamepad API compatible device like Xbox or PlayStation controllers, video streaming, parameter configuration, steering mode switching, and system service management.
+Key features include robot status monitoring, movement control via **keyboard**, **virtual gamepad**, or any Gamepad API compatible device like **Xbox** or **PlayStation** controllers, video streaming, parameter configuration, steering mode switching, and system service management.
 
 > [!TIP]
 > To learn more about Raph Rover itself visit our [Documentation](https://docs.fictionlab.pl/raph-rover)
