@@ -16,10 +16,10 @@
 
 **Raph Rover UI** is a modern, responsive web-based user interface for controlling and monitoring the **Raph Rover** robot. Built with **React** and **TypeScript**, it provides real-time communication with **ROS** (Robot Operating System) through rosbridge.
 
-Key features include robot status monitoring, movement control via keyboard or virtual gamepad, video streaming, parameter configuration, steering mode switching, and system service management.
+Key features include robot status monitoring, movement control via keyboard, virtual gamepad, or any Gamepad API compatible device like Xbox or PlayStation controllers, video streaming, parameter configuration, steering mode switching, and system service management.
 
 > [!TIP]
-> To learn more about Raph Rover visit our [Documentation](https://docs.fictionlab.pl/raph-rover)
+> To learn more about Raph Rover itself visit our [Documentation](https://docs.fictionlab.pl/raph-rover)
 
 ## How to Build
 
@@ -73,20 +73,19 @@ npm run serve
 ## Features
 
 - **Real-time ROS communication**: Leverages rosbridge for seamless interaction with ROS topics and services.
-- **Dynamic parameter tuning**: Modify robot parameters on-the-fly and observe the effects immediately.
-- **Customizable dashboard**: Users can configure their dashboard to show the most relevant information and controls.
-- **Multi-language support**: The interface can be easily translated into different languages.
-- **Accessibility features**: Designed with accessibility in mind, including keyboard navigation and screen reader support.
+- **Preview robot status**: Monitor battery levels, sensor data, and system health in real-time.
+- **Movement control**: Control the robot using **keyboard**, **virtual gamepad** or any Gamepad API compatible device like **Xbox** or **PlayStation** controllers.
+- **Dynamic parameter tuning**: Modify robot parameters on-the-fly.
 
 ## Contributing
 
-Feel free to contribute to the Raph Rover UI project! Whether it's fixing bugs, adding new features, or improving documentation, your contributions are welcome.
+Feel free to contribute to the Raph Rover UI project! Whether it's fixing bugs or adding new features, your contributions are welcome.
 
 You can contribute to Raph Rover UI by:
 
 - [submitting an issue](https://github.com/RaphRover/raph_ui/issues),
 - [joining discussions](https://github.com/RaphRover/raph_ui/discussions),
-- [pull requests](https://github.com/RaphRover/raph_ui/pulls).
+- [submitting pull requests](https://github.com/RaphRover/raph_ui/pulls).
 
 Before you open a pull request, please ensure your code adheres to the existing style and conventions used in the project. We use **ESLint** and **Prettier** for code formatting and linting. Before submitting your pull request, run the following commands to format your code:
 
