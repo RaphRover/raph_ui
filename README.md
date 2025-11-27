@@ -120,4 +120,3 @@ Check out social media channels for the latest updates and news about Raph Rover
 
 [![Facebook](https://img.shields.io/badge/Facebook-Fictionlab-C57B2C?style=flat&logo=facebook&logoColor=white)](https://www.facebook.com/fictionlabpl)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Fictionlab-C57B2C?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/10935694)
-
