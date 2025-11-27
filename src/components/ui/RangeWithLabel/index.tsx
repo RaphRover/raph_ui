@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Form, FormGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import type { FormRangeProps } from 'react-bootstrap/esm/FormRange';
 import styles from './styles.module.css';
@@ -45,8 +45,14 @@ export default function RangeWithLabel(props: RangeWithLabelProps) {
     return rangeProps;
   }, [valueArray, rangeProps]);
 
+  // We use internalValue as we update value only after we finish sliding
   const [internalValue, setInternalValue] = useState(value);
   const [showTooltip, setShowTooltip] = useState(false);
+
+  // Sync internal value when external value changes
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
 
   const formatValue = (
     value: number | string | readonly string[] | undefined,

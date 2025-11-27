@@ -33,7 +33,7 @@ export type ConfigSchema = {
 // Utility type to make all properties in T optional, recursively
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]
-    ? U[] // Tablice traktujemy całościowo
+    ? U[]
     : T[P] extends object
       ? RecursivePartial<T[P]>
       : T[P];

@@ -193,7 +193,7 @@ export const APP_CONFIG = {
       unit: 'ms',
     },
   },
-  VirtualGamepad: {
+  virtualGamepad: {
     sizePx: {
       type: 'number',
       defaultValue: 250,

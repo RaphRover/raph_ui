@@ -58,6 +58,7 @@ export default function useRobotVelocityControl(
         acceleration: ackermannAcceleration,
         jerk: ackermannJerk,
       };
+      // Swap speed and steering_angle for turn-in-place mode to use turning joystick axis for in-place rotation
       if (steeringMode === SteeringModes.TURN_IN_PLACE) {
         const tempSpeed = velocity.speed;
         velocity.speed = -velocity.steering_angle;

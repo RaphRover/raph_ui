@@ -23,15 +23,17 @@ export function showOrUpdateToast(
   const toastId = options?.toastId;
 
   if (toastId && toast.isActive(toastId)) {
-    if (options?.type) {
-      options.isLoading = false;
-      options.autoClose =
-        options.autoClose ?? toastConfig.autoCloseMs.defaultValue;
-    }
     const toastUpdateOptions: UpdateOptions = {
       ...options,
       render: content,
     };
+    // If type is provided, assume it's a status update and not a loading toast
+    if (toastUpdateOptions?.type) {
+      toastUpdateOptions.isLoading = false;
+      // We need to specify autoClose for updates, as loading toasts don't auto-close by default
+      toastUpdateOptions.autoClose =
+        toastUpdateOptions.autoClose ?? toastConfig.autoCloseMs.defaultValue;
+    }
     toast.update(toastId, toastUpdateOptions);
     return toastId;
   }

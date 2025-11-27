@@ -24,7 +24,7 @@ export default function VirtualGamepad() {
     colorBaseDisabled,
     colorStickDisabled,
     throttleMs,
-  } = settings.VirtualGamepad;
+  } = settings.virtualGamepad;
 
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const isMobile = useMediaQuery({ maxWidth: 767 });

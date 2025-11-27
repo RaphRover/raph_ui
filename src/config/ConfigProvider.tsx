@@ -7,12 +7,10 @@ import { ConfigContext } from './ConfigContext';
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Inicjalizacja stanu
   const [settings, setSettings] = useState<AppSettings>(() => {
     return getInitialSettings();
   });
 
-  // Actions
   const updateSettings = useCallback(
     (partialChanges: RecursivePartial<AppSettings>) => {
       setSettings((prevSettings) => {

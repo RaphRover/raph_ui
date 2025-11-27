@@ -1,12 +1,13 @@
 import { useMediaQuery } from 'react-responsive';
 import { Slide, ToastContainer, type ToastPosition } from 'react-toastify';
-import { APP_CONFIG } from '@/config';
+import { useConfigContext } from '@/config';
 // import { useAppContext } from '@scripts/context/AppContext';
 // import { VIRTUAL_JOYSTICK_CONFIG } from '@scripts/config/config';
 import styles from './styles.module.css';
 
 export default function ToastContainerWrapper() {
-  const autoCloseMs = APP_CONFIG.toast.autoCloseMs.defaultValue;
+  const { settings } = useConfigContext();
+  const autoCloseMs = settings.toast.autoCloseMs;
   // const { isMenuVisible, isVirtualGamepadEnabled } = useAppContext();
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
