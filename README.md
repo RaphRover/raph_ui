@@ -10,7 +10,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-7.1.12-646CFF?style=flat&logo=vite&logoColor=white)
 ![ROS](https://img.shields.io/badge/ROS-roslibjs-22314E?style=flat&logo=ros&logoColor=white)
-![License](https://img.shields.io/badge/License-TBD-lightgrey?style=flat)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
 ## About
 
@@ -80,31 +80,44 @@ npm run serve
 
 ## Contributing
 
-We welcome contributions from developers of all skill levels. To contribute to Raph Rover UI, follow these steps:
+Feel free to contribute to the Raph Rover UI project! Whether it's fixing bugs, adding new features, or improving documentation, your contributions are welcome.
 
-1. **Fork the repository**: Click on the "Fork" button at the top right of this page.
-2. **Create a new branch**:
-   ```bash
-   git checkout -b my-feature-branch
-   ```
-3. **Make your changes**: Edit, add, and delete files as necessary.
-4. **Commit your changes**:
-   ```bash
-   git commit -m "Description of my changes"
-   ```
-5. **Push to your fork**:
-   ```bash
-   git push origin my-feature-branch
-   ```
-6. **Create a pull request**: Go to the "Pull requests" tab in the main repository and click "New pull request".
+You can contribute to Raph Rover UI by:
 
-Please ensure your code adheres to the existing style and conventions used in the project. We use ESLint and Prettier for code formatting and linting. Before submitting your pull request, run the following commands to format your code:
+- [submitting an issue](https://github.com/RaphRover/raph_ui/issues),
+- [joining discussions](https://github.com/RaphRover/raph_ui/discussions),
+- [pull requests](https://github.com/RaphRover/raph_ui/pulls).
+
+Before you open a pull request, please ensure your code adheres to the existing style and conventions used in the project. We use **ESLint** and **Prettier** for code formatting and linting. Before submitting your pull request, run the following commands to format your code:
 
 ```bash
 npm run lint
 npm run format
 ```
 
+To check for any issues with the code, run:
+
+```bash
+npm run check
+```
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to modify and distribute the code as per the terms of the license.
+
+## Contact
+
+For questions, suggestions, or support about Raph Rover UI or any Fictionlab products, feel free to contact us. You can reach us via our [official website](https://fictionlab.pl) or email us at [contact@fictionlab.pl](mailto:contact@fictionlab.pl).
+
+[![website](https://img.shields.io/badge/Website-Fictionlab.pl-C57B2C?style=flat&logo=google-chrome&logoColor=white)](https://fictionlab.pl)
+[![email](https://img.shields.io/badge/Email-contact@fictionlab.pl-C57B2C?style=flat&logo=gmail&logoColor=white)](mailto:contact@fictionlab.pl)
+
+You can also join out Discord community to connect with other users and developers:
+
+[![Discord](https://img.shields.io/discord/1394297639062868061?label=Join%20our%20Discord&logo=discord&style=flat)](https://discord.gg/57DdtCnhCc)
+
+Check out social media channels for the latest updates and news about Raph Rover and Fictionlab:
+
+[![Facebook](https://img.shields.io/badge/Facebook-Fictionlab-C57B2C?style=flat&logo=facebook&logoColor=white)](https://www.facebook.com/fictionlabpl)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Fictionlab-C57B2C?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/10935694)
+
