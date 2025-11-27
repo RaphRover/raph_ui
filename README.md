@@ -1,7 +1,7 @@
-<picture>
+<picture style="display: flex; justify-content: center;">
   <source media="(prefers-color-scheme: dark)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg">
   <source media="(prefers-color-scheme: light)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_grey.svg">
-  <img alt="Raph Rover Logo" src="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg" style="width: 400px;display: block; margin-left: auto; margin-right: auto;">
+  <img alt="Raph Rover Logo" src="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg" style="width: 400px">
 </picture>
 
 # Raph Rover Web User Interface
