@@ -1,10 +1,10 @@
-<picture style ="margin-left: auto; margin-right: auto; display: block;">
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg">
   <source media="(prefers-color-scheme: light)" srcset="https://docs.fictionlab.pl/img/robots/raph/logotype_grey.svg">
-  <img alt="Raph Rover Logo" src="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg" width="300">
+  <img alt="Raph Rover Logo" src="https://docs.fictionlab.pl/img/robots/raph/logotype_white.svg" style="width: 400px;display: block; margin-left: auto; margin-right: auto;">
 </picture>
 
-# Raph Rover UI
+# Raph Rover Web User Interface
 
 ![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=flat&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=flat&logo=typescript&logoColor=white)
