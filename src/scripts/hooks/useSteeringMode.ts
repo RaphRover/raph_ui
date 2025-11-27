@@ -3,7 +3,7 @@ import {
   SteeringModes,
   type ServiceResponse,
   type SteeringModeRequest,
-} from '@root/src/types/rosInterfaces';
+} from '@/types/rosInterfaces';
 import useRosService from './useRosService';
 import { toast } from 'react-toastify';
 

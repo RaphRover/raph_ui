@@ -3,8 +3,9 @@ import {
   type ToastContent,
   type ToastOptions,
   type Id,
+  type UpdateOptions,
 } from 'react-toastify';
-import { TOAST_CONFIG } from '@scripts/config/config';
+import { APP_CONFIG } from '@/config';
 
 /**
  * Displays a new toast or updates an existing one if it's active.
@@ -18,13 +19,22 @@ export function showOrUpdateToast(
   content: ToastContent,
   options?: ToastOptions,
 ): Id {
+  const toastConfig = APP_CONFIG.toast;
   const toastId = options?.toastId;
 
   if (toastId && toast.isActive(toastId)) {
-    const toastProps = { ...options, render: content };
-    if (toastProps.isLoading === false)
-      toastProps.autoClose = TOAST_CONFIG.AUTO_CLOSE_MS;
-    toast.update(toastId, toastProps);
+    const toastUpdateOptions: UpdateOptions = {
+      ...options,
+      render: content,
+    };
+    // If type is provided, assume it's a status update and not a loading toast
+    if (toastUpdateOptions?.type) {
+      toastUpdateOptions.isLoading = false;
+      // We need to specify autoClose for updates, as loading toasts don't auto-close by default
+      toastUpdateOptions.autoClose =
+        toastUpdateOptions.autoClose ?? toastConfig.autoCloseMs.defaultValue;
+    }
+    toast.update(toastId, toastUpdateOptions);
     return toastId;
   }
   return toast(content, options);

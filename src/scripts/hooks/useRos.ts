@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as ROSLIB from 'roslib';
-import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
+import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
 
 export default function useRos(
   hostname: string,
@@ -33,7 +33,6 @@ export default function useRos(
       console.info('[useROS] Connected to ROS');
       showOrUpdateToast('Connection to ROS established', {
         type: 'success',
-        isLoading: false,
         toastId,
       });
       isInitialDisconnect.current = true;
@@ -44,7 +43,6 @@ export default function useRos(
       console.error('Error encountered while connecting to ROS');
       showOrUpdateToast('Error encountered while connecting to ROS', {
         type: 'error',
-        isLoading: false,
         toastId,
       });
       setRos(null);

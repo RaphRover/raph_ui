@@ -1,0 +1,259 @@
+import type { ConfigSchema } from './types';
+
+const getHostname = () =>
+  (import.meta.env.VITE_ROBOT_HOSTNAME || location.hostname) as string;
+
+export const APP_CONFIG = {
+  ros: {
+    hostname: {
+      type: 'string',
+      defaultValue: getHostname(),
+      label: 'ROS Hostname',
+      description: 'Hostname or IP address of the ROS bridge server',
+      readOnly: true,
+    },
+    port: {
+      type: 'number',
+      defaultValue: 9090,
+      label: 'ROS bridge websocket port',
+      readOnly: true,
+    },
+    reconnectIntervalMs: {
+      type: 'number',
+      defaultValue: 5000,
+      label: 'Reconnection Interval (ms)',
+      description: 'Interval between reconnection attempts to the ROS bridge',
+      readOnly: true,
+    },
+    topicPollIntervalMs: {
+      type: 'number',
+      defaultValue: 5000,
+      label: 'Topic Poll Interval (ms)',
+      description: 'Interval to poll for available ROS topics',
+      readOnly: true,
+    },
+    paramFloatPrecision: {
+      type: 'number',
+      defaultValue: 4,
+      label: 'Parameter Float Precision',
+      description: 'Number of decimal places for float parameters',
+      readOnly: true,
+    },
+  },
+  defaultStream: {
+    type: 'string',
+    defaultValue: '/oak/rgb/image_raw/compressed',
+    label: 'Default Video Stream',
+    description: 'The initial video stream to display on load',
+  },
+  battery: {
+    refreshIntervalMs: {
+      type: 'number',
+      defaultValue: 1000,
+      label: 'Battery Refresh Interval (ms)',
+      description: 'Interval to refresh battery status',
+    },
+    displayPrecision: {
+      type: 'number',
+      defaultValue: 2,
+      label: 'Battery Display Precision',
+      description: 'Number of decimal places for battery values',
+    },
+    criticalLevel: {
+      type: 'number',
+      defaultValue: 20,
+      label: 'Critical Battery Level (%)',
+      description: 'Battery level percentage considered critical',
+      unit: '%',
+    },
+    warningLevel: {
+      type: 'number',
+      defaultValue: 60,
+      label: 'Warning Battery Level (%)',
+      description: 'Battery level percentage considered a warning',
+      unit: '%',
+    },
+  },
+  imu: {
+    refreshIntervalMs: {
+      type: 'number',
+      defaultValue: 1000,
+      label: 'IMU Refresh Interval (ms)',
+      description: 'Interval to refresh IMU status',
+    },
+    displayPrecision: {
+      type: 'number',
+      defaultValue: 2,
+      label: 'IMU Display Precision',
+      description: 'Number of decimal places for IMU values',
+    },
+  },
+  driveConfig: {
+    velocityPublishIntervalMs: {
+      type: 'number',
+      defaultValue: 50,
+      label: 'Velocity Publish Interval (ms)',
+      description: 'Interval to publish velocity commands to the robot',
+      unit: 'ms',
+    },
+    linearVelocityMps: {
+      type: 'number',
+      defaultValue: 1.0,
+      label: 'Linear Velocity (m/s)',
+      description: 'Maximum linear velocity in meters per second',
+      unit: 'm/s',
+      min: 0.1,
+      max: 2.0,
+      step: 0.1,
+    },
+    steeringAngleVelocityRadps: {
+      type: 'number',
+      defaultValue: 3.0,
+      label: 'Steering Angle Velocity (rad/s)',
+      description: 'Maximum steering angle velocity in radians per second',
+      unit: 'rad/s',
+      min: 0.1,
+      max: 5.0,
+      step: 0.1,
+    },
+    steeringAngleLimitRad: {
+      type: 'number',
+      defaultValue: 1.1,
+      label: 'Steering Angle Limit (rad)',
+      description: 'Maximum steering angle in radians',
+      unit: 'rad',
+      readOnly: true,
+    },
+    ackermannAcceleration: {
+      type: 'number',
+      defaultValue: 2.5,
+      label: 'Ackermann Acceleration (m/s²)',
+      description:
+        'Maximum Ackermann acceleration in meters per second squared',
+      unit: 'm/s²',
+      min: 0.1,
+      max: 10,
+      step: 0.1,
+    },
+    ackermannJerk: {
+      type: 'number',
+      defaultValue: 3,
+      label: 'Ackermann Jerk (m/s³)',
+      description: 'Maximum Ackermann jerk in meters per second cubed',
+      unit: 'm/s³',
+      min: 0.1,
+      max: 10,
+      step: 0.1,
+    },
+  },
+  // Gamepad configuration settings
+  // For reference, see: https://www.w3.org/TR/gamepad/#remapping
+  gamepad: {
+    calibrationButtonIndex: {
+      type: 'number',
+      defaultValue: 2,
+      label: 'Calibration Button Index',
+      description: 'Button index to calibrate the gamepad',
+    },
+    steeringModeButtonIndex: {
+      type: 'number',
+      defaultValue: 1,
+      label: 'Steering Mode Button Index',
+      description: 'Button index to toggle steering mode',
+    },
+    drivingDeadmanButtonIndex: {
+      type: 'number',
+      defaultValue: 5,
+      label: 'Driving Deadman Button Index',
+      description: 'Button index for driving deadman switch',
+    },
+    forwardAxisIndex: {
+      type: 'number',
+      defaultValue: 1,
+      label: 'Forward Axis Index',
+      description: 'Axis index for forward/backward control',
+    },
+    steeringAxisIndex: {
+      type: 'number',
+      defaultValue: 2,
+      label: 'Steering Axis Index',
+      description: 'Axis index for left/right steering control',
+    },
+    joystickDeadzone: {
+      type: 'number',
+      defaultValue: 0.1,
+      label: 'Joystick Deadzone',
+      description: 'Deadzone threshold for joystick axes',
+    },
+    gamepadIntervalMs: {
+      type: 'number',
+      defaultValue: 50,
+      label: 'Gamepad Polling Interval (ms)',
+      description: 'Interval to poll gamepad state',
+      unit: 'ms',
+    },
+  },
+  virtualGamepad: {
+    sizePx: {
+      type: 'number',
+      defaultValue: 250,
+      label: 'Virtual Gamepad Size (px)',
+      description: 'Size of the virtual gamepad in pixels',
+      unit: 'px',
+    },
+    mobileSizePx: {
+      type: 'number',
+      defaultValue: 150,
+      label: 'Virtual Gamepad Mobile Size (px)',
+      description: 'Size of the virtual gamepad on mobile devices in pixels',
+      unit: 'px',
+    },
+    stickSizeRatio: {
+      type: 'number',
+      defaultValue: 0.5,
+      label: 'Stick Size Ratio',
+      description: 'Ratio of the stick size to the base size',
+    },
+    colorBase: {
+      type: 'string',
+      defaultValue: 'rgba(255,255,255, 0.3)',
+      label: 'Base Color',
+      description: 'Color of the virtual gamepad base',
+    },
+    colorStick: {
+      type: 'string',
+      defaultValue: 'rgba(255,255,255, 0.5)',
+      label: 'Stick Color',
+      description: 'Color of the virtual gamepad stick',
+    },
+    colorBaseDisabled: {
+      type: 'string',
+      defaultValue: 'rgba(255,255,255, 0.1)',
+      label: 'Disabled Base Color',
+      description: 'Color of the virtual gamepad base when disabled',
+    },
+    colorStickDisabled: {
+      type: 'string',
+      defaultValue: 'rgba(255,255,255, 0.2)',
+      label: 'Disabled Stick Color',
+      description: 'Color of the virtual gamepad stick when disabled',
+    },
+    throttleMs: {
+      type: 'number',
+      defaultValue: 50,
+      label: 'Virtual Gamepad Throttle (ms)',
+      description: 'Throttle interval for virtual gamepad input',
+      unit: 'ms',
+    },
+  },
+  toast: {
+    autoCloseMs: {
+      type: 'number',
+      defaultValue: 3000,
+      label: 'Toast Auto Close (ms)',
+      description: 'Duration before toast notifications auto close',
+      unit: 'ms',
+      readOnly: true,
+    },
+  },
+} as const satisfies ConfigSchema;

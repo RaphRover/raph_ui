@@ -1,7 +1,7 @@
-import { useROSContext } from '@scripts/context/ROSContext';
+import { useRosContext } from '@/scripts/context/RosContext';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Service } from 'roslib';
-import type { ServiceResponse } from 'types/rosInterfaces';
+import type { ServiceResponse } from '@/types/rosInterfaces';
 
 export type RosServiceHook<Request, Response extends ServiceResponse> = {
   callService: CallService<Request, Response>;
@@ -30,7 +30,7 @@ export default function useRosService<
   serviceType: string,
   timeout: number = 5000,
 ): RosServiceHook<Request, Response> {
-  const { ros } = useROSContext();
+  const { ros } = useRosContext();
 
   const serviceRef = useRef<Service<Request, Response> | null>(null);
   const isCallingRef = useRef<boolean>(false);

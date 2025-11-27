@@ -1,10 +1,10 @@
 import { Button, ButtonGroup } from 'react-bootstrap';
-import { SteeringModes } from '@root/src/types/rosInterfaces';
+import { SteeringModes } from '@/types/rosInterfaces';
 
 import AckermannIcon from './ackermann.svg?react';
 import TurnInPlaceIcon from './turn-in-place.svg?react';
 import styles from './styles.module.css';
-import { useAppContext } from '@scripts/context/AppContext';
+import { useAppContext } from '@/scripts/context/AppContext';
 
 export default function SteeringModeSwitch() {
   const { steeringMode, toggleSteeringMode, isLoading } =

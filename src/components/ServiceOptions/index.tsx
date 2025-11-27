@@ -1,6 +1,6 @@
 import { Button, Dropdown, Stack } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useAppContext } from '@scripts/context/AppContext';
+import { useAppContext } from '@/scripts/context/AppContext';
 
 interface ServiceOptionsProps {
   desktopLayout: boolean;

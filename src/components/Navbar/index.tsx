@@ -1,11 +1,11 @@
 import { Container, Navbar, Stack } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
-import ROSStatus from '@components/ROSStatus';
-import BatteryStatus from '@components/BatteryStatus';
-import ImuReadings from '@components/ImuReadings';
-import SteeringModeSwitch from '@components/SteeringModeSwitch';
-import { useAppContext } from '@scripts/context/AppContext';
-import MenuDrawer from '@components/MenuDrawer';
+import ROSStatus from '@/components/ROSStatus';
+import BatteryStatus from '@/components/BatteryStatus';
+import ImuReadings from '@/components/ImuReadings';
+import SteeringModeSwitch from '@/components/SteeringModeSwitch';
+import { useAppContext } from '@/scripts/context/AppContext';
+import MenuDrawer from '@/components/MenuDrawer';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });

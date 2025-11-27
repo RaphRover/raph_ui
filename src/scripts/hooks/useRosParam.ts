@@ -1,4 +1,3 @@
-import { ROS_CONFIG } from '@scripts/config/config';
 import {
   useCallback,
   useEffect,
@@ -7,6 +6,7 @@ import {
   useState,
 } from 'react';
 import { Param, Ros } from 'roslib';
+import { useConfigContext } from '@/config';
 
 export interface RosParam<T> {
   value: T | null;
@@ -33,6 +33,8 @@ export default function useRosParam<K extends keyof RosParamType>(
   paramType: K,
 ): RosParam<RosParamType[K]> {
   type valueType = RosParamType[K];
+  const { settings } = useConfigContext();
+  const { paramFloatPrecision } = settings.ros;
 
   const [paramValue, setParamValue] = useState<valueType | null>(null);
   const paramRef = useRef<Param | null>(null);
@@ -96,7 +98,6 @@ export default function useRosParam<K extends keyof RosParamType>(
       isCallingRef.current = true;
 
       const param = paramRef.current;
-      const { PARAM_FLOAT_PRECISION: floatPrecision } = ROS_CONFIG;
 
       let parsedValue: string = '';
 
@@ -106,7 +107,7 @@ export default function useRosParam<K extends keyof RosParamType>(
           break;
         case 'float':
           if (typeof value === 'number')
-            parsedValue = value.toPrecision(floatPrecision);
+            parsedValue = value.toPrecision(paramFloatPrecision);
           break;
         default:
           parsedValue = value.toString();
@@ -144,7 +145,7 @@ export default function useRosParam<K extends keyof RosParamType>(
       }
     },
 
-    [paramName, paramType, timeout],
+    [paramFloatPrecision, paramName, paramType, timeout],
   );
 
   // We use useEffectEvent as we don't want to fire useEffect on getParam change

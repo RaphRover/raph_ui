@@ -1,10 +1,14 @@
-import { useAppContext } from '@scripts/context/AppContext';
+import { useAppContext } from '@/scripts/context/AppContext';
 import { useEffect, useRef, useState } from 'react';
-import { DRIVE_CONFIG, GAMEPAD_CONFIG } from '@scripts/config/config';
-import type { AckermannDriveMsg } from 'types/rosInterfaces';
-import { showOrUpdateToast } from '@scripts/utils/showOrUpdateToast';
+import type { AckermannDriveMsg } from '@/types/rosInterfaces';
+import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
+import { useConfigContext } from '@/config';
 
 export default function RobotController() {
+  const { settings } = useConfigContext();
+  const { linearVelocityMps, steeringAngleLimitRad } = settings.driveConfig;
+  const { gamepad } = settings;
+
   const [isGamepadConnected, setGamepadConnected] = useState(false);
   const prevGamepadRef = useRef<Gamepad | null>(null);
 
@@ -169,50 +173,45 @@ export default function RobotController() {
   useEffect(() => {
     if (!isGamepadConnected) return;
 
+    const {
+      joystickDeadzone,
+      calibrationButtonIndex,
+      steeringModeButtonIndex,
+      drivingDeadmanButtonIndex,
+      forwardAxisIndex,
+      steeringAxisIndex,
+      gamepadIntervalMs,
+    } = gamepad;
+
     const handleGamepad = () => {
       const gamepads = navigator.getGamepads();
       const gamepad = gamepads[0];
       const prevGamepad = prevGamepadRef.current;
       if (gamepad === null) return;
 
-      const {
-        LINEAR_VELOCITY_LIMIT_MPS: maxVelocity,
-        STEERING_ANGLE_LIMIT_RAD: maxSteeringAngle,
-      } = DRIVE_CONFIG;
-
-      const {
-        JOYSTICK_DEADZONE: threshold,
-        CALIBRATION_BUTTON_INDEX,
-        STEERING_MODE_BUTTON_INDEX,
-        DRIVING_DEADMAN_BUTTON_INDEX,
-        FORWARD_AXIS_INDEX,
-        STEERING_AXIS_INDEX,
-      } = GAMEPAD_CONFIG;
-
       const steeringModeButton =
-        gamepad.buttons[STEERING_MODE_BUTTON_INDEX].pressed;
+        gamepad.buttons[steeringModeButtonIndex].pressed;
       const prevSteeringModeButton =
-        prevGamepad?.buttons[STEERING_MODE_BUTTON_INDEX].pressed;
+        prevGamepad?.buttons[steeringModeButtonIndex].pressed;
       if (steeringModeButton && !prevSteeringModeButton) {
         // Steering mode button pressed
         console.info('[RobotController] Toggle steering mode button pressed');
         toggleSteeringMode();
       }
 
-      const calibrationButton =
-        gamepad.buttons[CALIBRATION_BUTTON_INDEX].pressed;
+      const calibrationButton = gamepad.buttons[calibrationButtonIndex].pressed;
       const prevCalibrationButton =
-        prevGamepad?.buttons[CALIBRATION_BUTTON_INDEX].pressed;
+        prevGamepad?.buttons[calibrationButtonIndex].pressed;
       if (calibrationButton && !prevCalibrationButton) {
         // Calibration button pressed
         console.info('[RobotController] Calibrate wheels button pressed');
         calibrateWheels();
       }
 
-      const leftStickY = gamepad.axes[FORWARD_AXIS_INDEX];
-      const rightStickX = gamepad.axes[STEERING_AXIS_INDEX];
+      const leftStickY = gamepad.axes[forwardAxisIndex];
+      const rightStickX = gamepad.axes[steeringAxisIndex];
       const drivingDeadmanPressed =
-        gamepad.buttons[DRIVING_DEADMAN_BUTTON_INDEX].pressed;
+        gamepad.buttons[drivingDeadmanButtonIndex].pressed;
 
       const velocityObject: Partial<AckermannDriveMsg> = {
         speed: 0,
@@ -220,10 +219,12 @@ export default function RobotController() {
       };
       if (drivingDeadmanPressed) {
         velocityObject.speed =
-          Math.abs(leftStickY) > threshold ? -leftStickY * maxVelocity : 0;
+          Math.abs(leftStickY) > joystickDeadzone
+            ? -leftStickY * linearVelocityMps
+            : 0;
         velocityObject.steering_angle =
-          Math.abs(rightStickX) > threshold
-            ? -rightStickX * maxSteeringAngle
+          Math.abs(rightStickX) > joystickDeadzone
+            ? -rightStickX * steeringAngleLimitRad
             : 0;
       }
       setRobotVelocity(velocityObject);
@@ -233,7 +234,7 @@ export default function RobotController() {
     let animationFrame: number | undefined;
     let lastUpdate = 0;
     const handleGamepadLoop = (timestamp: number) => {
-      if (timestamp - lastUpdate >= DRIVE_CONFIG.GAMEPAD_INTERVAL_MS) {
+      if (timestamp - lastUpdate >= gamepadIntervalMs) {
         handleGamepad();
         lastUpdate = timestamp;
       }
@@ -248,8 +249,11 @@ export default function RobotController() {
     };
   }, [
     calibrateWheels,
+    gamepad,
     isGamepadConnected,
+    linearVelocityMps,
     setRobotVelocity,
+    steeringAngleLimitRad,
     toggleSteeringMode,
   ]);
 
