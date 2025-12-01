@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
+
 // Other imports
 import RaphNavbar from './components/Navbar';
 import { RosProvider } from '@/scripts/context/RosProvider';

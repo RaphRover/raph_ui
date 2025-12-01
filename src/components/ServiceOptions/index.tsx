@@ -1,6 +1,7 @@
 import { Button, Dropdown, Stack } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useAppContext } from '@/scripts/context/AppContext';
+import styles from './styles.module.css';
 
 interface ServiceOptionsProps {
   desktopLayout: boolean;
@@ -13,15 +14,14 @@ export default function ServiceOptions(props: ServiceOptionsProps) {
 
   return (
     <Dropdown drop={desktopLayout ? 'start' : 'up-centered'}>
-      <Dropdown.Toggle style={{ width: '100%' }} variant="outline-warning">
+      <Dropdown.Toggle style={{ width: '100%' }} variant="outline-fl-primary">
         Service Options
       </Dropdown.Toggle>
-      <Dropdown.Menu
-        style={{ width: '100%', paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+      <Dropdown.Menu className={styles.menu}
       >
         <Stack gap={2}>
           <Button
-            variant="outline-secondary"
+            variant="fl-secondary"
             onClick={() => {
               toast.dismiss();
             }}

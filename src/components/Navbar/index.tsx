@@ -11,7 +11,7 @@ import MenuIcon from './menu.svg?react';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });
-  const { setMenuVisible } = useAppContext();
+  const { setMenuVisible , setConfigVisible } = useAppContext();
 
   const infoPanel = () => {
     return (
@@ -56,7 +56,7 @@ export default function RaphNavbar() {
               value="menu"
               className={styles.menuButton}
               variant="fl-secondary"
-              onClick={() => setMenuVisible(true)}
+              onClick={() => { setMenuVisible(true); setConfigVisible(false); }}
               aria-label="Open menu drawer"
             >
               <MenuIcon />

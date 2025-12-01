@@ -17,10 +17,14 @@
 
   --fl-shadow:
     0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
+  --fl-inset-shadow: inset 0px 0px 2px hsla(0, 0%, 6%, 0.15);
 
   --fl-red: #d32f2f;
   --fl-green: #388e3c;
   --fl-yellow: darkgoldenrod;
+
+  /* Bootstrap variables override */
+  --bs-dropdown-link-active-bg: var(--fl-primary);
 }
 
 [data-bs-theme='dark'] {
@@ -29,6 +33,8 @@
   --bs-body-bg-rgb: 28, 28, 28;
   --bs-secondary-bg: #303030;
   --bs-secondary-bg-rgb: 30, 30, 30;
+
+  --bs-dropdown-link-active-bg: var(--fl-primary);
 }
 
 #root {
@@ -61,7 +67,22 @@
   --bs-btn-disabled-color: var(--fl-text-muted);
   --bs-btn-disabled-border-color: var(--fl-primary-dark);
   --bs-btn-disabled-bg: var(--fl-primary-dark);
+  box-shadow: var(--fl-shadow);
+}
 
+.btn-outline-fl-primary {
+  --bs-btn-bg: var(--fl-bg);
+  --bs-btn-color: var(--fl-text-light);
+  --bs-btn-border-color: var(--fl-primary);
+  --bs-btn-hover-color: var(--fl-text);
+  --bs-btn-hover-bg: var(--fl-primary-dark);
+  --bs-btn-hover-border-color: var(--fl-primary-dark);
+  --bs-btn-active-color: var(--fl-text);
+  --bs-btn-active-bg: var(--fl-primary);
+  --bs-btn-active-border-color: var(--fl-primary);
+  --bs-btn-disabled-color: var(--fl-text-muted);
+  --bs-btn-disabled-border-color: var(--fl-primary-dark);
+  --bs-btn-disabled-bg: var(--fl-bg-dark);
   box-shadow: var(--fl-shadow);
 }
 
@@ -78,6 +99,30 @@
   --bs-btn-disabled-color: var(--fl-text-muted);
   --bs-btn-disabled-border-color: var(--fl-border);
   --bs-btn-disabled-bg: var(--fl-bg-dark);
-
   box-shadow: var(--fl-shadow);
+}
+
+.btn-outline-fl-secondary {
+  --bs-btn-bg: var(--fl-bg-dark);
+  --bs-btn-color: var(--fl-text-light);
+  --bs-btn-border-color: var(--fl-border);
+  --bs-btn-hover-color: var(--fl-text);
+  --bs-btn-hover-bg: var(--fl-bg-dark);
+  --bs-btn-hover-border-color: var(--fl-border);
+  --bs-btn-active-color: var(--fl-text);
+  --bs-btn-active-bg: var(--fl-bg-light);
+  --bs-btn-active-border-color: var(--fl-border);
+  --bs-btn-disabled-color: var(--fl-text-muted);
+  --bs-btn-disabled-border-color: var(--fl-border);
+  --bs-btn-disabled-bg: var(--fl-bg-dark);
+  box-shadow: var(--fl-inset-shadow);
+}
+
+/* Dropdowns */
+.dropdown-item:active , .dropdown-item.active {
+  background-color: var(--fl-primary);
+}
+
+.dropdown-item.focus , .dropdown-item:focus {
+  background-color: var(--fl-bg-light);
 }

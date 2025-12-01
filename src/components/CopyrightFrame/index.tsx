@@ -1,18 +1,11 @@
 import Frame from '@/components/ui/Frame';
+import styles from './styles.module.css';
 
 export default function CopyrightFrame() {
   return (
-    <Frame>
-      <div style={{ marginBottom: '0.5rem' }}>{__APP_DISPLAY_NAME__}</div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          fontSize: '0.875rem',
-          color: 'var(--bs-secondary-color)',
-        }}
-      >
+    <Frame className={styles.frame}>
+      <div className={styles.appDisplayName}>{__APP_DISPLAY_NAME__}</div>
+      <div className={styles.info}>
         <span>© {__BUILD_YEAR__} Fictionlab</span>
         <a
           href={__REPOSITORY_URL__}

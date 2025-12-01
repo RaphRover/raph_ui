@@ -1,0 +1,7 @@
+.offcanvas {
+  background-color: var(--fl-bg);
+}
+
+.body {
+  overflow: visible;
+}
