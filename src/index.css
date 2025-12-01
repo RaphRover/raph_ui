@@ -19,12 +19,11 @@
     0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
   --fl-inset-shadow: inset 0px 0px 2px hsla(0, 0%, 6%, 0.15);
 
+  --fl-focus-ring: 0 0 0 0.2rem hsla(31, 63.5%, 47.3%, 0.25);
+
   --fl-red: #d32f2f;
   --fl-green: #388e3c;
   --fl-yellow: darkgoldenrod;
-
-  /* Bootstrap variables override */
-  --bs-dropdown-link-active-bg: var(--fl-primary);
 }
 
 [data-bs-theme='dark'] {
@@ -126,3 +125,4 @@
 .dropdown-item.focus , .dropdown-item:focus {
   background-color: var(--fl-bg-light);
 }
+

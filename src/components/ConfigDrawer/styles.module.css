@@ -1,0 +1,5 @@
+.offcanvas {
+  background-color: var(--fl-bg-dark) !important;
+  width: 100%;
+  max-width: 500px;
+}
