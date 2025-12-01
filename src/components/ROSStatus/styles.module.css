@@ -1,5 +1,6 @@
 .frame {
   align-content: center;
+  background-color: var(--fl-bg-light);
 }
 
 .icon {

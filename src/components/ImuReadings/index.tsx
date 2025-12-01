@@ -56,7 +56,7 @@ export default function ImuReadings() {
   if (imuReadings) euler = quaternionToEuler(imuReadings.orientation);
 
   return (
-    <Frame>
+    <Frame className={styles.frame}>
       <div>IMU readings:</div>
       <div>
         <span className={styles.angle}>

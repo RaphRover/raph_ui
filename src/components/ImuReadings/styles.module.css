@@ -1,3 +1,7 @@
+.frame {
+  background-color: var(--fl-bg-light);
+}
+
 .angle {
   display: inline-block;
 }

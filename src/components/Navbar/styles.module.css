@@ -1,0 +1,16 @@
+.navbar {
+  background-color: var(--fl-bg);
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--fl-border);
+  box-shadow: var(--fl-shadow);
+}
+
+.menuButton {
+  height: 100%;
+  align-content: center;
+}
+
+.menuButton svg {
+  height: 2rem;
+  width: 2rem;
+}

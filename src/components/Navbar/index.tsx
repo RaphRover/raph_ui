@@ -1,4 +1,4 @@
-import { Container, Navbar, Stack } from 'react-bootstrap';
+import { Button, Container, Navbar, Stack } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import ROSStatus from '@/components/ROSStatus';
 import BatteryStatus from '@/components/BatteryStatus';
@@ -6,6 +6,8 @@ import ImuReadings from '@/components/ImuReadings';
 import SteeringModeSwitch from '@/components/SteeringModeSwitch';
 import { useAppContext } from '@/scripts/context/AppContext';
 import MenuDrawer from '@/components/MenuDrawer';
+import styles from './styles.module.css';
+import MenuIcon from './menu.svg?react';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });
@@ -32,7 +34,7 @@ export default function RaphNavbar() {
 
   return (
     <>
-      <Navbar className="bg-body flex-shrink-0" expand="false" sticky="top">
+      <Navbar className={styles.navbar} expand="false" sticky="top">
         <Container fluid className="justify-content-start">
           <Navbar.Brand href="/">
             <img
@@ -49,11 +51,16 @@ export default function RaphNavbar() {
           {isDesktop && infoPanel()}
           <Stack direction="horizontal" gap={2} className="ms-auto">
             <SteeringModeSwitch />
-            <Navbar.Toggle
-              aria-controls="responsive-navbar-nav"
-              style={{ height: '100%' }}
+            <Button
+              id="menu"
+              value="menu"
+              className={styles.menuButton}
+              variant="fl-secondary"
               onClick={() => setMenuVisible(true)}
-            />
+              aria-label="Open menu drawer"
+            >
+              <MenuIcon />
+            </Button>
           </Stack>
 
           {!isDesktop && infoPanel()}

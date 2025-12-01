@@ -1,5 +1,6 @@
 .frame {
   min-width: 158.5px;
+  background-color: var(--fl-bg-light);
 }
 
 .blinkRed {
