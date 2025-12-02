@@ -82,7 +82,7 @@ export default function MenuDrawer() {
             checked={isFullscreen}
             value={''}
             onClick={toggleFullscreen}
-            variant="outline-fl-secondary"
+            variant="fl-secondary"
           >
             {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
           </ToggleButton>
@@ -94,9 +94,9 @@ export default function MenuDrawer() {
                 checked={isVirtualGamepadEnabled}
                 value={''}
                 onClick={() => setVirtualGamepadEnabled((prev) => !prev)}
-                variant="outline-fl-secondary"
+                variant="fl-secondary"
               >
-                Toggle virtual joystick
+                { isVirtualGamepadEnabled ? 'Hide' : 'Show' } Virtual Gamepad
               </ToggleButton>
             </Col>
             <Col>
@@ -106,9 +106,9 @@ export default function MenuDrawer() {
                 checked={isKeyboardControlEnabled}
                 value={''}
                 onClick={() => setKeyboardControlEnabled((prev) => !prev)}
-                variant="outline-fl-secondary"
+                variant="fl-secondary"
               >
-                Toggle keyboard control
+                { isKeyboardControlEnabled ? 'Disable' : 'Enable' } Keyboard Control
               </ToggleButton>
             </Col>
           </Row>

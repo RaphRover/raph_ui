@@ -13,7 +13,8 @@
   --fl-text-muted: hsl(0, 0%, 70%);
 
   --fl-border: hsl(225, 5%, 30%);
-  --fl-gradient: linear-gradient(0deg, var(--fl-bg), var(--fl-bg-light));
+  --fl-gradient: linear-gradient(0deg, var(--fl-bg) 95%, var(--fl-bg-light));
+  --fl-gradient-hover: linear-gradient(0deg, var(--fl-bg), var(--fl-bg-light));
 
   --fl-shadow:
     0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
@@ -53,6 +54,21 @@
   fill: currentColor;
 }
 
+.btn {
+  box-shadow: var(--fl-shadow);
+}
+
+.btn:active,
+.btn.active,
+.btn-check:checked + .btn {
+  box-shadow: inset 0px 0px 2px hsla(225, 0%, 20%, 0.15);
+}
+
+.btn-check:disabled + .btn,
+.btn-check[disabled] + .btn {
+  box-shadow: none;
+}
+
 .btn-fl-primary {
   --bs-btn-bg: var(--fl-primary);
   --bs-btn-color: var(--fl-text-light);
@@ -66,7 +82,6 @@
   --bs-btn-disabled-color: var(--fl-text-muted);
   --bs-btn-disabled-border-color: var(--fl-primary-dark);
   --bs-btn-disabled-bg: var(--fl-primary-dark);
-  box-shadow: var(--fl-shadow);
 }
 
 .btn-outline-fl-primary {
@@ -82,7 +97,6 @@
   --bs-btn-disabled-color: var(--fl-text-muted);
   --bs-btn-disabled-border-color: var(--fl-primary-dark);
   --bs-btn-disabled-bg: var(--fl-bg-dark);
-  box-shadow: var(--fl-shadow);
 }
 
 .btn-fl-secondary {
@@ -90,15 +104,14 @@
   --bs-btn-color: var(--fl-text-light);
   --bs-btn-border-color: var(--fl-border);
   --bs-btn-hover-color: var(--fl-text);
-  --bs-btn-hover-bg: var(--fl-bg-dark);
+  --bs-btn-hover-bg: var(--fl-gradient-hover);
   --bs-btn-hover-border-color: var(--fl-border);
-  --bs-btn-active-color: var(--fl-text);
-  --bs-btn-active-bg: var(--fl-bg);
-  --bs-btn-active-border-color: var(--fl-border);
+  --bs-btn-active-color: var(--fl-text-light);
+  --bs-btn-active-bg: var(--fl-bg-dark);
+  --bs-btn-active-border-color: var(--fl-bg-dark);
   --bs-btn-disabled-color: var(--fl-text-muted);
   --bs-btn-disabled-border-color: var(--fl-border);
   --bs-btn-disabled-bg: var(--fl-bg-dark);
-  box-shadow: var(--fl-shadow);
 }
 
 .btn-outline-fl-secondary {
@@ -114,15 +127,15 @@
   --bs-btn-disabled-color: var(--fl-text-muted);
   --bs-btn-disabled-border-color: var(--fl-border);
   --bs-btn-disabled-bg: var(--fl-bg-dark);
-  box-shadow: var(--fl-inset-shadow);
 }
 
 /* Dropdowns */
-.dropdown-item:active , .dropdown-item.active {
+.dropdown-item:active,
+.dropdown-item.active {
   background-color: var(--fl-primary);
 }
 
-.dropdown-item.focus , .dropdown-item:focus {
+.dropdown-item.focus,
+.dropdown-item:focus {
   background-color: var(--fl-bg-light);
 }
-
