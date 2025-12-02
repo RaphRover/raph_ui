@@ -1,28 +1,31 @@
 import { useMediaQuery } from 'react-responsive';
-import { Slide, ToastContainer, type ToastPosition } from 'react-toastify';
+import { Slide, ToastContainer, type DraggableDirection, type ToastPosition } from 'react-toastify';
 import { useConfigContext } from '@/config';
-// import { useAppContext } from '@scripts/context/AppContext';
-// import { VIRTUAL_JOYSTICK_CONFIG } from '@scripts/config/config';
+import { useAppContext } from '@/scripts/context/AppContext';
 import styles from './styles.module.css';
 
 export default function ToastContainerWrapper() {
   const { settings } = useConfigContext();
   const autoCloseMs = settings.toast.autoCloseMs;
-  // const { isMenuVisible, isVirtualGamepadEnabled } = useAppContext();
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const { isMenuVisible, isVirtualGamepadEnabled } = useAppContext();
+  const isMobile = useMediaQuery({ maxWidth: 950 });
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
-  // const { SIZE_PX, MOBILE_SIZE_PX } = VIRTUAL_JOYSTICK_CONFIG;
+  const { sizePx } = settings.virtualGamepad;
 
   // Default toast properties (desktop)
   let hideProgressBar = false;
   let stacked = false;
   let position: ToastPosition = 'bottom-right';
-  // let bottomOffset = undefined;
-  // let rightOffset = undefined;
+  let draggableDirection: DraggableDirection = 'x';
+  let bottomOffset = undefined;
+  let rightOffset = undefined;
 
   let toastClassName;
 
+
   if (isMobile) {
+    // Mobile toasts configuration
+
     if (!isPortrait) {
       // Landscape mode on mobile
       toastClassName = styles.LandscapeMobile;
@@ -31,18 +34,20 @@ export default function ToastContainerWrapper() {
       toastClassName = styles.PortraitMobile;
     }
     position = 'top-center';
+    draggableDirection = 'y';
     stacked = true;
     hideProgressBar = true;
+  } else {
+    // Desktop toasts configuration
+
+    if (isVirtualGamepadEnabled) {
+      bottomOffset = `calc( var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
+    }
+    if (isMenuVisible && !isMobile) {
+      rightOffset = 'calc( var(--toastify-toast-right) + 400px)';
+      bottomOffset = undefined;
+    }
   }
-
-  // if (isVirtualGamepadEnabled) {
-  //   bottomOffset = `calc( var(--toastify-toast-bottom) + ${(isMobile ? MOBILE_SIZE_PX : SIZE_PX) + 20}px)`;
-  // }
-  // if (isMenuVisible && !isMobile) {
-  //   rightOffset = 'calc( var(--toastify-toast-right) + 400px)';
-  //   bottomOffset = undefined;
-  // }
-
   return (
     <ToastContainer
       autoClose={autoCloseMs}
@@ -50,6 +55,7 @@ export default function ToastContainerWrapper() {
       newestOnTop={true}
       closeOnClick
       draggable
+      draggableDirection={draggableDirection}
       theme="dark"
       transition={Slide}
       limit={5}
@@ -59,8 +65,8 @@ export default function ToastContainerWrapper() {
       toastClassName={styles.ToastMobile}
       style={{
         transition: 'all 0.3s ease-in-out',
-        // bottom: bottomOffset,
-        // maxWidth: '80vw'
+        bottom: bottomOffset,
+        right: rightOffset,
       }}
     />
   );
