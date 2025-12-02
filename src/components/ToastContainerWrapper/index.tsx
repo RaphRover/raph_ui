@@ -1,15 +1,18 @@
 import { useMediaQuery } from 'react-responsive';
-import { Slide, ToastContainer, type DraggableDirection, type ToastPosition } from 'react-toastify';
+import {
+  Slide,
+  ToastContainer,
+  type DraggableDirection,
+  type ToastPosition,
+} from 'react-toastify';
 import { useConfigContext } from '@/config';
 import { useAppContext } from '@/scripts/context/AppContext';
-import styles from './styles.module.css';
 
 export default function ToastContainerWrapper() {
   const { settings } = useConfigContext();
   const autoCloseMs = settings.toast.autoCloseMs;
   const { isMenuVisible, isVirtualGamepadEnabled } = useAppContext();
   const isMobile = useMediaQuery({ maxWidth: 950 });
-  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const { sizePx } = settings.virtualGamepad;
 
   // Default toast properties (desktop)
@@ -20,26 +23,14 @@ export default function ToastContainerWrapper() {
   let bottomOffset = undefined;
   let rightOffset = undefined;
 
-  let toastClassName;
-
-
   if (isMobile) {
     // Mobile toasts configuration
-
-    if (!isPortrait) {
-      // Landscape mode on mobile
-      toastClassName = styles.LandscapeMobile;
-    } else {
-      // Portrait mode on mobile
-      toastClassName = styles.PortraitMobile;
-    }
     position = 'top-center';
     draggableDirection = 'y';
     stacked = true;
     hideProgressBar = true;
   } else {
     // Desktop toasts configuration
-
     if (isVirtualGamepadEnabled) {
       bottomOffset = `calc( var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
     }
@@ -61,8 +52,6 @@ export default function ToastContainerWrapper() {
       limit={5}
       stacked={stacked}
       hideProgressBar={hideProgressBar}
-      className={toastClassName}
-      toastClassName={styles.ToastMobile}
       style={{
         transition: 'all 0.3s ease-in-out',
         bottom: bottomOffset,

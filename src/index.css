@@ -44,6 +44,7 @@
 .app-wrapper {
   display: flex;
   flex-direction: column;
+  max-width: 100vw;
   height: 100vh; /* Fallback for browsers that don't support 100dvh */
   height: 100dvh;
 }
