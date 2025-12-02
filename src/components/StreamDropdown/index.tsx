@@ -26,10 +26,24 @@ export default function StreamDropdown(props: StreamDropdownProps) {
       onSelect={handleStreamSelection}
       drop={desktopLayout ? 'start' : 'down-centered'}
     >
-      <Dropdown.Toggle style={{ width: '100%' }} variant='fl-secondary'>
+      <Dropdown.Toggle style={{ width: '100%' }} variant="fl-secondary">
         Stream selection
       </Dropdown.Toggle>
-      <Dropdown.Menu className={styles.menu}>
+      <Dropdown.Menu
+        className={styles.menu}
+        popperConfig={{
+          strategy: 'fixed',
+          modifiers: [
+            {
+              name: 'preventOverflow',
+              options: {
+                boundary: 'viewport',
+              },
+            },
+          ],
+        }}
+        renderOnMount={true}
+      >
         {streamList.map((stream) => {
           return (
             <Dropdown.Item

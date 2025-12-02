@@ -17,7 +17,20 @@ export default function ServiceOptions(props: ServiceOptionsProps) {
       <Dropdown.Toggle style={{ width: '100%' }} variant="outline-fl-primary">
         Service Options
       </Dropdown.Toggle>
-      <Dropdown.Menu className={styles.menu}
+      <Dropdown.Menu
+        className={styles.menu}
+        popperConfig={{
+          strategy: 'fixed',
+          modifiers: [
+            {
+              name: 'preventOverflow',
+              options: {
+                boundary: 'viewport',
+              },
+            },
+          ],
+        }}
+        renderOnMount={true}
       >
         <Stack gap={2}>
           <Button

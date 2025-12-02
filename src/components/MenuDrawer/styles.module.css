@@ -1,5 +1,6 @@
 .offcanvas {
   background-color: var(--fl-bg);
+  overflow-y: auto;
 }
 
 .body {
