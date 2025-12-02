@@ -20,8 +20,7 @@ export default function ToastContainerWrapper() {
   let stacked = false;
   let position: ToastPosition = 'bottom-right';
   let draggableDirection: DraggableDirection = 'x';
-  let bottomOffset = undefined;
-  let rightOffset = undefined;
+  let toastStyle: React.CSSProperties = {};
 
   if (isMobile) {
     // Mobile toasts configuration
@@ -29,15 +28,19 @@ export default function ToastContainerWrapper() {
     draggableDirection = 'y';
     stacked = true;
     hideProgressBar = true;
+    toastStyle = {
+      top: '10vw',
+      left: '50%',
+      transform: 'translateX(-50%)',
+    };
   } else {
+
     // Desktop toasts configuration
     if (isVirtualGamepadEnabled) {
-      bottomOffset = `calc( var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
+      toastStyle.bottom = `calc( var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
     }
     if (isMenuVisible && !isMobile) {
-      rightOffset = 'calc( var(--toastify-toast-right) + 400px)';
-      bottomOffset = undefined;
-    }
+      toastStyle.right = 'calc( var(--toastify-toast-right) + 400px)';}
   }
   return (
     <ToastContainer
@@ -54,8 +57,7 @@ export default function ToastContainerWrapper() {
       hideProgressBar={hideProgressBar}
       style={{
         transition: 'all 0.3s ease-in-out',
-        bottom: bottomOffset,
-        right: rightOffset,
+        ...toastStyle,
       }}
     />
   );
