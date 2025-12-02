@@ -4,6 +4,12 @@
   padding: 0.25rem 0.5rem;
 }
 
+.wrapper {
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+}
+
 .icon {
   height: 24px;
   width: 24px;

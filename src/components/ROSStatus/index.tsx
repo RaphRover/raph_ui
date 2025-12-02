@@ -13,21 +13,21 @@ export default function ROSStatus({
 
   const icon = () => {
     return ros ? (
-      <WifiOn className={clsx(styles.icon, styles.green)} />
+      <WifiOn
+        className={clsx(styles.icon, styles.green)}
+        aria-label="ros-connected"
+      />
     ) : (
-      <WifiOff className={clsx(styles.icon, styles.red)} />
+      <WifiOff
+        className={clsx(styles.icon, styles.red)}
+        aria-label="ros-disconnected"
+      />
     );
   };
 
   return (
     <Frame className={clsx(styles.frame, className)} {...props}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+      <div className={styles.wrapper}>
         {icon()}
         <span>ROS Status</span>
       </div>

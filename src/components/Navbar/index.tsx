@@ -42,8 +42,6 @@ export default function RaphNavbar() {
           <Stack direction="horizontal" gap={2} className="ms-auto">
             {isDesktop && <SteeringModeSwitch />}
             <Button
-              id="menu"
-              value="menu"
               className={styles.menuButton}
               variant="fl-secondary"
               onClick={() => {
@@ -56,30 +54,26 @@ export default function RaphNavbar() {
             </Button>
           </Stack>
           {!isDesktop && isPortrait && (
-            <>
-              <Stack
-                gap={2}
-                style={{
-                  width: '100%',
-                  marginTop: '0.5rem',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <SteeringModeSwitch />
-                <Row>
-                  <Col>
-                    <ROSStatus style={{ height: '100%' }} />
-                  </Col>
-                  <Col>
-                    <BatteryStatus />
-                  </Col>
-                </Row>
-                <ImuReadings />
-              </Stack>
-            </>
+            <Stack
+              gap={2}
+              style={{
+                width: '100%',
+                marginTop: '0.5rem',
+                justifyContent: 'space-between',
+              }}
+            >
+              <SteeringModeSwitch />
+              <Row>
+                <Col>
+                  <ROSStatus style={{ height: '100%' }} />
+                </Col>
+                <Col>
+                  <BatteryStatus />
+                </Col>
+              </Row>
+              <ImuReadings />
+            </Stack>
           )}
-
-          {/* {!isDesktop && infoPanel()} */}
         </Container>
       </Navbar>
       <MenuDrawer />

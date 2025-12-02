@@ -36,10 +36,10 @@ export default function ToastContainerWrapper() {
   } else {
     // Desktop toasts configuration
     if (isVirtualGamepadEnabled) {
-      toastStyle.bottom = `calc( var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
+      toastStyle.bottom = `calc(var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
     }
-    if (isMenuVisible && !isMobile) {
-      toastStyle.right = 'calc( var(--toastify-toast-right) + 400px)';
+    if (isMenuVisible) {
+      toastStyle.right = 'calc(var(--toastify-toast-right) + 400px)';
     }
   }
   return (
