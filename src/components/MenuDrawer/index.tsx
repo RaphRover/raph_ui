@@ -70,7 +70,10 @@ export default function MenuDrawer() {
           </Button>
           <StreamDropdown desktopLayout={isDesktop} />
           <Button
-            onClick={() => { setConfigVisible(true); setMenuVisible(false); }}
+            onClick={() => {
+              setConfigVisible(true);
+              setMenuVisible(false);
+            }}
             variant="fl-secondary"
           >
             Settings
@@ -96,7 +99,7 @@ export default function MenuDrawer() {
                 onClick={() => setVirtualGamepadEnabled((prev) => !prev)}
                 variant="fl-secondary"
               >
-                { isVirtualGamepadEnabled ? 'Hide' : 'Show' } Virtual Gamepad
+                {isVirtualGamepadEnabled ? 'Hide' : 'Show'} Virtual Gamepad
               </ToggleButton>
             </Col>
             <Col>
@@ -108,7 +111,8 @@ export default function MenuDrawer() {
                 onClick={() => setKeyboardControlEnabled((prev) => !prev)}
                 variant="fl-secondary"
               >
-                { isKeyboardControlEnabled ? 'Disable' : 'Enable' } Keyboard Control
+                {isKeyboardControlEnabled ? 'Disable' : 'Enable'} Keyboard
+                Control
               </ToggleButton>
             </Col>
           </Row>

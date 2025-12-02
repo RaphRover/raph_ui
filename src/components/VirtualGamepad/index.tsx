@@ -70,7 +70,7 @@ export default function VirtualGamepad() {
     <>
       <div
         className={styles.virtualButtonsContainer}
-        style={{ height: joystickSize , maxWidth: buttonSize * 2 + 20}}
+        style={{ height: joystickSize, maxWidth: buttonSize * 2 + 20 }}
       >
         <button
           className={styles.virtualButton}

@@ -34,13 +34,13 @@ export default function ToastContainerWrapper() {
       transform: 'translateX(-50%)',
     };
   } else {
-
     // Desktop toasts configuration
     if (isVirtualGamepadEnabled) {
       toastStyle.bottom = `calc( var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
     }
     if (isMenuVisible && !isMobile) {
-      toastStyle.right = 'calc( var(--toastify-toast-right) + 400px)';}
+      toastStyle.right = 'calc( var(--toastify-toast-right) + 400px)';
+    }
   }
   return (
     <ToastContainer
