@@ -5,7 +5,7 @@ import WifiOff from './wifi_off.svg?react';
 import styles from './styles.module.css';
 import clsx from 'clsx';
 
-export default function ROSStatus() {
+export default function ROSStatus({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const { ros } = useRosContext();
 
   const icon = () => {
@@ -17,9 +17,11 @@ export default function ROSStatus() {
   };
 
   return (
-    <Frame className={styles.frame}>
-      ROS Status
-      {icon()}
+    <Frame className={clsx(styles.frame, className)} {...props}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {icon()}
+        <span>ROS Status</span>
+      </div>
     </Frame>
   );
 }
