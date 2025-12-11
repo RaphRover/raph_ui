@@ -13,6 +13,7 @@ import CopyrightFrame from '@/components/CopyrightFrame';
 
 import { useMediaQuery } from 'react-responsive';
 import ServiceOptions from '@/components/ServiceOptions';
+import styles from './styles.module.css';
 
 export default function MenuDrawer() {
   const {
@@ -22,12 +23,13 @@ export default function MenuDrawer() {
     setVirtualGamepadEnabled,
     wheelCalibration,
     setConfigVisible,
+    robotVelocityControl,
+    isMenuVisible,
+    setMenuVisible,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
-  const { robotVelocityControl, isMenuVisible, setMenuVisible } =
-    useAppContext();
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
 
   const { isInitialized, isLoading, calibrateWheels } = wheelCalibration;
@@ -41,11 +43,12 @@ export default function MenuDrawer() {
       onHide={handleClose}
       aria-labelledby="offcanvasMenuLabel"
       scrollable={'true'}
+      className={styles.offcanvas}
     >
       <Offcanvas.Header closeButton>
         <Offcanvas.Title>Menu</Offcanvas.Title>
       </Offcanvas.Header>
-      <Offcanvas.Body style={{ overflow: 'visible' }}>
+      <Offcanvas.Body className={styles.body}>
         <Stack gap={2} style={{ height: '100%' }}>
           <ToggleButton
             id="enable-driving"
@@ -53,13 +56,13 @@ export default function MenuDrawer() {
             checked={isDrivingEnabled}
             value={''}
             onClick={() => setDrivingEnabled((prev) => !prev)}
-            variant="outline-success"
+            variant="outline-fl-primary"
           >
             {isDrivingEnabled ? 'Disable Driving' : 'Enable Driving'}
           </ToggleButton>
           <Button
             id="calibrate-wheels"
-            variant="outline-primary"
+            variant="fl-secondary"
             disabled={!isInitialized || isLoading}
             onClick={calibrateWheels}
           >
@@ -67,8 +70,11 @@ export default function MenuDrawer() {
           </Button>
           <StreamDropdown desktopLayout={isDesktop} />
           <Button
-            onClick={() => setConfigVisible(true)}
-            variant="outline-secondary"
+            onClick={() => {
+              setConfigVisible(true);
+              setMenuVisible(false);
+            }}
+            variant="fl-secondary"
           >
             Settings
           </Button>
@@ -79,7 +85,7 @@ export default function MenuDrawer() {
             checked={isFullscreen}
             value={''}
             onClick={toggleFullscreen}
-            variant="outline-secondary"
+            variant="fl-secondary"
           >
             {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
           </ToggleButton>
@@ -91,9 +97,9 @@ export default function MenuDrawer() {
                 checked={isVirtualGamepadEnabled}
                 value={''}
                 onClick={() => setVirtualGamepadEnabled((prev) => !prev)}
-                variant="outline-secondary"
+                variant="fl-secondary"
               >
-                Toggle virtual joystick
+                {isVirtualGamepadEnabled ? 'Hide' : 'Show'} Virtual Gamepad
               </ToggleButton>
             </Col>
             <Col>
@@ -103,9 +109,10 @@ export default function MenuDrawer() {
                 checked={isKeyboardControlEnabled}
                 value={''}
                 onClick={() => setKeyboardControlEnabled((prev) => !prev)}
-                variant="outline-secondary"
+                variant="fl-secondary"
               >
-                Toggle keyboard control
+                {isKeyboardControlEnabled ? 'Disable' : 'Enable'} Keyboard
+                Control
               </ToggleButton>
             </Col>
           </Row>

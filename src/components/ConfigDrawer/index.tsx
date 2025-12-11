@@ -1,6 +1,7 @@
 import { Offcanvas, Tabs, Tab } from 'react-bootstrap';
 import { useAppContext } from '@/scripts/context/AppContext';
 import RobotVelocityConfig from '@/components/RobotVelocityConfig';
+import styles from './styles.module.css';
 
 export default function ConfigDrawer() {
   const { isConfigVisible, setConfigVisible } = useAppContext();
@@ -12,7 +13,7 @@ export default function ConfigDrawer() {
       placement="end"
       aria-labelledby="offcanvasConfigLabel"
       scrollable={'true'}
-      style={{ width: '100%', maxWidth: '500px' }}
+      className={styles.offcanvas}
     >
       <Offcanvas.Header closeButton>
         <Offcanvas.Title>Configuration</Offcanvas.Title>

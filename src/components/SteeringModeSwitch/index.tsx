@@ -28,9 +28,7 @@ export default function SteeringModeSwitch() {
       {steeringModesRadio.map((mode) => (
         <Button
           key={mode.value}
-          variant={
-            steeringMode === mode.value ? 'primary' : 'outline-secondary'
-          }
+          variant={steeringMode === mode.value ? 'fl-primary' : 'fl-secondary'}
           className={styles.button}
           disabled={isLoading}
           onClick={() => {

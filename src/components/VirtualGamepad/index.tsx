@@ -26,7 +26,6 @@ export default function VirtualGamepad() {
     throttleMs,
   } = settings.virtualGamepad;
 
-  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const {
     isLoading: isSwitchingSteeringMode,
@@ -39,7 +38,7 @@ export default function VirtualGamepad() {
     calibrateWheels,
   } = wheelCalibration;
 
-  const joystickSize = isMobile && isPortrait ? mobileSizePx : sizePx;
+  const joystickSize = isMobile ? mobileSizePx : sizePx;
   const buttonSize = joystickSize / 2 - 10;
   const baseColor = isDrivingEnabled ? colorBase : colorBaseDisabled;
   const stickColor = isDrivingEnabled ? colorStick : colorStickDisabled;
@@ -71,7 +70,7 @@ export default function VirtualGamepad() {
     <>
       <div
         className={styles.virtualButtonsContainer}
-        style={{ height: joystickSize }}
+        style={{ height: joystickSize, maxWidth: buttonSize * 2 + 20 }}
       >
         <button
           className={styles.virtualButton}

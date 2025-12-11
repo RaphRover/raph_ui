@@ -182,6 +182,7 @@ export default function RangeWithLabel(props: RangeWithLabelProps) {
         }
       >
         <Form.Range
+          className={styles.range}
           {...computedRangeProps}
           value={currentIndex}
           onChange={handleRangeChange}

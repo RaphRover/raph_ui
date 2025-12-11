@@ -1,6 +1,7 @@
 import { useRosContext } from '@/scripts/context/RosContext';
 import { useAppContext } from '@/scripts/context/AppContext';
 import { Dropdown } from 'react-bootstrap';
+import styles from './styles.module.css';
 
 interface StreamDropdownProps {
   desktopLayout: boolean;
@@ -25,10 +26,24 @@ export default function StreamDropdown(props: StreamDropdownProps) {
       onSelect={handleStreamSelection}
       drop={desktopLayout ? 'start' : 'down-centered'}
     >
-      <Dropdown.Toggle style={{ width: '100%' }}>
+      <Dropdown.Toggle style={{ width: '100%' }} variant="fl-secondary">
         Stream selection
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <Dropdown.Menu
+        className={styles.menu}
+        popperConfig={{
+          strategy: 'fixed',
+          modifiers: [
+            {
+              name: 'preventOverflow',
+              options: {
+                boundary: 'viewport',
+              },
+            },
+          ],
+        }}
+        renderOnMount={true}
+      >
         {streamList.map((stream) => {
           return (
             <Dropdown.Item

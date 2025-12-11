@@ -1,0 +1,7 @@
+.menu {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  width: 100%;
+  max-width: 300px;
+  background-color: var(--fl-bg);
+}

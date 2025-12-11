@@ -1,8 +1,26 @@
 :root {
-  --fl-main: #c57b2c;
+  --fl-primary-light: hsl(31, 63.5%, 57.3%);
+  --fl-primary: hsl(31, 63.5%, 47.3%);
+  --fl-primary-dark: hsl(31, 63.5%, 37.3%);
   --fl-secondary: #2f302f;
 
-  --fl-background-color: #1c1c1c;
+  --fl-bg-dark: hsl(225, 5%, 10%);
+  --fl-bg: hsl(225, 5%, 15%);
+  --fl-bg-light: hsl(225, 5%, 20%);
+
+  --fl-text: hsl(0, 0%, 95%);
+  --fl-text-light: hsl(0, 0%, 90%);
+  --fl-text-muted: hsl(0, 0%, 70%);
+
+  --fl-border: hsl(225, 5%, 30%);
+  --fl-gradient: linear-gradient(0deg, var(--fl-bg) 95%, var(--fl-bg-light));
+  --fl-gradient-hover: linear-gradient(0deg, var(--fl-bg), var(--fl-bg-light));
+
+  --fl-shadow:
+    0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
+  --fl-inset-shadow: inset 0px 0px 2px hsla(0, 0%, 6%, 0.15);
+
+  --fl-focus-ring: 0 0 0 0.2rem hsla(31, 63.5%, 47.3%, 0.25);
 
   --fl-red: #d32f2f;
   --fl-green: #388e3c;
@@ -11,19 +29,114 @@
 
 [data-bs-theme='dark'] {
   color-scheme: dark;
-  --bs-body-bg: var(--fl-background-color);
+  --bs-body-bg: var(--fl-bg-dark);
   --bs-body-bg-rgb: 28, 28, 28;
   --bs-secondary-bg: #303030;
   --bs-secondary-bg-rgb: 30, 30, 30;
+
+  --bs-dropdown-link-active-bg: var(--fl-primary);
 }
 
-body {
-  background-color: var(--bs-secondary-bg);
+#root {
+  background-color: var(--fl-bg-dark);
 }
 
 .app-wrapper {
   display: flex;
   flex-direction: column;
+  max-width: 100vw;
   height: 100vh; /* Fallback for browsers that don't support 100dvh */
   height: 100dvh;
+}
+
+/* Buttons */
+
+.btn svg {
+  fill: currentColor;
+}
+
+.btn {
+  box-shadow: var(--fl-shadow);
+}
+
+.btn:active,
+.btn.active,
+.btn-check:checked + .btn {
+  box-shadow: inset 0px 0px 2px hsla(225, 0%, 20%, 0.15);
+}
+
+.btn-check:disabled + .btn,
+.btn-check[disabled] + .btn {
+  box-shadow: none;
+}
+
+.btn-fl-primary {
+  --bs-btn-bg: var(--fl-primary);
+  --bs-btn-color: var(--fl-text-light);
+  --bs-btn-border-color: var(--fl-primary-dark);
+  --bs-btn-hover-color: var(--fl-text);
+  --bs-btn-hover-bg: var(--fl-primary-dark);
+  --bs-btn-hover-border-color: var(--fl-primary-dark);
+  --bs-btn-active-color: var(--fl-text);
+  --bs-btn-active-bg: var(--fl-primary-light);
+  --bs-btn-active-border-color: var(--fl-primary-light);
+  --bs-btn-disabled-color: var(--fl-text-muted);
+  --bs-btn-disabled-border-color: var(--fl-primary-dark);
+  --bs-btn-disabled-bg: var(--fl-primary-dark);
+}
+
+.btn-outline-fl-primary {
+  --bs-btn-bg: var(--fl-bg);
+  --bs-btn-color: var(--fl-text-light);
+  --bs-btn-border-color: var(--fl-primary);
+  --bs-btn-hover-color: var(--fl-text);
+  --bs-btn-hover-bg: var(--fl-primary-dark);
+  --bs-btn-hover-border-color: var(--fl-primary-dark);
+  --bs-btn-active-color: var(--fl-text);
+  --bs-btn-active-bg: var(--fl-primary);
+  --bs-btn-active-border-color: var(--fl-primary);
+  --bs-btn-disabled-color: var(--fl-text-muted);
+  --bs-btn-disabled-border-color: var(--fl-primary-dark);
+  --bs-btn-disabled-bg: var(--fl-bg-dark);
+}
+
+.btn-fl-secondary {
+  --bs-btn-bg: var(--fl-bg-light);
+  --bs-btn-color: var(--fl-text-light);
+  --bs-btn-border-color: var(--fl-border);
+  --bs-btn-hover-color: var(--fl-text);
+  --bs-btn-hover-bg: var(--fl-gradient-hover);
+  --bs-btn-hover-border-color: var(--fl-border);
+  --bs-btn-active-color: var(--fl-text-light);
+  --bs-btn-active-bg: var(--fl-bg-dark);
+  --bs-btn-active-border-color: var(--fl-bg-dark);
+  --bs-btn-disabled-color: var(--fl-text-muted);
+  --bs-btn-disabled-border-color: var(--fl-border);
+  --bs-btn-disabled-bg: var(--fl-bg-dark);
+}
+
+.btn-outline-fl-secondary {
+  --bs-btn-bg: var(--fl-bg-dark);
+  --bs-btn-color: var(--fl-text-light);
+  --bs-btn-border-color: var(--fl-border);
+  --bs-btn-hover-color: var(--fl-text);
+  --bs-btn-hover-bg: var(--fl-bg-dark);
+  --bs-btn-hover-border-color: var(--fl-border);
+  --bs-btn-active-color: var(--fl-text);
+  --bs-btn-active-bg: var(--fl-bg-light);
+  --bs-btn-active-border-color: var(--fl-border);
+  --bs-btn-disabled-color: var(--fl-text-muted);
+  --bs-btn-disabled-border-color: var(--fl-border);
+  --bs-btn-disabled-bg: var(--fl-bg-dark);
+}
+
+/* Dropdowns */
+.dropdown-item:active,
+.dropdown-item.active {
+  background-color: var(--fl-primary);
+}
+
+.dropdown-item.focus,
+.dropdown-item:focus {
+  background-color: var(--fl-bg-light);
 }
