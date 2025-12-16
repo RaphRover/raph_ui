@@ -14,6 +14,8 @@ import CopyrightFrame from '@/components/CopyrightFrame';
 import { useMediaQuery } from 'react-responsive';
 import ServiceOptions from '@/components/ServiceOptions';
 import styles from './styles.module.css';
+import SteeringModeSwitch from '@/components/SteeringModeSwitch';
+import ImuReadings from '@/components/ImuReadings';
 
 export default function MenuDrawer() {
   const {
@@ -28,6 +30,8 @@ export default function MenuDrawer() {
     setMenuVisible,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
+  const isTablet = useMediaQuery({ minWidth: 760 });
+  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
@@ -50,6 +54,8 @@ export default function MenuDrawer() {
       </Offcanvas.Header>
       <Offcanvas.Body className={styles.body}>
         <Stack gap={2} style={{ height: '100%' }}>
+          {!isDesktop && !isPortrait && <SteeringModeSwitch />}
+          {!isTablet && !isPortrait && <ImuReadings />}
           <ToggleButton
             id="enable-driving"
             type="checkbox"
