@@ -11,6 +11,7 @@ import MenuIcon from './menu.svg?react';
 
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });
+  const isTablet = useMediaQuery({ minWidth: 760 });
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const { setMenuVisible, setConfigVisible } = useAppContext();
 
@@ -37,7 +38,7 @@ export default function RaphNavbar() {
             </Navbar.Brand>
             {(isDesktop || !isPortrait) && <ROSStatus />}
             {(isDesktop || !isPortrait) && <BatteryStatus />}
-            {(isDesktop || !isPortrait) && <ImuReadings />}
+            {isTablet && <ImuReadings />}
           </Stack>
           <Stack direction="horizontal" gap={2} className="ms-auto">
             {isDesktop && <SteeringModeSwitch />}
