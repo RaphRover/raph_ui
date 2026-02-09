@@ -8,10 +8,17 @@ import {
 import useRosTopicPublisher from './useRosTopicPublisher';
 import { useConfigContext } from '@/config';
 
+type RobotVelocityCommand = {
+  speed: number;
+  steering_angle: number;
+  angular_velocity: number;
+};
+
 export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
   setDrivingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
-  setRobotVelocity: (velocity: Partial<AckermannDriveMsg>) => void;
+  setRobotVelocity: (command: RobotVelocityCommand) => void;
+  latestCommandRef: React.RefObject<RobotVelocityCommand>;
 }
 
 export default function useRobotVelocityControl(
@@ -38,40 +45,40 @@ export default function useRobotVelocityControl(
       'raph_interfaces/msg/TurnInPlaceDrive',
     );
 
-  const robotVelocityRef = useRef<AckermannDriveMsg>({
-    steering_angle: 0,
-    steering_angle_velocity: steeringAngleVelocityRadps,
+  const latestCommandRef = useRef<RobotVelocityCommand>({
     speed: 0,
-    acceleration: ackermannAcceleration,
-    jerk: ackermannJerk,
+    steering_angle: 0,
+    angular_velocity: 0,
   });
 
-  const setRobotVelocity = useCallback(
-    (velocity: Partial<AckermannDriveMsg>) => {
-      const prevVelocity = robotVelocityRef.current;
-      robotVelocityRef.current = {
-        ...prevVelocity,
-        ...velocity,
-      };
-    },
-    [],
-  );
+  const setRobotVelocity = useCallback((command: RobotVelocityCommand) => {
+    latestCommandRef.current = command;
+  }, []);
+
+  useEffect(() => {
+    if (!isDrivingEnabled) {
+      latestCommandRef.current = { speed: 0, steering_angle: 0, angular_velocity: 0 };
+    }
+  }, [isDrivingEnabled]);
 
   useEffect(() => {
     if (!isDrivingEnabled) return;
 
     const interval = setInterval(() => {
+      const { speed, steering_angle, angular_velocity } = latestCommandRef.current;
+      
       if (steeringMode === SteeringModes.TURN_IN_PLACE) {
         publishTurnInPlaceVelocity({
-          angular_velocity: -robotVelocityRef.current.steering_angle,
+          angular_velocity: angular_velocity,
           acceleration: turnInPlaceAcceleration,
         });
         return;
       }
 
       const velocity = {
-        ...robotVelocityRef.current,
+        steering_angle: steering_angle,
         steering_angle_velocity: steeringAngleVelocityRadps,
+        speed,
         acceleration: ackermannAcceleration,
         jerk: ackermannJerk,
       };
@@ -95,5 +102,10 @@ export default function useRobotVelocityControl(
     velocityPublishIntervalMs,
   ]);
 
-  return { isDrivingEnabled, setDrivingEnabled, setRobotVelocity };
+  return {
+    isDrivingEnabled,
+    setDrivingEnabled,
+    setRobotVelocity,
+    latestCommandRef,
+  };
 }

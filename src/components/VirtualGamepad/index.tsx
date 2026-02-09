@@ -14,6 +14,7 @@ export default function VirtualGamepad() {
   } = useAppContext();
   const { isDrivingEnabled, setRobotVelocity } = robotVelocityControl;
   const { settings } = useConfigContext();
+  const { driveConfig, virtualGamepad } = settings;
 
   const {
     sizePx,
@@ -24,7 +25,9 @@ export default function VirtualGamepad() {
     colorBaseDisabled,
     colorStickDisabled,
     throttleMs,
-  } = settings.virtualGamepad;
+  } = virtualGamepad;
+  const { linearVelocityMps, steeringAngleLimitRad, angularVelocityRadps } =
+    driveConfig;
 
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const {
@@ -45,24 +48,21 @@ export default function VirtualGamepad() {
 
   const handleMove = (event: IJoystickUpdateEvent) => {
     if (!isDrivingEnabled) {
-      setRobotVelocity({
-        speed: 0,
-        steering_angle: 0,
-      });
+      setRobotVelocity({ speed: 0, steering_angle: 0, angular_velocity: 0 });
       return;
     }
     const { x, y } = event;
+    const steeringInput = (x ?? 0) * -1;
+    const speedInput = y ?? 0;
     setRobotVelocity({
-      speed: y ?? 0,
-      steering_angle: (x ?? 0) * -1,
+      speed: speedInput * linearVelocityMps,
+      steering_angle: steeringInput * steeringAngleLimitRad,
+      angular_velocity: steeringInput * angularVelocityRadps * -1,
     });
   };
 
   const handleStop = () => {
-    setRobotVelocity({
-      speed: 0,
-      steering_angle: 0,
-    });
+    setRobotVelocity({ speed: 0, steering_angle: 0, angular_velocity: 0 });
   };
 
   if (!isVirtualGamepadEnabled) return null;
