@@ -18,7 +18,7 @@ export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
   setDrivingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setRobotVelocity: (command: RobotVelocityCommand) => void;
-  latestCommandRef: React.RefObject<RobotVelocityCommand>;
+  getLatestVelocity: () => RobotVelocityCommand;
 }
 
 export default function useRobotVelocityControl(
@@ -53,6 +53,8 @@ export default function useRobotVelocityControl(
   const setRobotVelocity = useCallback((command: RobotVelocityCommand) => {
     latestCommandRef.current = command;
   }, []);
+
+  const getLatestVelocity = useCallback(() => latestCommandRef.current, []);
 
   useEffect(() => {
     if (!isDrivingEnabled) {
@@ -110,6 +112,6 @@ export default function useRobotVelocityControl(
     isDrivingEnabled,
     setDrivingEnabled,
     setRobotVelocity,
-    latestCommandRef,
+    getLatestVelocity,
   };
 }

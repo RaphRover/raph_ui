@@ -32,7 +32,7 @@ export default function RobotController() {
     wheelCalibration,
     steeringMode,
   } = useAppContext();
-  const { setRobotVelocity, latestCommandRef } = robotVelocityControl;
+  const { setRobotVelocity, getLatestVelocity } = robotVelocityControl;
   const { calibrateWheels } = wheelCalibration;
   const { toggleSteeringMode } = steeringMode;
   const keyboardControlToastId = 'keyboardControlToast';
@@ -77,7 +77,7 @@ export default function RobotController() {
 
     const updateKeyboardVelocity = () => {
       const state = keyboardStateRef.current;
-      const velocity = { ...latestCommandRef.current };
+      const velocity = { ...getLatestVelocity() };
       const forward = (state.w ? 1 : 0) - (state.s ? 1 : 0);
       const steering = (state.a ? 1 : 0) - (state.d ? 1 : 0);
 
@@ -129,8 +129,8 @@ export default function RobotController() {
     };
   }, [
     angularVelocityRadps,
+    getLatestVelocity,
     isKeyboardControlEnabled,
-    latestCommandRef,
     linearVelocityMps,
     setRobotVelocity,
     steeringAngleLimitRad,
