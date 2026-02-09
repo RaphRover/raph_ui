@@ -19,7 +19,7 @@ export type SteeringModeHook = {
 
 export default function useSteeringMode(): SteeringModeHook {
   const drivetrainState = useRosTopicSubscription<DrivetrainStateMsg>(
-    '/controller/drivetrain_state',
+    'controller/drivetrain_state',
     'raph_interfaces/msg/DrivetrainState',
   );
   const { callService, isLoading, isInitialized } = useRosService<
