@@ -52,9 +52,31 @@ export const SteeringModes = {
   TURN_IN_PLACE: 1,
 } as const;
 
-export type SteeringModeRequest = {
-  steering_mode: { data: (typeof SteeringModes)[keyof typeof SteeringModes] };
+export type SteeringMode = (typeof SteeringModes)[keyof typeof SteeringModes];
+
+export type SteeringModeMsg = {
+  data: SteeringMode;
 };
+
+export type SteeringModeRequest = {
+  steering_mode: SteeringModeMsg;
+};
+
+export const DrivetrainOperatingStates = {
+  DISABLED: 0,
+  ENABLED: 1,
+  CALIBRATING_SERVOS: 2,
+  CHANGING_STEERING_MODE: 3,
+} as const;
+
+export type DrivetrainOperatingState =
+  (typeof DrivetrainOperatingStates)[keyof typeof DrivetrainOperatingStates];
+
+export interface DrivetrainStateMsg {
+  steering_mode: SteeringModeMsg;
+  operating_state: DrivetrainOperatingState;
+  is_servos_calibrated: boolean;
+}
 
 export interface AckermannDriveMsg {
   steering_angle: number;

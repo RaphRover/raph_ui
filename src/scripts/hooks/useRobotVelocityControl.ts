@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { AckermannDriveMsg } from '@/types/rosInterfaces';
+import {
+  SteeringModes,
+  type AckermannDriveMsg,
+  type SteeringMode,
+} from '@/types/rosInterfaces';
 import useRosTopicPublisher from './useRosTopicPublisher';
-import { SteeringModes } from '@/types/rosInterfaces';
-import type { SteeringMode } from '@/scripts/hooks/useSteeringMode';
 import { useConfigContext } from '@/config';
 
 export interface RobotVelocityControl {
