@@ -159,7 +159,8 @@ export const APP_CONFIG = {
       type: 'number',
       defaultValue: 2.0,
       label: 'Turn In Place Angular Velocity (rad/s)',
-      description: 'Maximum angular velocity in radians per second for turn-in-place commands',
+      description:
+        'Maximum angular velocity in radians per second for turn-in-place commands',
       unit: 'rad/s',
       min: 0.1,
       max: 5.0,

@@ -39,11 +39,10 @@ export default function useRobotVelocityControl(
     'controller/cmd_ackermann',
     'ackermann_msgs/msg/AckermannDrive',
   );
-  const publishTurnInPlaceVelocity =
-    useRosTopicPublisher<TurnInPlaceDriveMsg>(
-      'controller/cmd_turn_in_place',
-      'raph_interfaces/msg/TurnInPlaceDrive',
-    );
+  const publishTurnInPlaceVelocity = useRosTopicPublisher<TurnInPlaceDriveMsg>(
+    'controller/cmd_turn_in_place',
+    'raph_interfaces/msg/TurnInPlaceDrive',
+  );
 
   const latestCommandRef = useRef<RobotVelocityCommand>({
     speed: 0,
@@ -57,7 +56,11 @@ export default function useRobotVelocityControl(
 
   useEffect(() => {
     if (!isDrivingEnabled) {
-      latestCommandRef.current = { speed: 0, steering_angle: 0, angular_velocity: 0 };
+      latestCommandRef.current = {
+        speed: 0,
+        steering_angle: 0,
+        angular_velocity: 0,
+      };
     }
   }, [isDrivingEnabled]);
 
@@ -65,8 +68,9 @@ export default function useRobotVelocityControl(
     if (!isDrivingEnabled) return;
 
     const interval = setInterval(() => {
-      const { speed, steering_angle, angular_velocity } = latestCommandRef.current;
-      
+      const { speed, steering_angle, angular_velocity } =
+        latestCommandRef.current;
+
       if (steeringMode === SteeringModes.TURN_IN_PLACE) {
         publishTurnInPlaceVelocity({
           angular_velocity: angular_velocity,

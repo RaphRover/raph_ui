@@ -257,7 +257,7 @@ export default function RobotController() {
             ? leftStickX * angularVelocityRadps
             : 0;
       }
-      setRobotVelocity({ speed, steering_angle, angular_velocity});
+      setRobotVelocity({ speed, steering_angle, angular_velocity });
       prevButtons[steeringModeButtonIndex] = steeringModeButton;
       prevButtons[calibrationButtonIndex] = calibrationButton;
     };
