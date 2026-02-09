@@ -99,7 +99,7 @@ export const APP_CONFIG = {
     linearVelocityMps: {
       type: 'number',
       defaultValue: 1.0,
-      label: 'Linear Velocity (m/s)',
+      label: 'Ackermann Linear Velocity (m/s)',
       description: 'Maximum linear velocity in meters per second',
       unit: 'm/s',
       min: 0.1,
@@ -109,7 +109,7 @@ export const APP_CONFIG = {
     steeringAngleVelocityRadps: {
       type: 'number',
       defaultValue: 3.0,
-      label: 'Steering Angle Velocity (rad/s)',
+      label: 'Ackermann Steering Angle Velocity (rad/s)',
       description: 'Maximum steering angle velocity in radians per second',
       unit: 'rad/s',
       min: 0.1,
@@ -119,7 +119,7 @@ export const APP_CONFIG = {
     steeringAngleLimitRad: {
       type: 'number',
       defaultValue: 1.1,
-      label: 'Steering Angle Limit (rad)',
+      label: 'Ackermann Steering Angle Limit (rad)',
       description: 'Maximum steering angle in radians',
       unit: 'rad',
       readOnly: true,
@@ -155,6 +155,16 @@ export const APP_CONFIG = {
       max: 10,
       step: 0.1,
     },
+    angularVelocityRadps: {
+      type: 'number',
+      defaultValue: 2.0,
+      label: 'Turn In Place Angular Velocity (rad/s)',
+      description: 'Maximum angular velocity in radians per second for turn-in-place commands',
+      unit: 'rad/s',
+      min: 0.1,
+      max: 5.0,
+      step: 0.1,
+    },
   },
   // Gamepad configuration settings
   // For reference, see: https://www.w3.org/TR/gamepad/#remapping
@@ -183,11 +193,17 @@ export const APP_CONFIG = {
       label: 'Forward Axis Index',
       description: 'Axis index for forward/backward control',
     },
-    steeringAxisIndex: {
+    ackermannSteeringAxisIndex: {
       type: 'number',
       defaultValue: 2,
-      label: 'Steering Axis Index',
+      label: 'Ackermann Steering Axis Index',
       description: 'Axis index for left/right steering control',
+    },
+    turnInPlaceSteeringAxisIndex: {
+      type: 'number',
+      defaultValue: 0,
+      label: 'Turn In Place Steering Axis Index',
+      description: 'Axis index for turn-in-place angular control',
     },
     joystickDeadzone: {
       type: 'number',

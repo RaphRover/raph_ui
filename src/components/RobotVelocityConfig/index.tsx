@@ -11,6 +11,7 @@ export default function RobotVelocityConfig() {
     ackermannAcceleration,
     ackermannJerk,
     turnInPlaceAcceleration,
+    angularVelocityRadps,
   } = settings.driveConfig;
   const driveLimits = APP_CONFIG.driveConfig;
   const {
@@ -19,6 +20,7 @@ export default function RobotVelocityConfig() {
     ackermannAcceleration: ackermannAccelerationLimits,
     ackermannJerk: ackermannJerkLimits,
     turnInPlaceAcceleration: turnInPlaceAccelerationLimits,
+    angularVelocityRadps: angularVelocityLimits,
   } = driveLimits;
 
   const handleVelocitySet = (
@@ -101,6 +103,22 @@ export default function RobotVelocityConfig() {
     );
   };
 
+  const handleAngularVelocitySet = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { angularVelocityRadps: newValue },
+    });
+    showOrUpdateToast(
+      `Angular velocity set to: ${newValue} ${angularVelocityLimits.unit}`,
+      {
+        toastId: 'angular-velocity-set',
+        type: 'info',
+      },
+    );
+  };
+
   return (
     <ConfigFrame title="Robot Velocity Config">
       <RangeWithLabel
@@ -156,6 +174,17 @@ export default function RobotVelocityConfig() {
         value={turnInPlaceAcceleration}
         onMouseUp={handleTurnInPlaceAccelerationSet}
         onTouchEnd={handleTurnInPlaceAccelerationSet}
+        showLegend
+      />
+      <RangeWithLabel
+        label={angularVelocityLimits.label}
+        unit={angularVelocityLimits.unit}
+        min={angularVelocityLimits.min}
+        max={angularVelocityLimits.max}
+        step={angularVelocityLimits.step}
+        value={angularVelocityRadps}
+        onMouseUp={handleAngularVelocitySet}
+        onTouchEnd={handleAngularVelocitySet}
         showLegend
       />
     </ConfigFrame>
