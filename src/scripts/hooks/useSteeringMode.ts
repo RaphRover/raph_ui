@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import {
   SteeringModes,
   type DrivetrainStateMsg,
@@ -18,7 +18,6 @@ export type SteeringModeHook = {
 };
 
 export default function useSteeringMode(): SteeringModeHook {
-  const [steeringMode, setSteeringMode] = useState<SteeringMode | null>(null);
   const drivetrainState = useRosTopicSubscription<DrivetrainStateMsg>(
     '/controller/drivetrain_state',
     'raph_interfaces/msg/DrivetrainState',
@@ -27,6 +26,10 @@ export default function useSteeringMode(): SteeringModeHook {
     SteeringModeRequest,
     ServiceResponse
   >('controller/set_steering_mode', 'raph_interfaces/srv/SetSteeringMode');
+
+  const steeringMode = useMemo<SteeringMode | null>(() => {
+    return drivetrainState?.steering_mode?.data ?? null;
+  }, [drivetrainState]);
 
   const toggleSteeringMode = async () => {
     if (steeringMode === null) {
@@ -62,15 +65,6 @@ export default function useSteeringMode(): SteeringModeHook {
       );
     }
   };
-
-  useEffect(() => {
-    const topicSteeringMode = drivetrainState?.steering_mode?.data;
-    if (topicSteeringMode === undefined) return;
-
-    setSteeringMode((prev) =>
-      prev === topicSteeringMode ? prev : topicSteeringMode,
-    );
-  }, [drivetrainState]);
 
   return { steeringMode, toggleSteeringMode, isLoading, isInitialized };
 }
