@@ -85,3 +85,8 @@ export interface AckermannDriveMsg {
   acceleration: number;
   jerk: number;
 }
+
+export interface TurnInPlaceDriveMsg {
+  angular_velocity: number;
+  acceleration: number;
+}
