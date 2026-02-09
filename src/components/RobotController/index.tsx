@@ -11,6 +11,8 @@ function isKeyboardCommandKey(key: string): key is KeyboardCommandKey {
   return keyboardCommandKeys.includes(key as KeyboardCommandKey);
 }
 
+const zeroVelocity = { speed: 0, steering_angle: 0, angular_velocity: 0 };
+
 export default function RobotController() {
   const { settings } = useConfigContext();
   const { linearVelocityMps, steeringAngleLimitRad, angularVelocityRadps } =
@@ -25,6 +27,13 @@ export default function RobotController() {
     s: false,
     d: false,
   });
+
+  const resetKeyboardState = () => {
+    keyboardStateRef.current.w = false;
+    keyboardStateRef.current.a = false;
+    keyboardStateRef.current.s = false;
+    keyboardStateRef.current.d = false;
+  };
 
   const {
     isKeyboardControlEnabled,
@@ -52,7 +61,8 @@ export default function RobotController() {
   useEffect(() => {
     const handleBlur = () => {
       console.debug('[RobotController] Window focus lost - stopping robot');
-      setRobotVelocity({ speed: 0, steering_angle: 0, angular_velocity: 0 });
+      resetKeyboardState();
+      setRobotVelocity({ ...zeroVelocity });
     };
 
     window.addEventListener('blur', handleBlur);
@@ -68,6 +78,8 @@ export default function RobotController() {
   useEffect(() => {
     if (!isKeyboardControlEnabled) {
       console.debug('[RobotController] Keyboard control disabled');
+      resetKeyboardState();
+      setRobotVelocity({ ...zeroVelocity });
       showOrUpdateToast('Keyboard control disabled', {
         type: 'info',
         toastId: keyboardControlToastId,
@@ -126,6 +138,8 @@ export default function RobotController() {
       console.debug('[RobotController] Clean keyboard control listeners');
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      resetKeyboardState();
+      setRobotVelocity({ ...zeroVelocity });
     };
   }, [
     angularVelocityRadps,
