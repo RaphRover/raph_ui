@@ -10,7 +10,7 @@ export default function RobotController() {
   const { gamepad } = settings;
 
   const [isGamepadConnected, setGamepadConnected] = useState(false);
-  const prevGamepadRef = useRef<Gamepad | null>(null);
+  const prevButtonStatesRef = useRef<boolean[]>([]);
 
   const {
     isKeyboardControlEnabled,
@@ -23,6 +23,16 @@ export default function RobotController() {
   const { toggleSteeringMode } = steeringMode;
   const keyboardControlToastId = 'keyboardControlToast';
   const gamepadToastId = 'gamepadConnectionToast';
+  const calibrateWheelsRef = useRef(calibrateWheels);
+  const toggleSteeringModeRef = useRef(toggleSteeringMode);
+
+  useEffect(() => {
+    calibrateWheelsRef.current = calibrateWheels;
+  }, [calibrateWheels]);
+
+  useEffect(() => {
+    toggleSteeringModeRef.current = toggleSteeringMode;
+  }, [toggleSteeringMode]);
 
   // Reset velocity on window focus loss
   useEffect(() => {
@@ -186,26 +196,26 @@ export default function RobotController() {
     const handleGamepad = () => {
       const gamepads = navigator.getGamepads();
       const gamepad = gamepads[0];
-      const prevGamepad = prevGamepadRef.current;
-      if (gamepad === null) return;
+      if (!gamepad) return;
 
+      const prevButtons = prevButtonStatesRef.current;
       const steeringModeButton =
         gamepad.buttons[steeringModeButtonIndex].pressed;
       const prevSteeringModeButton =
-        prevGamepad?.buttons[steeringModeButtonIndex].pressed;
+        prevButtons[steeringModeButtonIndex] ?? false;
       if (steeringModeButton && !prevSteeringModeButton) {
         // Steering mode button pressed
         console.info('[RobotController] Toggle steering mode button pressed');
-        toggleSteeringMode();
+        toggleSteeringModeRef.current();
       }
 
       const calibrationButton = gamepad.buttons[calibrationButtonIndex].pressed;
       const prevCalibrationButton =
-        prevGamepad?.buttons[calibrationButtonIndex].pressed;
+        prevButtons[calibrationButtonIndex] ?? false;
       if (calibrationButton && !prevCalibrationButton) {
         // Calibration button pressed
         console.info('[RobotController] Calibrate wheels button pressed');
-        calibrateWheels();
+        calibrateWheelsRef.current();
       }
 
       const leftStickY = gamepad.axes[forwardAxisIndex];
@@ -228,7 +238,8 @@ export default function RobotController() {
             : 0;
       }
       setRobotVelocity(velocityObject);
-      prevGamepadRef.current = gamepad;
+      prevButtons[steeringModeButtonIndex] = steeringModeButton;
+      prevButtons[calibrationButtonIndex] = calibrationButton;
     };
 
     let animationFrame: number | undefined;
@@ -245,16 +256,15 @@ export default function RobotController() {
 
     return () => {
       if (animationFrame) cancelAnimationFrame(animationFrame);
+      prevButtonStatesRef.current = [];
       console.debug('[RobotController] Gamepad controller unmounted');
     };
   }, [
-    calibrateWheels,
     gamepad,
     isGamepadConnected,
     linearVelocityMps,
     setRobotVelocity,
     steeringAngleLimitRad,
-    toggleSteeringMode,
   ]);
 
   return null;
