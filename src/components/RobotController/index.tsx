@@ -5,10 +5,10 @@ import { useConfigContext } from '@/config';
 
 type KeyboardCommandKey = 'w' | 'a' | 's' | 'd';
 
-const keyboard_command_keys: KeyboardCommandKey[] = ['w', 'a', 's', 'd'];
+const keyboardCommandKeys: KeyboardCommandKey[] = ['w', 'a', 's', 'd'];
 
 function isKeyboardCommandKey(key: string): key is KeyboardCommandKey {
-  return keyboard_command_keys.includes(key as KeyboardCommandKey);
+  return keyboardCommandKeys.includes(key as KeyboardCommandKey);
 }
 
 export default function RobotController() {
