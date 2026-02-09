@@ -145,6 +145,16 @@ export const APP_CONFIG = {
       max: 10,
       step: 0.1,
     },
+    turnInPlaceAcceleration: {
+      type: 'number',
+      defaultValue: 4.0,
+      label: 'Turn In Place Acceleration (rad/s²)',
+      description: 'Angular acceleration used for turn-in-place commands',
+      unit: 'rad/s²',
+      min: 0.1,
+      max: 10,
+      step: 0.1,
+    },
   },
   // Gamepad configuration settings
   // For reference, see: https://www.w3.org/TR/gamepad/#remapping

@@ -10,6 +10,7 @@ export default function RobotVelocityConfig() {
     steeringAngleVelocityRadps,
     ackermannAcceleration,
     ackermannJerk,
+    turnInPlaceAcceleration,
   } = settings.driveConfig;
   const driveLimits = APP_CONFIG.driveConfig;
   const {
@@ -17,6 +18,7 @@ export default function RobotVelocityConfig() {
     steeringAngleVelocityRadps: steeringAngleLimits,
     ackermannAcceleration: ackermannAccelerationLimits,
     ackermannJerk: ackermannJerkLimits,
+    turnInPlaceAcceleration: turnInPlaceAccelerationLimits,
   } = driveLimits;
 
   const handleVelocitySet = (
@@ -83,6 +85,22 @@ export default function RobotVelocityConfig() {
     );
   };
 
+  const handleTurnInPlaceAccelerationSet = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { turnInPlaceAcceleration: newValue },
+    });
+    showOrUpdateToast(
+      `Turn-in-place acceleration set to: ${newValue} ${turnInPlaceAccelerationLimits.unit}`,
+      {
+        toastId: 'turn-in-place-acceleration-set',
+        type: 'info',
+      },
+    );
+  };
+
   return (
     <ConfigFrame title="Robot Velocity Config">
       <RangeWithLabel
@@ -127,6 +145,17 @@ export default function RobotVelocityConfig() {
         value={ackermannJerk}
         onMouseUp={handleAckermannJerkSet}
         onTouchEnd={handleAckermannJerkSet}
+        showLegend
+      />
+      <RangeWithLabel
+        label={turnInPlaceAccelerationLimits.label}
+        unit={turnInPlaceAccelerationLimits.unit}
+        min={turnInPlaceAccelerationLimits.min}
+        max={turnInPlaceAccelerationLimits.max}
+        step={turnInPlaceAccelerationLimits.step}
+        value={turnInPlaceAcceleration}
+        onMouseUp={handleTurnInPlaceAccelerationSet}
+        onTouchEnd={handleTurnInPlaceAccelerationSet}
         showLegend
       />
     </ConfigFrame>
