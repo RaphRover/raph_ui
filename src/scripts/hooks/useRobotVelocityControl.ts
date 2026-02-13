@@ -18,7 +18,6 @@ export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
   setDrivingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setRobotVelocity: (command: RobotVelocityCommand) => void;
-  getLatestVelocity: () => RobotVelocityCommand;
 }
 
 export default function useRobotVelocityControl(
@@ -54,8 +53,6 @@ export default function useRobotVelocityControl(
     latestCommandRef.current = command;
   }, []);
 
-  const getLatestVelocity = useCallback(() => latestCommandRef.current, []);
-
   useEffect(() => {
     if (!isDrivingEnabled) {
       latestCommandRef.current = {
@@ -78,17 +75,16 @@ export default function useRobotVelocityControl(
           angular_velocity: angular_velocity,
           acceleration: turnInPlaceAcceleration,
         });
-        return;
+      } else {
+        const velocity = {
+          steering_angle: steering_angle,
+          steering_angle_velocity: steeringAngleVelocityRadps,
+          speed,
+          acceleration: ackermannAcceleration,
+          jerk: ackermannJerk,
+        };
+        publishAckermannVelocity(velocity);
       }
-
-      const velocity = {
-        steering_angle: steering_angle,
-        steering_angle_velocity: steeringAngleVelocityRadps,
-        speed,
-        acceleration: ackermannAcceleration,
-        jerk: ackermannJerk,
-      };
-      publishAckermannVelocity(velocity);
     }, velocityPublishIntervalMs);
     console.debug('[useRobotVelocityControl] Velocity publish enabled');
 
@@ -112,6 +108,5 @@ export default function useRobotVelocityControl(
     isDrivingEnabled,
     setDrivingEnabled,
     setRobotVelocity,
-    getLatestVelocity,
   };
 }

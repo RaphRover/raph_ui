@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
   SteeringModes,
   type DrivetrainStateMsg,
@@ -27,19 +27,23 @@ export default function useSteeringMode(): SteeringModeHook {
     ServiceResponse
   >('controller/set_steering_mode', 'raph_interfaces/srv/SetSteeringMode');
 
-  const steeringMode = useMemo<SteeringMode | null>(() => {
-    return drivetrainState?.steering_mode?.data ?? null;
-  }, [drivetrainState]);
+  const steeringMode = drivetrainState?.steering_mode?.data ?? null;
+  const steeringModeRef = useRef<SteeringMode | null>(steeringMode);
 
-  const toggleSteeringMode = async () => {
-    if (steeringMode === null) {
+  useEffect(() => {
+    steeringModeRef.current = steeringMode;
+  }, [steeringMode]);
+
+  const toggleSteeringMode = useCallback(async () => {
+    const currentSteeringMode = steeringModeRef.current;
+    if (currentSteeringMode === null) {
       console.warn(
         '[SteeringModeSwitch] Steering mode unavailable, ignoring toggle',
       );
       return;
     }
     const newSteeringMode =
-      steeringMode === SteeringModes.ACKERMANN
+      currentSteeringMode === SteeringModes.ACKERMANN
         ? SteeringModes.TURN_IN_PLACE
         : SteeringModes.ACKERMANN;
     try {
@@ -64,7 +68,7 @@ export default function useSteeringMode(): SteeringModeHook {
         error,
       );
     }
-  };
+  }, [callService]);
 
   return { steeringMode, toggleSteeringMode, isLoading, isInitialized };
 }

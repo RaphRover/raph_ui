@@ -41,28 +41,18 @@ export default function RobotController() {
     wheelCalibration,
     steeringMode,
   } = useAppContext();
-  const { setRobotVelocity, getLatestVelocity } = robotVelocityControl;
+  const { setRobotVelocity } = robotVelocityControl;
   const { calibrateWheels } = wheelCalibration;
   const { toggleSteeringMode } = steeringMode;
   const keyboardControlToastId = 'keyboardControlToast';
   const gamepadToastId = 'gamepadConnectionToast';
-  const calibrateWheelsRef = useRef(calibrateWheels);
-  const toggleSteeringModeRef = useRef(toggleSteeringMode);
-
-  useEffect(() => {
-    calibrateWheelsRef.current = calibrateWheels;
-  }, [calibrateWheels]);
-
-  useEffect(() => {
-    toggleSteeringModeRef.current = toggleSteeringMode;
-  }, [toggleSteeringMode]);
 
   // Reset velocity on window focus loss
   useEffect(() => {
     const handleBlur = () => {
       console.debug('[RobotController] Window focus lost - stopping robot');
       resetKeyboardState();
-      setRobotVelocity({ ...zeroVelocity });
+      setRobotVelocity(zeroVelocity);
     };
 
     window.addEventListener('blur', handleBlur);
@@ -79,7 +69,7 @@ export default function RobotController() {
     if (!isKeyboardControlEnabled) {
       console.debug('[RobotController] Keyboard control disabled');
       resetKeyboardState();
-      setRobotVelocity({ ...zeroVelocity });
+      setRobotVelocity(zeroVelocity);
       showOrUpdateToast('Keyboard control disabled', {
         type: 'info',
         toastId: keyboardControlToastId,
@@ -89,22 +79,17 @@ export default function RobotController() {
 
     const updateKeyboardVelocity = () => {
       const state = keyboardStateRef.current;
-      const velocity = { ...getLatestVelocity() };
+      const velocity = { ...zeroVelocity };
       const forward = (state.w ? 1 : 0) - (state.s ? 1 : 0);
       const steering = (state.a ? 1 : 0) - (state.d ? 1 : 0);
 
       if (state.w || state.s) {
         velocity.speed = forward * linearVelocityMps;
-      } else {
-        velocity.speed = 0;
       }
 
       if (state.a || state.d) {
         velocity.steering_angle = steering * steeringAngleLimitRad;
         velocity.angular_velocity = -steering * angularVelocityRadps;
-      } else {
-        velocity.steering_angle = 0;
-        velocity.angular_velocity = 0;
       }
 
       setRobotVelocity(velocity);
@@ -139,11 +124,10 @@ export default function RobotController() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
       resetKeyboardState();
-      setRobotVelocity({ ...zeroVelocity });
+      setRobotVelocity(zeroVelocity);
     };
   }, [
     angularVelocityRadps,
-    getLatestVelocity,
     isKeyboardControlEnabled,
     linearVelocityMps,
     setRobotVelocity,
@@ -236,7 +220,7 @@ export default function RobotController() {
       if (steeringModeButton && !prevSteeringModeButton) {
         // Steering mode button pressed
         console.info('[RobotController] Toggle steering mode button pressed');
-        toggleSteeringModeRef.current();
+        toggleSteeringMode();
       }
 
       const calibrationButton = gamepad.buttons[calibrationButtonIndex].pressed;
@@ -245,7 +229,7 @@ export default function RobotController() {
       if (calibrationButton && !prevCalibrationButton) {
         // Calibration button pressed
         console.info('[RobotController] Calibrate wheels button pressed');
-        calibrateWheelsRef.current();
+        calibrateWheels();
       }
 
       const leftStickY = gamepad.axes[forwardAxisIndex];
@@ -300,6 +284,8 @@ export default function RobotController() {
     setRobotVelocity,
     angularVelocityRadps,
     steeringAngleLimitRad,
+    calibrateWheels,
+    toggleSteeringMode,
   ]);
 
   return null;
