@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import useRosService from './useRosService';
 import type { ServiceResponse } from '@/types/rosInterfaces';
 import { toast } from 'react-toastify';
@@ -18,7 +18,7 @@ export default function useWheelCalibration(): WheelCalibration {
     ServiceResponse
   >('controller/calibrate_servos', 'std_srvs/srv/Trigger');
 
-  const calibrateWheels = async () => {
+  const calibrateWheels = useCallback(async () => {
     const promise = callService();
     toast.promise(
       promise,
@@ -45,7 +45,7 @@ export default function useWheelCalibration(): WheelCalibration {
       console.error('[useWheelCalibration] Failed to calibrate wheels:', error);
       throw error;
     }
-  };
+  }, [callService]);
 
   return {
     isCalibrated,

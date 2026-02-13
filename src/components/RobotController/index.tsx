@@ -1,16 +1,39 @@
 import { useAppContext } from '@/scripts/context/AppContext';
 import { useEffect, useRef, useState } from 'react';
-import type { AckermannDriveMsg } from '@/types/rosInterfaces';
 import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
 import { useConfigContext } from '@/config';
 
+type KeyboardCommandKey = 'w' | 'a' | 's' | 'd';
+
+const keyboardCommandKeys: KeyboardCommandKey[] = ['w', 'a', 's', 'd'];
+
+function isKeyboardCommandKey(key: string): key is KeyboardCommandKey {
+  return keyboardCommandKeys.includes(key as KeyboardCommandKey);
+}
+
+const zeroVelocity = { speed: 0, steering_angle: 0, angular_velocity: 0 };
+
 export default function RobotController() {
   const { settings } = useConfigContext();
-  const { linearVelocityMps, steeringAngleLimitRad } = settings.driveConfig;
+  const { linearVelocityMps, steeringAngleLimitRad, angularVelocityRadps } =
+    settings.driveConfig;
   const { gamepad } = settings;
 
   const [isGamepadConnected, setGamepadConnected] = useState(false);
-  const prevGamepadRef = useRef<Gamepad | null>(null);
+  const prevButtonStatesRef = useRef<boolean[]>([]);
+  const keyboardStateRef = useRef<Record<KeyboardCommandKey, boolean>>({
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+  });
+
+  const resetKeyboardState = () => {
+    keyboardStateRef.current.w = false;
+    keyboardStateRef.current.a = false;
+    keyboardStateRef.current.s = false;
+    keyboardStateRef.current.d = false;
+  };
 
   const {
     isKeyboardControlEnabled,
@@ -28,7 +51,8 @@ export default function RobotController() {
   useEffect(() => {
     const handleBlur = () => {
       console.debug('[RobotController] Window focus lost - stopping robot');
-      setRobotVelocity({ speed: 0, steering_angle: 0 });
+      resetKeyboardState();
+      setRobotVelocity(zeroVelocity);
     };
 
     window.addEventListener('blur', handleBlur);
@@ -44,6 +68,8 @@ export default function RobotController() {
   useEffect(() => {
     if (!isKeyboardControlEnabled) {
       console.debug('[RobotController] Keyboard control disabled');
+      resetKeyboardState();
+      setRobotVelocity(zeroVelocity);
       showOrUpdateToast('Keyboard control disabled', {
         type: 'info',
         toastId: keyboardControlToastId,
@@ -51,50 +77,39 @@ export default function RobotController() {
       return;
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase();
-      const repeat = event.repeat;
-      if (repeat) return; // Ignore repeated events
-      const velocityObject: Partial<AckermannDriveMsg> = {};
-      switch (key) {
-        case 'w':
-          velocityObject.speed = 1;
-          break;
-        case 's':
-          velocityObject.speed = -1;
-          break;
-        case 'a':
-          velocityObject.steering_angle = 1;
-          break;
-        case 'd':
-          velocityObject.steering_angle = -1;
-          break;
-        default:
-          break;
+    const updateKeyboardVelocity = () => {
+      const state = keyboardStateRef.current;
+      const velocity = { ...zeroVelocity };
+      const forward = (state.w ? 1 : 0) - (state.s ? 1 : 0);
+      const steering = (state.a ? 1 : 0) - (state.d ? 1 : 0);
+
+      if (state.w || state.s) {
+        velocity.speed = forward * linearVelocityMps;
       }
-      setRobotVelocity(velocityObject);
+
+      if (state.a || state.d) {
+        velocity.steering_angle = steering * steeringAngleLimitRad;
+        velocity.angular_velocity = -steering * angularVelocityRadps;
+      }
+
+      setRobotVelocity(velocity);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+      const key = event.key.toLowerCase();
+      if (!isKeyboardCommandKey(key)) return;
+      if (keyboardStateRef.current[key]) return;
+      keyboardStateRef.current[key] = true;
+      updateKeyboardVelocity();
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      const velocityObject: Partial<AckermannDriveMsg> = {};
-      switch (key) {
-        case 'w':
-          velocityObject.speed = 0;
-          break;
-        case 's':
-          velocityObject.speed = 0;
-          break;
-        case 'a':
-          velocityObject.steering_angle = 0;
-          break;
-        case 'd':
-          velocityObject.steering_angle = 0;
-          break;
-        default:
-          break;
-      }
-      setRobotVelocity(velocityObject);
+      if (!isKeyboardCommandKey(key)) return;
+      if (!keyboardStateRef.current[key]) return;
+      keyboardStateRef.current[key] = false;
+      updateKeyboardVelocity();
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -108,8 +123,16 @@ export default function RobotController() {
       console.debug('[RobotController] Clean keyboard control listeners');
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      resetKeyboardState();
+      setRobotVelocity(zeroVelocity);
     };
-  }, [isKeyboardControlEnabled, setRobotVelocity]);
+  }, [
+    angularVelocityRadps,
+    isKeyboardControlEnabled,
+    linearVelocityMps,
+    setRobotVelocity,
+    steeringAngleLimitRad,
+  ]);
 
   // Gamepad connection handlers
   useEffect(() => {
@@ -179,20 +202,21 @@ export default function RobotController() {
       steeringModeButtonIndex,
       drivingDeadmanButtonIndex,
       forwardAxisIndex,
-      steeringAxisIndex,
+      ackermannSteeringAxisIndex,
+      turnInPlaceSteeringAxisIndex,
       gamepadIntervalMs,
     } = gamepad;
 
     const handleGamepad = () => {
       const gamepads = navigator.getGamepads();
       const gamepad = gamepads[0];
-      const prevGamepad = prevGamepadRef.current;
-      if (gamepad === null) return;
+      if (!gamepad) return;
 
+      const prevButtons = prevButtonStatesRef.current;
       const steeringModeButton =
         gamepad.buttons[steeringModeButtonIndex].pressed;
       const prevSteeringModeButton =
-        prevGamepad?.buttons[steeringModeButtonIndex].pressed;
+        prevButtons[steeringModeButtonIndex] ?? false;
       if (steeringModeButton && !prevSteeringModeButton) {
         // Steering mode button pressed
         console.info('[RobotController] Toggle steering mode button pressed');
@@ -201,7 +225,7 @@ export default function RobotController() {
 
       const calibrationButton = gamepad.buttons[calibrationButtonIndex].pressed;
       const prevCalibrationButton =
-        prevGamepad?.buttons[calibrationButtonIndex].pressed;
+        prevButtons[calibrationButtonIndex] ?? false;
       if (calibrationButton && !prevCalibrationButton) {
         // Calibration button pressed
         console.info('[RobotController] Calibrate wheels button pressed');
@@ -209,26 +233,31 @@ export default function RobotController() {
       }
 
       const leftStickY = gamepad.axes[forwardAxisIndex];
-      const rightStickX = gamepad.axes[steeringAxisIndex];
+      const rightStickX = gamepad.axes[ackermannSteeringAxisIndex];
+      const leftStickX = gamepad.axes[turnInPlaceSteeringAxisIndex];
       const drivingDeadmanPressed =
         gamepad.buttons[drivingDeadmanButtonIndex].pressed;
 
-      const velocityObject: Partial<AckermannDriveMsg> = {
-        speed: 0,
-        steering_angle: 0,
-      };
+      let speed = 0;
+      let steering_angle = 0;
+      let angular_velocity = 0;
       if (drivingDeadmanPressed) {
-        velocityObject.speed =
+        speed =
           Math.abs(leftStickY) > joystickDeadzone
             ? -leftStickY * linearVelocityMps
             : 0;
-        velocityObject.steering_angle =
+        steering_angle =
           Math.abs(rightStickX) > joystickDeadzone
             ? -rightStickX * steeringAngleLimitRad
             : 0;
+        angular_velocity =
+          Math.abs(leftStickX) > joystickDeadzone
+            ? leftStickX * angularVelocityRadps
+            : 0;
       }
-      setRobotVelocity(velocityObject);
-      prevGamepadRef.current = gamepad;
+      setRobotVelocity({ speed, steering_angle, angular_velocity });
+      prevButtons[steeringModeButtonIndex] = steeringModeButton;
+      prevButtons[calibrationButtonIndex] = calibrationButton;
     };
 
     let animationFrame: number | undefined;
@@ -245,15 +274,17 @@ export default function RobotController() {
 
     return () => {
       if (animationFrame) cancelAnimationFrame(animationFrame);
+      prevButtonStatesRef.current = [];
       console.debug('[RobotController] Gamepad controller unmounted');
     };
   }, [
-    calibrateWheels,
     gamepad,
     isGamepadConnected,
     linearVelocityMps,
     setRobotVelocity,
+    angularVelocityRadps,
     steeringAngleLimitRad,
+    calibrateWheels,
     toggleSteeringMode,
   ]);
 

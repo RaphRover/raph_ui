@@ -10,6 +10,8 @@ export default function RobotVelocityConfig() {
     steeringAngleVelocityRadps,
     ackermannAcceleration,
     ackermannJerk,
+    turnInPlaceAcceleration,
+    angularVelocityRadps,
   } = settings.driveConfig;
   const driveLimits = APP_CONFIG.driveConfig;
   const {
@@ -17,6 +19,8 @@ export default function RobotVelocityConfig() {
     steeringAngleVelocityRadps: steeringAngleLimits,
     ackermannAcceleration: ackermannAccelerationLimits,
     ackermannJerk: ackermannJerkLimits,
+    turnInPlaceAcceleration: turnInPlaceAccelerationLimits,
+    angularVelocityRadps: angularVelocityLimits,
   } = driveLimits;
 
   const handleVelocitySet = (
@@ -83,6 +87,38 @@ export default function RobotVelocityConfig() {
     );
   };
 
+  const handleTurnInPlaceAccelerationSet = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { turnInPlaceAcceleration: newValue },
+    });
+    showOrUpdateToast(
+      `Turn-in-place acceleration set to: ${newValue} ${turnInPlaceAccelerationLimits.unit}`,
+      {
+        toastId: 'turn-in-place-acceleration-set',
+        type: 'info',
+      },
+    );
+  };
+
+  const handleAngularVelocitySet = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    const newValue = e.currentTarget.valueAsNumber;
+    updateSettings({
+      driveConfig: { angularVelocityRadps: newValue },
+    });
+    showOrUpdateToast(
+      `Angular velocity set to: ${newValue} ${angularVelocityLimits.unit}`,
+      {
+        toastId: 'angular-velocity-set',
+        type: 'info',
+      },
+    );
+  };
+
   return (
     <ConfigFrame title="Robot Velocity Config">
       <RangeWithLabel
@@ -127,6 +163,28 @@ export default function RobotVelocityConfig() {
         value={ackermannJerk}
         onMouseUp={handleAckermannJerkSet}
         onTouchEnd={handleAckermannJerkSet}
+        showLegend
+      />
+      <RangeWithLabel
+        label={turnInPlaceAccelerationLimits.label}
+        unit={turnInPlaceAccelerationLimits.unit}
+        min={turnInPlaceAccelerationLimits.min}
+        max={turnInPlaceAccelerationLimits.max}
+        step={turnInPlaceAccelerationLimits.step}
+        value={turnInPlaceAcceleration}
+        onMouseUp={handleTurnInPlaceAccelerationSet}
+        onTouchEnd={handleTurnInPlaceAccelerationSet}
+        showLegend
+      />
+      <RangeWithLabel
+        label={angularVelocityLimits.label}
+        unit={angularVelocityLimits.unit}
+        min={angularVelocityLimits.min}
+        max={angularVelocityLimits.max}
+        step={angularVelocityLimits.step}
+        value={angularVelocityRadps}
+        onMouseUp={handleAngularVelocitySet}
+        onTouchEnd={handleAngularVelocitySet}
         showLegend
       />
     </ConfigFrame>
