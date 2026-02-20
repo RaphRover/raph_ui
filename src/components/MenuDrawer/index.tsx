@@ -16,6 +16,7 @@ import ServiceOptions from '@/components/ServiceOptions';
 import styles from './styles.module.css';
 import SteeringModeSwitch from '@/components/SteeringModeSwitch';
 import ImuReadings from '@/components/ImuReadings';
+import { toast } from 'react-toastify';
 
 export default function MenuDrawer() {
   const {
@@ -36,7 +37,23 @@ export default function MenuDrawer() {
 
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
 
-  const { isInitialized, isLoading, calibrateWheels } = wheelCalibration;
+  const { isInitialized, isLoading, calibrateWheels, isCalibrated } =
+    wheelCalibration;
+
+  const handleDrivingToggle = () => {
+    setDrivingEnabled((prev) => {
+      const isEnablingDriving = !prev;
+      if (isEnablingDriving && !isCalibrated) {
+        toast.warn(
+          'Wheels are not calibrated. Steering commands will be ignored.',
+          {
+            toastId: 'driving-uncalibrated-warning',
+          },
+        );
+      }
+      return !prev;
+    });
+  };
 
   const handleClose = () => setMenuVisible(false);
 
@@ -61,7 +78,7 @@ export default function MenuDrawer() {
             type="checkbox"
             checked={isDrivingEnabled}
             value={''}
-            onClick={() => setDrivingEnabled((prev) => !prev)}
+            onClick={handleDrivingToggle}
             variant="outline-fl-primary"
           >
             {isDrivingEnabled ? 'Disable Driving' : 'Enable Driving'}
