@@ -1,7 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import useRosService from './useRosService';
-import type { ServiceResponse } from '@/types/rosInterfaces';
+import type {
+  DrivetrainStateMsg,
+  ServiceResponse,
+} from '@/types/rosInterfaces';
 import { toast } from 'react-toastify';
+import useRosTopicSubscription from './useRosTopicSubscription';
 
 export interface WheelCalibration {
   isCalibrated: boolean;
@@ -11,12 +15,15 @@ export interface WheelCalibration {
 }
 
 export default function useWheelCalibration(): WheelCalibration {
-  // Temporary true as there is no way of getting wheel calibration status yet
-  const [isCalibrated, setIsCalibrated] = useState<boolean>(true);
+  const drivetrainState = useRosTopicSubscription<DrivetrainStateMsg>(
+    'controller/drivetrain_state',
+    'raph_interfaces/msg/DrivetrainState',
+  );
   const { callService, isInitialized, isLoading } = useRosService<
     undefined,
     ServiceResponse
   >('controller/calibrate_servos', 'std_srvs/srv/Trigger');
+  const isCalibrated = drivetrainState?.is_servos_calibrated ?? false;
 
   const calibrateWheels = useCallback(async () => {
     const promise = callService();
@@ -37,9 +44,6 @@ export default function useWheelCalibration(): WheelCalibration {
     );
     try {
       const response = await promise;
-      if (response.success) {
-        setIsCalibrated(true);
-      }
       return response;
     } catch (error) {
       console.error('[useWheelCalibration] Failed to calibrate wheels:', error);
