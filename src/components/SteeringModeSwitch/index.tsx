@@ -5,10 +5,32 @@ import AckermannIcon from './ackermann.svg?react';
 import TurnInPlaceIcon from './turn-in-place.svg?react';
 import styles from './styles.module.css';
 import { useAppContext } from '@/scripts/context/AppContext';
+import { toast } from 'react-toastify';
 
 export default function SteeringModeSwitch() {
-  const { steeringMode, toggleSteeringMode, isLoading } =
-    useAppContext().steeringMode;
+  const {
+    steeringMode: steeringModeContext,
+    wheelCalibration: { isCalibrated },
+  } = useAppContext();
+  const { steeringMode, toggleSteeringMode, isLoading } = steeringModeContext;
+
+  const handleSteeringModeChange = async (nextMode: number) => {
+    if (steeringMode === nextMode) {
+      return;
+    }
+
+    if (!isCalibrated) {
+      toast.warn(
+        'Wheels are not calibrated. Calibrate wheels before changing steering mode.',
+        {
+          toastId: 'steering-mode-uncalibrated-warning',
+        },
+      );
+      return;
+    }
+
+    await toggleSteeringMode();
+  };
 
   const steeringModesRadio = [
     {
@@ -32,9 +54,7 @@ export default function SteeringModeSwitch() {
           className={styles.button}
           disabled={isLoading}
           onClick={() => {
-            if (steeringMode !== mode.value) {
-              toggleSteeringMode();
-            }
+            void handleSteeringModeChange(mode.value);
           }}
         >
           <div>{mode.icon}</div>
