@@ -15,7 +15,11 @@ export default function useRosStreamList(topicList: RosTopic[]): StreamTopic[] {
     const list: StreamTopic[] = [];
 
     topicList.forEach((topic) => {
-      if (!topic.type.includes('CompressedImage')) return;
+      if (
+        !topic.type.includes('CompressedImage') ||
+        !topic.name.endsWith('/compressed')
+      )
+        return;
       const topicName = topic.name.replace('/compressed', '');
       const url =
         'http://' +
