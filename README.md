@@ -70,6 +70,16 @@ You can test the production build locally using:
 npm run serve
 ```
 
+### Building a Debian Package
+
+To build a `.deb` package with the app installed to `/opt/raph_ui`, run:
+
+```bash
+npm run build:deb
+```
+
+The version is automatically derived from `git describe --tags`.
+
 ## Features
 
 - **Real-time ROS communication**: Leverages rosbridge for seamless interaction with ROS topics and services.
