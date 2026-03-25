@@ -8,6 +8,7 @@
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",
+    "build:deb": "npm run build && VERSION=$(git describe --tags --always) nfpm pkg --packager deb",
     "serve": "vite preview",
     "format": "prettier --write .",
     "check:lint": "eslint . --report-unused-disable-directives --max-warnings 0",
