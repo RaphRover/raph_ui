@@ -1,0 +1,9 @@
+name: raph-ui
+arch: all
+version: ${VERSION}
+maintainer: Fictionlab <support@fictionlab.pl>
+description: Raph Rover Web User Interface
+contents:
+  - src: dist/
+    dst: /opt/raph_ui/
+    type: tree
