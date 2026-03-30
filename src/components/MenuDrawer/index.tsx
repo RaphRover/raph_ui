@@ -17,6 +17,12 @@ import styles from './styles.module.css';
 import SteeringModeSwitch from '@/components/SteeringModeSwitch';
 import ImuReadings from '@/components/ImuReadings';
 import { toast } from 'react-toastify';
+import useRosService from '@/scripts/hooks/useRosService';
+import {
+  type GetControllerInfoResponse,
+  type GetOsVersionResponse,
+} from '@/types/rosInterfaces';
+import { useEffect, useState } from 'react';
 
 export default function MenuDrawer() {
   const {
@@ -34,6 +40,24 @@ export default function MenuDrawer() {
   const isTablet = useMediaQuery({ minWidth: 760 });
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
   const { isFullscreen, toggleFullscreen } = useFullscreen();
+  const [firmwareVersion, setFirmwareVersion] = useState('Unknown');
+  const [bootloaderVersion, setBootloaderVersion] = useState('Unknown');
+  const [raphOsVersion, setRaphOsVersion] = useState('Unknown');
+
+  const {
+    callService: callGetControllerInfo,
+    isInitialized: isControllerInfoInitialized,
+  } = useRosService<undefined, GetControllerInfoResponse>(
+    '/controller/get_controller_info',
+    'raph_interfaces/srv/GetControllerInfo',
+  );
+  const {
+    callService: callGetOsVersion,
+    isInitialized: isOsVersionInitialized,
+  } = useRosService<undefined, GetOsVersionResponse>(
+    '/raph_system/get_os_version',
+    'raph_interfaces/srv/GetOsVersion',
+  );
 
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
 
@@ -56,6 +80,48 @@ export default function MenuDrawer() {
   };
 
   const handleClose = () => setMenuVisible(false);
+
+  useEffect(() => {
+    if (!isMenuVisible) {
+      return;
+    }
+
+    if (isControllerInfoInitialized) {
+      void callGetControllerInfo()
+        .then((response) => {
+          setFirmwareVersion(response.firmware_version || 'Unknown');
+          setBootloaderVersion(response.bootloader_version || 'Unknown');
+        })
+        .catch((error: Error) => {
+          console.warn(
+            '[MenuDrawer] Failed to fetch controller info:',
+            error.message,
+          );
+        });
+    }
+
+    if (isOsVersionInitialized) {
+      void callGetOsVersion()
+        .then((response) => {
+          const version = response.version || 'Unknown';
+          setRaphOsVersion(
+            response.variant ? `${version} (${response.variant})` : version,
+          );
+        })
+        .catch((error: Error) => {
+          console.warn(
+            '[MenuDrawer] Failed to fetch OS version:',
+            error.message,
+          );
+        });
+    }
+  }, [
+    isMenuVisible,
+    isControllerInfoInitialized,
+    isOsVersionInitialized,
+    callGetControllerInfo,
+    callGetOsVersion,
+  ]);
 
   return (
     <Offcanvas
@@ -140,6 +206,20 @@ export default function MenuDrawer() {
             </Col>
           </Row>
           <ServiceOptions desktopLayout={isDesktop} />
+          <div className={styles.versionInfo}>
+            <div className={styles.versionRow}>
+              <span>Firmware version</span>
+              <span>{firmwareVersion}</span>
+            </div>
+            <div className={styles.versionRow}>
+              <span>Bootloader version</span>
+              <span>{bootloaderVersion}</span>
+            </div>
+            <div className={styles.versionRow}>
+              <span>RaphOS version</span>
+              <span>{raphOsVersion}</span>
+            </div>
+          </div>
           <CopyrightFrame />
         </Stack>
       </Offcanvas.Body>

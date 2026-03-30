@@ -47,6 +47,25 @@ export interface ServiceResponse {
   status_message?: string;
 }
 
+export interface KeyValue {
+  key: string;
+  value: string;
+}
+
+export interface GetControllerInfoResponse extends ServiceResponse {
+  bootloader_version: string;
+  firmware_version: string;
+  extra_information: KeyValue[];
+}
+
+export interface GetOsVersionResponse extends ServiceResponse {
+  version: string;
+  variant: string;
+  major: number;
+  minor: number;
+  patch: number;
+}
+
 export const SteeringModes = {
   ACKERMANN: 0,
   TURN_IN_PLACE: 1,
