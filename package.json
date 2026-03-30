@@ -3,7 +3,7 @@
   "displayName": "Raph Rover Web User Interface",
   "repository": "https://github.com/RaphRover/raph_ui",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "start": "vite",
