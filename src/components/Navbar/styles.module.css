@@ -10,6 +10,11 @@
   align-content: center;
 }
 
+.actionButton {
+  height: 100%;
+  white-space: nowrap;
+}
+
 .menuButton svg {
   height: 2rem;
   width: 2rem;

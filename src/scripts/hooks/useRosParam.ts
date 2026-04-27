@@ -39,10 +39,15 @@ export default function useRosParam<K extends keyof RosParamType>(
   const [paramValue, setParamValue] = useState<valueType | null>(null);
   const paramRef = useRef<Param | null>(null);
   const isCallingRef = useRef<boolean>(false);
+  const pendingGetRef = useRef<Promise<valueType> | null>(null);
 
   const getParam = useCallback(async (): Promise<valueType> => {
     if (!paramRef.current) {
       return Promise.reject(new Error('Param not initialized.'));
+    }
+
+    if (pendingGetRef.current) {
+      return pendingGetRef.current;
     }
 
     if (isCallingRef.current) {
@@ -58,6 +63,7 @@ export default function useRosParam<K extends keyof RosParamType>(
     const paramGetPromise = new Promise<valueType>((resolve, reject) => {
       param.get(
         (response: valueType) => {
+          setParamValue(response);
           resolve(response);
         },
         (error: string) => {
@@ -66,27 +72,42 @@ export default function useRosParam<K extends keyof RosParamType>(
       );
     });
 
-    let timer: number | undefined;
-    const timeoutPromise = new Promise<valueType>((_, reject) => {
-      timer = setTimeout(() => {
-        reject(
-          new Error(`Get call to ${paramName} timed out after ${timeout}ms.`),
-        );
-      }, timeout);
-    });
+    const requestPromise = (async () => {
+      let timer: number | undefined;
+      const timeoutPromise = new Promise<valueType>((_, reject) => {
+        timer = setTimeout(() => {
+          reject(
+            new Error(`Get call to ${paramName} timed out after ${timeout}ms.`),
+          );
+        }, timeout);
+      });
 
-    try {
-      return await Promise.race([paramGetPromise, timeoutPromise]);
-    } finally {
-      isCallingRef.current = false;
-      clearTimeout(timer);
-    }
+      try {
+        return await Promise.race([paramGetPromise, timeoutPromise]);
+      } finally {
+        isCallingRef.current = false;
+        pendingGetRef.current = null;
+        clearTimeout(timer);
+      }
+    })();
+
+    pendingGetRef.current = requestPromise;
+    return requestPromise;
   }, [paramName, timeout]);
 
   const setRosParam = useCallback(
     async (value: valueType): Promise<valueType> => {
       if (!paramRef.current) {
         return Promise.reject(new Error('Param not initialized.'));
+      }
+
+      // Wait for any in-flight read to avoid read/write call collisions.
+      if (pendingGetRef.current) {
+        try {
+          await pendingGetRef.current;
+        } catch (error) {
+          console.debug('[useRosParam] pending get before set failed', error);
+        }
       }
 
       if (isCallingRef.current) {
@@ -99,18 +120,18 @@ export default function useRosParam<K extends keyof RosParamType>(
 
       const param = paramRef.current;
 
-      let parsedValue: string = '';
+      let parsedValue: valueType = value;
 
       switch (paramType) {
         case 'int':
-          if (typeof value === 'number') parsedValue = value.toFixed(0);
+          if (typeof value === 'number') {
+            parsedValue = Number(value.toFixed(0)) as valueType;
+          }
           break;
         case 'float':
-          if (typeof value === 'number')
-            parsedValue = value.toPrecision(paramFloatPrecision);
-          break;
-        default:
-          parsedValue = value.toString();
+          if (typeof value === 'number') {
+            parsedValue = Number(value.toPrecision(paramFloatPrecision)) as valueType;
+          }
           break;
       }
 
@@ -167,6 +188,8 @@ export default function useRosParam<K extends keyof RosParamType>(
     );
     return () => {
       paramRef.current = null;
+      pendingGetRef.current = null;
+      isCallingRef.current = false;
       setParamValue(null);
       console.debug(`[useRosParam] ROS param ${paramName} uninitialized`);
     };
