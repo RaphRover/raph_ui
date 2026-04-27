@@ -98,7 +98,7 @@ export const APP_CONFIG = {
     },
     linearVelocityMps: {
       type: 'number',
-      defaultValue: 1.0,
+      defaultValue: 0.2,
       label: 'Ackermann Linear Velocity (m/s)',
       description: 'Maximum linear velocity in meters per second',
       unit: 'm/s',
