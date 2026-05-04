@@ -22,6 +22,7 @@ export interface RobotVelocityControl {
 
 export default function useRobotVelocityControl(
   steeringMode: SteeringMode | null,
+  isSteeringReversed: boolean,
 ): RobotVelocityControl {
   const { settings } = useConfigContext();
 
@@ -69,17 +70,23 @@ export default function useRobotVelocityControl(
     const interval = setInterval(() => {
       const { speed, steering_angle, angular_velocity } =
         latestCommandRef.current;
-
+      const effectiveSpeed = isSteeringReversed ? -speed : speed;
+      const effectiveSteeringAngle = isSteeringReversed
+        ? -steering_angle
+        : steering_angle;
+      const effectiveAngularVelocity = isSteeringReversed
+        ? -angular_velocity
+        : angular_velocity;
       if (steeringMode === SteeringModes.TURN_IN_PLACE) {
         publishTurnInPlaceVelocity({
-          angular_velocity: angular_velocity,
+          angular_velocity: effectiveAngularVelocity,
           acceleration: turnInPlaceAcceleration,
         });
       } else {
         const velocity = {
-          steering_angle: steering_angle,
+          steering_angle: effectiveSteeringAngle,
           steering_angle_velocity: steeringAngleVelocityRadps,
-          speed,
+          speed: effectiveSpeed,
           acceleration: ackermannAcceleration,
           jerk: ackermannJerk,
         };
@@ -99,6 +106,7 @@ export default function useRobotVelocityControl(
     publishAckermannVelocity,
     publishTurnInPlaceVelocity,
     steeringAngleVelocityRadps,
+    isSteeringReversed,
     steeringMode,
     turnInPlaceAcceleration,
     velocityPublishIntervalMs,

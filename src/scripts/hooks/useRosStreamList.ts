@@ -3,6 +3,7 @@ import type { RosTopic } from './useRosTopicList';
 import { NAME_MAPPINGS, useConfigContext } from '@/config';
 
 export interface StreamTopic extends RosTopic {
+  topicName: string;
   displayName: string;
   url: string;
 }

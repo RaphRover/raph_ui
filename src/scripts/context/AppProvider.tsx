@@ -7,6 +7,7 @@ import useSteeringMode from '@/scripts/hooks/useSteeringMode';
 import useWheelCalibration from '@/scripts/hooks/useWheelCalibration';
 import useSystemServices from '@/scripts/hooks/useSystemServices';
 import { useConfigContext } from '../../config/ConfigContext';
+import { REAR_OAK_PREVIEW_TOPIC } from '@/config/streamMapping';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -33,9 +34,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const steeringMode = useSteeringMode();
   const wheelCalibration = useWheelCalibration();
+  const selectedStreamTopicName =
+    effectiveSelectedStream?.topicName ?? effectiveSelectedStream?.name;
+  const isSteeringReversed = selectedStreamTopicName === REAR_OAK_PREVIEW_TOPIC;
 
   const robotVelocityControl = useRobotVelocityControl(
     steeringMode.steeringMode,
+    isSteeringReversed,
   );
 
   const systemServices = useSystemServices();

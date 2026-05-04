@@ -3,6 +3,8 @@ export interface StreamNameMapping {
   displayName: string;
 }
 
+export const REAR_OAK_PREVIEW_TOPIC = '/oak_rear/preview/compressed';
+
 export const NAME_MAPPINGS: StreamNameMapping[] = [
   {
     topicName: '/oak/left/image_raw/compressed',
@@ -33,7 +35,7 @@ export const NAME_MAPPINGS: StreamNameMapping[] = [
     displayName: 'OAK Front Preview',
   },
   {
-    topicName: '/oak_rear/preview/compressed',
+    topicName: REAR_OAK_PREVIEW_TOPIC,
     displayName: 'OAK Rear Preview',
   },
 ];
