@@ -14,7 +14,6 @@ import CopyrightFrame from '@/components/CopyrightFrame';
 import { useMediaQuery } from 'react-responsive';
 import ServiceOptions from '@/components/ServiceOptions';
 import styles from './styles.module.css';
-import SteeringModeSwitch from '@/components/SteeringModeSwitch';
 import ImuReadings from '@/components/ImuReadings';
 import { toast } from 'react-toastify';
 import useRosService from '@/scripts/hooks/useRosService';
@@ -176,7 +175,6 @@ export default function MenuDrawer() {
       </Offcanvas.Header>
       <Offcanvas.Body className={styles.body}>
         <Stack gap={2} style={{ height: '100%' }}>
-          {!isDesktop && !isPortrait && <SteeringModeSwitch />}
           {!isTablet && !isPortrait && <ImuReadings />}
           <ToggleButton
             id="enable-driving"

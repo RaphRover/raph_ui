@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import ROSStatus from '@/components/ROSStatus';
 import BatteryStatus from '@/components/BatteryStatus';
 import ImuReadings from '@/components/ImuReadings';
-import SteeringModeSwitch from '@/components/SteeringModeSwitch';
 import { useAppContext } from '@/scripts/context/AppContext';
 import { useRosContext } from '@/scripts/context/RosContext';
 import useRosParam from '@/scripts/hooks/useRosParam';
@@ -134,7 +133,6 @@ export default function RaphNavbar() {
             {isTablet && <ImuReadings />}
           </Stack>
           <Stack direction="horizontal" gap={2} className="ms-auto">
-            {isDesktop && <SteeringModeSwitch />}
             <Button
               className={styles.actionButton}
               variant={sprayButtonVariant}
@@ -167,7 +165,6 @@ export default function RaphNavbar() {
                 justifyContent: 'space-between',
               }}
             >
-              <SteeringModeSwitch />
               <Row>
                 <Col>
                   <ROSStatus style={{ height: '100%' }} />
