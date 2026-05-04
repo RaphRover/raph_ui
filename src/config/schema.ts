@@ -126,7 +126,7 @@ export const APP_CONFIG = {
     },
     ackermannAcceleration: {
       type: 'number',
-      defaultValue: 2.5,
+      defaultValue: 0.5,
       label: 'Ackermann Acceleration (m/s²)',
       description:
         'Maximum Ackermann acceleration in meters per second squared',
