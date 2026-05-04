@@ -42,7 +42,7 @@ export const APP_CONFIG = {
   },
   defaultStream: {
     type: 'string',
-    defaultValue: '/oak/rgb/image_raw/compressed',
+    defaultValue: '/oak_front/preview/compressed',
     label: 'Default Video Stream',
     description: 'The initial video stream to display on load',
   },
