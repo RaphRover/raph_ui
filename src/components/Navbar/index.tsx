@@ -14,10 +14,6 @@ import MenuDrawer from '@/components/MenuDrawer';
 import styles from './styles.module.css';
 import MenuIcon from './menu.svg?react';
 
-const SPRAY_PARAM_NODE = '/controller';
-const SPRAY_PARAM_NAME = 'power_manager.output_5v_enabled';
-const PARAM_TIMEOUT_MS = 2000;
-
 export default function RaphNavbar() {
   const isDesktop = useMediaQuery({ minWidth: 950 });
   const isTablet = useMediaQuery({ minWidth: 760 });
@@ -33,9 +29,9 @@ export default function RaphNavbar() {
     set: setSprayingState,
   } = useRosParam(
     ros,
-    SPRAY_PARAM_NODE,
-    SPRAY_PARAM_NAME,
-    PARAM_TIMEOUT_MS,
+    '/controller',
+    'power_manager.output_12v_enabled',
+    2000,
     'bool',
   );
 
