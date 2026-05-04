@@ -28,4 +28,12 @@ export const NAME_MAPPINGS: StreamNameMapping[] = [
     topicName: '/oak/rgb_rect/image_rect/compressed',
     displayName: 'OAK-D RGB camera (rectified)',
   },
+  {
+    topicName: '/oak_front/preview/compressed',
+    displayName: 'OAK Front Preview',
+  },
+  {
+    topicName: '/oak_rear/preview/compressed',
+    displayName: 'OAK Rear Preview',
+  },
 ];
