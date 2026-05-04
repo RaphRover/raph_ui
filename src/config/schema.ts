@@ -103,8 +103,8 @@ export const APP_CONFIG = {
       description: 'Maximum linear velocity in meters per second',
       unit: 'm/s',
       min: 0.1,
-      max: 2.0,
-      step: 0.1,
+      max: 0.5,
+      step: 0.01,
     },
     steeringAngleVelocityRadps: {
       type: 'number',
