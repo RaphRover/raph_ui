@@ -130,7 +130,9 @@ export default function useRosParam<K extends keyof RosParamType>(
           break;
         case 'float':
           if (typeof value === 'number') {
-            parsedValue = Number(value.toPrecision(paramFloatPrecision)) as valueType;
+            parsedValue = Number(
+              value.toPrecision(paramFloatPrecision),
+            ) as valueType;
           }
           break;
       }

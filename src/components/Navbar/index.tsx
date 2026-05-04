@@ -58,7 +58,12 @@ export default function RaphNavbar() {
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [isSprayUpdating, refreshSprayingState, ros, settings.ros.topicPollIntervalMs]);
+  }, [
+    isSprayUpdating,
+    refreshSprayingState,
+    ros,
+    settings.ros.topicPollIntervalMs,
+  ]);
 
   const handleSprayToggle = useCallback(async () => {
     if (isSpraying === null || !ros) {
