@@ -109,3 +109,22 @@ export interface TurnInPlaceDriveMsg {
   angular_velocity: number;
   acceleration: number;
 }
+
+export const LED_STRIP_SIZE = 143;
+
+export interface LedColorMsg {
+  red: number;
+  green: number;
+  blue: number;
+  white: number;
+}
+
+export interface LedStateMsg {
+  duration: number;
+  priority: number;
+  color: LedColorMsg;
+}
+
+export interface LedStripStateMsg {
+  state: LedStateMsg[];
+}

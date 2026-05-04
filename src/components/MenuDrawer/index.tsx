@@ -18,11 +18,33 @@ import SteeringModeSwitch from '@/components/SteeringModeSwitch';
 import ImuReadings from '@/components/ImuReadings';
 import { toast } from 'react-toastify';
 import useRosService from '@/scripts/hooks/useRosService';
+import useRosTopicPublisher from '@/scripts/hooks/useRosTopicPublisher';
 import {
+  LED_STRIP_SIZE,
+  type LedStripStateMsg,
   type GetControllerInfoResponse,
   type GetOsVersionResponse,
 } from '@/types/rosInterfaces';
 import { useEffect, useState } from 'react';
+
+const LED_PANEL_LIGHT_PRIORITY = 120;
+const LED_PANEL_LIGHT_COLOR = {
+  red: 255,
+  green: 255,
+  blue: 255,
+  white: 255,
+};
+
+const buildLedStripState = (priority: number): LedStripStateMsg => ({
+  state: Array.from({ length: LED_STRIP_SIZE }, () => ({
+    duration: 0,
+    priority,
+    color:
+      priority === -1
+        ? { red: 0, green: 0, blue: 0, white: 0 }
+        : LED_PANEL_LIGHT_COLOR,
+  })),
+});
 
 export default function MenuDrawer() {
   const {
@@ -43,6 +65,7 @@ export default function MenuDrawer() {
   const [firmwareVersion, setFirmwareVersion] = useState('Unknown');
   const [bootloaderVersion, setBootloaderVersion] = useState('Unknown');
   const [raphOsVersion, setRaphOsVersion] = useState('Unknown');
+  const [isLedPanelsLit, setIsLedPanelsLit] = useState(false);
 
   const {
     callService: callGetControllerInfo,
@@ -57,6 +80,10 @@ export default function MenuDrawer() {
   } = useRosService<undefined, GetOsVersionResponse>(
     '/raph_system/get_os_version',
     'raph_interfaces/srv/GetOsVersion',
+  );
+  const publishLedStripState = useRosTopicPublisher<LedStripStateMsg>(
+    'controller/cmd_led_strip',
+    'raph_interfaces/msg/LedStripState',
   );
 
   const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
@@ -76,6 +103,18 @@ export default function MenuDrawer() {
         );
       }
       return !prev;
+    });
+  };
+
+  const handleLedPanelsToggle = () => {
+    setIsLedPanelsLit((prev) => {
+      const nextIsLit = !prev;
+      publishLedStripState(
+        nextIsLit
+          ? buildLedStripState(LED_PANEL_LIGHT_PRIORITY)
+          : buildLedStripState(-1),
+      );
+      return nextIsLit;
     });
   };
 
@@ -148,6 +187,16 @@ export default function MenuDrawer() {
             variant="outline-fl-primary"
           >
             {isDrivingEnabled ? 'Disable Driving' : 'Enable Driving'}
+          </ToggleButton>
+          <ToggleButton
+            id="toggle-led-panels"
+            type="checkbox"
+            checked={isLedPanelsLit}
+            value={''}
+            onClick={handleLedPanelsToggle}
+            variant="outline-fl-primary"
+          >
+            {isLedPanelsLit ? 'Disable LED lights' : 'Enable LED lights'}
           </ToggleButton>
           <Button
             id="calibrate-wheels"
