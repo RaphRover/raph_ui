@@ -85,7 +85,12 @@ export default function MenuDrawer() {
     'raph_interfaces/msg/LedStripState',
   );
 
-  const { isDrivingEnabled, setDrivingEnabled } = robotVelocityControl;
+  const {
+    isDrivingEnabled,
+    setDrivingEnabled,
+    isGuidedSteeringEnabled,
+    setGuidedSteeringEnabled,
+  } = robotVelocityControl;
 
   const { isInitialized, isLoading, calibrateWheels, isCalibrated } =
     wheelCalibration;
@@ -185,6 +190,18 @@ export default function MenuDrawer() {
             variant="outline-fl-primary"
           >
             {isDrivingEnabled ? 'Disable Driving' : 'Enable Driving'}
+          </ToggleButton>
+          <ToggleButton
+            id="toggle-guided-steering"
+            type="checkbox"
+            checked={isGuidedSteeringEnabled}
+            value={''}
+            onClick={() => setGuidedSteeringEnabled((prev) => !prev)}
+            variant="outline-fl-primary"
+          >
+            {isGuidedSteeringEnabled
+              ? 'Disable Guided Steering'
+              : 'Use Guided Steering'}
           </ToggleButton>
           <ToggleButton
             id="toggle-led-panels"

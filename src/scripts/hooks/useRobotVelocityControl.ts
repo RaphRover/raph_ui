@@ -17,6 +17,8 @@ type RobotVelocityCommand = {
 export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
   setDrivingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  isGuidedSteeringEnabled: boolean;
+  setGuidedSteeringEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setRobotVelocity: (command: RobotVelocityCommand) => void;
 }
 
@@ -27,6 +29,7 @@ export default function useRobotVelocityControl(
   const { settings } = useConfigContext();
 
   const [isDrivingEnabled, setDrivingEnabled] = useState(false);
+  const [isGuidedSteeringEnabled, setGuidedSteeringEnabled] = useState(false);
   const {
     velocityPublishIntervalMs,
     ackermannAcceleration,
@@ -35,8 +38,12 @@ export default function useRobotVelocityControl(
     turnInPlaceAcceleration,
   } = settings.driveConfig;
 
+  const ackermannTopic = isGuidedSteeringEnabled
+    ? 'pds_pipe_guide/cmd_ackermann'
+    : 'controller/cmd_ackermann';
+
   const publishAckermannVelocity = useRosTopicPublisher<AckermannDriveMsg>(
-    'controller/cmd_ackermann',
+    ackermannTopic,
     'ackermann_msgs/msg/AckermannDrive',
   );
   const publishTurnInPlaceVelocity = useRosTopicPublisher<TurnInPlaceDriveMsg>(
@@ -115,6 +122,8 @@ export default function useRobotVelocityControl(
   return {
     isDrivingEnabled,
     setDrivingEnabled,
+    isGuidedSteeringEnabled,
+    setGuidedSteeringEnabled,
     setRobotVelocity,
   };
 }
