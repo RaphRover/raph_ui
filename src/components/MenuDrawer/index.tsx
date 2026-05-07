@@ -23,6 +23,7 @@ import {
   type LedStripStateMsg,
   type GetControllerInfoResponse,
   type GetOsVersionResponse,
+  type ServiceResponse,
 } from '@/types/rosInterfaces';
 import { useEffect, useState } from 'react';
 
@@ -83,6 +84,14 @@ export default function MenuDrawer() {
   const publishLedStripState = useRosTopicPublisher<LedStripStateMsg>(
     'controller/cmd_led_strip',
     'raph_interfaces/msg/LedStripState',
+  );
+  const {
+    callService: callResetOdometry,
+    isLoading: isResetOdometryLoading,
+    isInitialized: isResetOdometryInitialized,
+  } = useRosService<undefined, ServiceResponse>(
+    '/controller/reset_odom',
+    'std_srvs/srv/Trigger',
   );
 
   const {
@@ -220,6 +229,31 @@ export default function MenuDrawer() {
             onClick={calibrateWheels}
           >
             Calibrate wheels
+          </Button>
+          <Button
+            id="reset-odometer"
+            variant="fl-secondary"
+            disabled={!isResetOdometryInitialized || isResetOdometryLoading}
+            onClick={() => {
+              const promise = callResetOdometry();
+              toast.promise(
+                promise,
+                {
+                  pending: 'Resetting odometer...',
+                  success: 'Odometer reset successfully!',
+                  error: {
+                    render({ data }: { data: Error }) {
+                      return `Failed to reset odometer: ${data.message}`;
+                    },
+                  },
+                },
+                {
+                  toastId: 'reset-odometry-toast',
+                },
+              );
+            }}
+          >
+            Reset Odometer
           </Button>
           <StreamDropdown desktopLayout={isDesktop} />
           <Button
