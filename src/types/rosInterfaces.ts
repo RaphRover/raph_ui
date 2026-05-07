@@ -128,3 +128,11 @@ export interface LedStateMsg {
 export interface LedStripStateMsg {
   state: LedStateMsg[];
 }
+
+export interface OdometryMsg {
+  pose: {
+    pose: {
+      position: { x: number; y: number; z: number };
+    };
+  };
+}

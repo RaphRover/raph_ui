@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import ROSStatus from '@/components/ROSStatus';
 import BatteryStatus from '@/components/BatteryStatus';
 import ImuReadings from '@/components/ImuReadings';
+import Odometer from '@/components/Odometer';
 import { useAppContext } from '@/scripts/context/AppContext';
 import { useRosContext } from '@/scripts/context/RosContext';
 import useRosParam from '@/scripts/hooks/useRosParam';
@@ -136,6 +137,7 @@ export default function RaphNavbar() {
             {(isDesktop || !isPortrait) && <ROSStatus />}
             {(isDesktop || !isPortrait) && <BatteryStatus />}
             {isTablet && <ImuReadings />}
+            {isTablet && <Odometer />}
           </Stack>
           <Stack direction="horizontal" gap={2} className="ms-auto">
             <Button
@@ -179,6 +181,7 @@ export default function RaphNavbar() {
                 </Col>
               </Row>
               <ImuReadings />
+              <Odometer />
             </Stack>
           )}
         </Container>
