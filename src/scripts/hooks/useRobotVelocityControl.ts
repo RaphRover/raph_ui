@@ -29,7 +29,7 @@ export default function useRobotVelocityControl(
   const { settings } = useConfigContext();
 
   const [isDrivingEnabled, setDrivingEnabled] = useState(false);
-  const [isGuidedSteeringEnabled, setGuidedSteeringEnabled] = useState(false);
+  const [isGuidedSteeringEnabled, setGuidedSteeringEnabled] = useState(true);
   const {
     velocityPublishIntervalMs,
     ackermannAcceleration,
