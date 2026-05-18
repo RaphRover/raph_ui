@@ -14,6 +14,7 @@ import StreamWindow from '@/components/StreamWindow';
 import { AppProvider } from '@/scripts/context/AppProvider.tsx';
 import RobotController from '@/components/RobotController';
 import VirtualGamepad from '@/components/VirtualGamepad';
+import DirectionLockButtons from '@/components/DirectionLockButtons';
 import ConfigDrawer from '@/components/ConfigDrawer';
 import { ConfigProvider } from '@/config';
 
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
           <ToastContainerWrapper />
           <RobotController />
           <VirtualGamepad />
+          <DirectionLockButtons />
           <div className="app-wrapper">
             <RaphNavbar />
             <StreamWindow />

@@ -14,11 +14,15 @@ type RobotVelocityCommand = {
   angular_velocity: number;
 };
 
+export type DirectionLock = 'forward' | 'backward' | null;
+
 export interface RobotVelocityControl {
   isDrivingEnabled: boolean;
   setDrivingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   isGuidedSteeringEnabled: boolean;
   setGuidedSteeringEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  directionLock: DirectionLock;
+  setDirectionLock: React.Dispatch<React.SetStateAction<DirectionLock>>;
   setRobotVelocity: (command: RobotVelocityCommand) => void;
 }
 
@@ -30,8 +34,10 @@ export default function useRobotVelocityControl(
 
   const [isDrivingEnabled, setDrivingEnabled] = useState(false);
   const [isGuidedSteeringEnabled, setGuidedSteeringEnabled] = useState(true);
+  const [directionLock, setDirectionLock] = useState<DirectionLock>(null);
   const {
     velocityPublishIntervalMs,
+    linearVelocityMps,
     ackermannAcceleration,
     ackermannJerk,
     steeringAngleVelocityRadps,
@@ -68,15 +74,32 @@ export default function useRobotVelocityControl(
         steering_angle: 0,
         angular_velocity: 0,
       };
+      setDirectionLock(null);
     }
   }, [isDrivingEnabled]);
+
+  useEffect(() => {
+    if (!isGuidedSteeringEnabled) {
+      setDirectionLock(null);
+    }
+  }, [isGuidedSteeringEnabled]);
 
   useEffect(() => {
     if (!isDrivingEnabled) return;
 
     const interval = setInterval(() => {
-      const { speed, steering_angle, angular_velocity } =
+      let { speed, steering_angle, angular_velocity } =
         latestCommandRef.current;
+
+      if (isGuidedSteeringEnabled && directionLock !== null) {
+        speed =
+          directionLock === 'forward'
+            ? linearVelocityMps
+            : -linearVelocityMps;
+        steering_angle = 0;
+        angular_velocity = 0;
+      }
+
       const effectiveSpeed = isSteeringReversed ? -speed : speed;
       const effectiveSteeringAngle = isSteeringReversed
         ? -steering_angle
@@ -109,7 +132,10 @@ export default function useRobotVelocityControl(
   }, [
     ackermannAcceleration,
     ackermannJerk,
+    directionLock,
     isDrivingEnabled,
+    isGuidedSteeringEnabled,
+    linearVelocityMps,
     publishAckermannVelocity,
     publishTurnInPlaceVelocity,
     steeringAngleVelocityRadps,
@@ -124,6 +150,8 @@ export default function useRobotVelocityControl(
     setDrivingEnabled,
     isGuidedSteeringEnabled,
     setGuidedSteeringEnabled,
+    directionLock,
+    setDirectionLock,
     setRobotVelocity,
   };
 }

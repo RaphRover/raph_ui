@@ -11,9 +11,13 @@ import { useAppContext } from '@/scripts/context/AppContext';
 export default function ToastContainerWrapper() {
   const { settings } = useConfigContext();
   const autoCloseMs = settings.toast.autoCloseMs;
-  const { isMenuVisible, isVirtualGamepadEnabled } = useAppContext();
+  const { isMenuVisible, isVirtualGamepadEnabled, robotVelocityControl } =
+    useAppContext();
+  const { isGuidedSteeringEnabled } = robotVelocityControl;
   const isMobile = useMediaQuery({ maxWidth: 950 });
   const { sizePx } = settings.virtualGamepad;
+  const showDirectionLockButtons =
+    isGuidedSteeringEnabled && !isVirtualGamepadEnabled;
 
   // Default toast properties (desktop)
   let hideProgressBar = false;
@@ -37,6 +41,8 @@ export default function ToastContainerWrapper() {
     // Desktop toasts configuration
     if (isVirtualGamepadEnabled) {
       toastStyle.bottom = `calc(var(--toastify-toast-bottom) + ${sizePx + 20}px)`;
+    } else if (showDirectionLockButtons) {
+      toastStyle.bottom = `calc(var(--toastify-toast-bottom) + 200px)`;
     }
     if (isMenuVisible) {
       toastStyle.right = 'calc(var(--toastify-toast-right) + 400px)';
