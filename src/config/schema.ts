@@ -55,7 +55,7 @@ export const APP_CONFIG = {
     },
     displayPrecision: {
       type: 'number',
-      defaultValue: 2,
+      defaultValue: 0,
       label: 'Battery Display Precision',
       description: 'Number of decimal places for battery values',
     },
