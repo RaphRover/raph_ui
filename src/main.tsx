@@ -16,6 +16,7 @@ import RobotController from '@/components/RobotController';
 import VirtualGamepad from '@/components/VirtualGamepad';
 import ConfigDrawer from '@/components/ConfigDrawer';
 import { ConfigProvider } from '@/config';
+import FirmwareUpdateNotice from '@/components/FirmwareUpdateNotice';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')!).render(
       <RosProvider>
         <AppProvider>
           <ToastContainerWrapper />
+          <FirmwareUpdateNotice />
           <RobotController />
           <VirtualGamepad />
           <div className="app-wrapper">

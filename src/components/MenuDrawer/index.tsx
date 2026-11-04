@@ -35,6 +35,8 @@ export default function MenuDrawer() {
     robotVelocityControl,
     isMenuVisible,
     setMenuVisible,
+    firmwareStatus,
+    setFirmwareUpdateVisible,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
   const isTablet = useMediaQuery({ minWidth: 760 });
@@ -209,7 +211,13 @@ export default function MenuDrawer() {
           <div className={styles.versionInfo}>
             <div className={styles.versionRow}>
               <span>Firmware version</span>
-              <span>{firmwareVersion}</span>
+              <span>
+                {firmwareStatus.status?.current_version || firmwareVersion}
+              </span>
+            </div>
+            <div className={styles.versionRow}>
+              <span>Packaged firmware target</span>
+              <span>{firmwareStatus.status?.target_version || 'Unknown'}</span>
             </div>
             <div className={styles.versionRow}>
               <span>Bootloader version</span>
@@ -218,6 +226,42 @@ export default function MenuDrawer() {
             <div className={styles.versionRow}>
               <span>RaphOS version</span>
               <span>{raphOsVersion}</span>
+            </div>
+            <div aria-live="polite">
+              {firmwareStatus.status?.checking ? (
+                <small>Checking firmware updates...</small>
+              ) : firmwareStatus.error ||
+                firmwareStatus.status?.status === 'unavailable' ? (
+                <small>
+                  Firmware update check unavailable:{' '}
+                  {firmwareStatus.error ||
+                    firmwareStatus.status?.status_message}
+                </small>
+              ) : firmwareStatus.status?.status === 'up_to_date' ? (
+                <small>Firmware matches the installed package.</small>
+              ) : firmwareStatus.status?.status === 'running_newer' ? (
+                <small>
+                  Running firmware is newer than the packaged image. No
+                  downgrade recommended.
+                </small>
+              ) : firmwareStatus.status?.status === 'incomparable' ? (
+                <small>
+                  Firmware versions cannot be ordered safely. No update
+                  recommended.
+                </small>
+              ) : firmwareStatus.status?.status === 'update_available' ? (
+                <Button
+                  variant="fl-secondary"
+                  onClick={() => {
+                    setMenuVisible(false);
+                    setFirmwareUpdateVisible(true);
+                  }}
+                >
+                  Update firmware
+                </Button>
+              ) : (
+                <small>Firmware update status not available yet.</small>
+              )}
             </div>
           </div>
           <CopyrightFrame />
