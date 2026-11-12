@@ -10,7 +10,7 @@ export default function FirmwareUpdateNotice() {
     isFirmwareUpdateVisible,
     setFirmwareUpdateVisible,
   } = useAppContext();
-  const notified = useRef(new Set<string>());
+  const dismissed = useRef(new Set<string>());
   const reportedFailures = useRef(new Set<string>());
   const toastId = `firmware-update:${robot}`;
   const failureId = `firmware-check:${robot}`;
@@ -41,8 +41,7 @@ export default function FirmwareUpdateNotice() {
       return;
     }
     const key = `${robot}:${status.target_version}`;
-    if (notified.current.has(key)) return;
-    notified.current.add(key);
+    if (dismissed.current.has(key)) return;
     showOrUpdateToast(
       <div>
         <div>
@@ -58,7 +57,14 @@ export default function FirmwareUpdateNotice() {
           Update firmware
         </Button>
       </div>,
-      { type: 'info', toastId, autoClose: false },
+      {
+        type: 'info',
+        toastId,
+        autoClose: false,
+        onClose: (reason) => {
+          if (reason === true) dismissed.current.add(key);
+        },
+      },
     );
   }, [available, robot, setFirmwareUpdateVisible, status, toastId]);
 
