@@ -45,17 +45,16 @@ export default function FirmwareUpdateNotice() {
     showOrUpdateToast(
       <div>
         <div>
-          New RaphCore firmware available: {status.current_version} &rarr;{' '}
-          {status.target_version}.
-        </div>
-        <Button
-          size="sm"
-          variant="fl-secondary"
-          className="mt-2"
-          onClick={() => setFirmwareUpdateVisible(true)}
-        >
-          Update firmware
-        </Button>
+          New RaphCore firmware version available. See{' '}
+          <a
+            href="https://docs.fictionlab.pl/raph-rover/guides/firmware-update"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            documentation
+          </a>{' '}
+          for update instructions.        </div>
       </div>,
       {
         type: 'info',
