@@ -36,7 +36,6 @@ export default function MenuDrawer() {
     isMenuVisible,
     setMenuVisible,
     firmwareStatus,
-    setFirmwareUpdateVisible,
   } = useAppContext();
   const isDesktop = useMediaQuery({ minWidth: 950 });
   const isTablet = useMediaQuery({ minWidth: 760 });
@@ -213,11 +212,9 @@ export default function MenuDrawer() {
               <span>Firmware version</span>
               <span>
                 {firmwareStatus.status?.current_version || firmwareVersion}
+                {firmwareStatus.status?.status === 'update_available' &&
+                  ' (newer available)'}
               </span>
-            </div>
-            <div className={styles.versionRow}>
-              <span>Packaged firmware target</span>
-              <span>{firmwareStatus.status?.target_version || 'Unknown'}</span>
             </div>
             <div className={styles.versionRow}>
               <span>Bootloader version</span>
@@ -249,17 +246,8 @@ export default function MenuDrawer() {
                   Firmware versions cannot be ordered safely. No update
                   recommended.
                 </small>
-              ) : firmwareStatus.status?.status === 'update_available' ? (
-                <Button
-                  variant="fl-secondary"
-                  onClick={() => {
-                    setMenuVisible(false);
-                    setFirmwareUpdateVisible(true);
-                  }}
-                >
-                  Update firmware
-                </Button>
-              ) : (
+              ) : firmwareStatus.status?.status ===
+                'update_available' ? null : (
                 <small>Firmware update status not available yet.</small>
               )}
             </div>
