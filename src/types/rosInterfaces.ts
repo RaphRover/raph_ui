@@ -66,6 +66,22 @@ export interface GetOsVersionResponse extends ServiceResponse {
   patch: number;
 }
 
+export interface GetFirmwareStatusResponse extends ServiceResponse {
+  status:
+    | 'up_to_date'
+    | 'update_available'
+    | 'running_newer'
+    | 'incomparable'
+    | 'unavailable';
+  current_version: string;
+  target_version: string;
+  checking: boolean;
+  checked_at: number;
+  status_message: string;
+  update_command: string;
+  update_instructions: string;
+}
+
 export const SteeringModes = {
   ACKERMANN: 0,
   TURN_IN_PLACE: 1,
