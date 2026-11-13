@@ -54,7 +54,8 @@ export default function FirmwareUpdateNotice() {
           >
             documentation
           </a>{' '}
-          for update instructions.        </div>
+          for update instructions.{' '}
+        </div>
       </div>,
       {
         type: 'info',
