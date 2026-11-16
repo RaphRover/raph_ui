@@ -78,8 +78,6 @@ export interface GetFirmwareStatusResponse extends ServiceResponse {
   checking: boolean;
   checked_at: number;
   status_message: string;
-  update_command: string;
-  update_instructions: string;
 }
 
 export const SteeringModes = {

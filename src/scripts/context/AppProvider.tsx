@@ -16,7 +16,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   const defaultStreamName = settings.defaultStream;
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isConfigVisible, setConfigVisible] = useState(false);
-  const [isFirmwareUpdateVisible, setFirmwareUpdateVisible] = useState(false);
 
   // Driving
   const [isKeyboardControlEnabled, setKeyboardControlEnabled] = useState(false);
@@ -61,8 +60,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         wheelCalibration,
         systemServices,
         firmwareStatus,
-        isFirmwareUpdateVisible,
-        setFirmwareUpdateVisible,
       }}
     >
       {children}

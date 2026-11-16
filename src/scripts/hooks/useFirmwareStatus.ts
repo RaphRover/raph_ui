@@ -18,7 +18,7 @@ export default function useFirmwareStatus(): FirmwareStatusHook {
     { refresh: boolean },
     GetFirmwareStatusResponse
   >(
-    '/raph_system/get_firmware_status',
+    'raph_system/get_firmware_status',
     'raph_interfaces/srv/GetFirmwareStatus',
   );
   const [result, setResult] = useState<{
@@ -53,13 +53,8 @@ export default function useFirmwareStatus(): FirmwareStatusHook {
           !Number.isSafeInteger(status.checked_at) ||
           status.checked_at < 0 ||
           typeof status.status_message !== 'string' ||
-          typeof status.update_command !== 'string' ||
-          typeof status.update_instructions !== 'string' ||
           (status.status === 'update_available' &&
-            (!status.current_version ||
-              !status.target_version ||
-              !status.update_command ||
-              !status.update_instructions))
+            (!status.current_version || !status.target_version))
         ) {
           throw new Error('Invalid firmware status response.');
         }

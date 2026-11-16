@@ -22,8 +22,6 @@ interface AppContext {
   wheelCalibration: WheelCalibration;
   systemServices: SystemServices;
   firmwareStatus: FirmwareStatusHook;
-  isFirmwareUpdateVisible: boolean;
-  setFirmwareUpdateVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<AppContext | undefined>(undefined);

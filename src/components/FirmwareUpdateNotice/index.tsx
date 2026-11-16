@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { Alert, Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useAppContext } from '@/scripts/context/AppContext';
 import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
@@ -7,8 +6,6 @@ import { showOrUpdateToast } from '@/scripts/utils/showOrUpdateToast';
 export default function FirmwareUpdateNotice() {
   const {
     firmwareStatus: { status, error, robot },
-    isFirmwareUpdateVisible,
-    setFirmwareUpdateVisible,
   } = useAppContext();
   const dismissed = useRef(new Set<string>());
   const reportedFailures = useRef(new Set<string>());
@@ -66,7 +63,7 @@ export default function FirmwareUpdateNotice() {
         },
       },
     );
-  }, [available, robot, setFirmwareUpdateVisible, status, toastId]);
+  }, [available, robot, status, toastId]);
 
   useEffect(
     () => () => {
@@ -76,51 +73,5 @@ export default function FirmwareUpdateNotice() {
     [failureId, toastId],
   );
 
-  return (
-    <Modal
-      show={isFirmwareUpdateVisible}
-      onHide={() => setFirmwareUpdateVisible(false)}
-      centered
-      aria-labelledby="firmware-update-title"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="firmware-update-title">
-          Update RaphCore firmware
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {available && status ? (
-          <>
-            <p>
-              Running: <strong>{status.current_version}</strong>
-              <br />
-              Target from installed raph_fw:{' '}
-              <strong>{status.target_version}</strong>
-            </p>
-            <Alert variant="warning">
-              This does not flash from the browser. Follow these steps on the
-              robot.
-            </Alert>
-            <p>{status.update_instructions}</p>
-            <pre>
-              <code>{status.update_command}</code>
-            </pre>
-          </>
-        ) : (
-          <p>
-            No confirmed firmware update is currently available. Check the menu
-            for status.
-          </p>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="fl-secondary"
-          onClick={() => setFirmwareUpdateVisible(false)}
-        >
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
+  return null;
 }
