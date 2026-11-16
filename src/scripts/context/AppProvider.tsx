@@ -7,6 +7,7 @@ import useSteeringMode from '@/scripts/hooks/useSteeringMode';
 import useWheelCalibration from '@/scripts/hooks/useWheelCalibration';
 import useSystemServices from '@/scripts/hooks/useSystemServices';
 import { useConfigContext } from '../../config/ConfigContext';
+import useFirmwareStatus from '@/scripts/hooks/useFirmwareStatus';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -39,6 +40,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const systemServices = useSystemServices();
+  const firmwareStatus = useFirmwareStatus();
 
   return (
     <AppContext.Provider
@@ -57,6 +59,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         steeringMode,
         wheelCalibration,
         systemServices,
+        firmwareStatus,
       }}
     >
       {children}
