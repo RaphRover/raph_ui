@@ -17,10 +17,7 @@ export default function useFirmwareStatus(): FirmwareStatusHook {
   const { callService, isInitialized } = useRosService<
     { refresh: boolean },
     GetFirmwareStatusResponse
-  >(
-    'raph_system/get_firmware_status',
-    'raph_interfaces/srv/GetFirmwareStatus',
-  );
+  >('raph_system/get_firmware_status', 'raph_interfaces/srv/GetFirmwareStatus');
   const [result, setResult] = useState<{
     robot: string;
     connection: typeof ros;
