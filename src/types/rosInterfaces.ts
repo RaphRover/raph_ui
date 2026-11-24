@@ -45,6 +45,7 @@ export interface ImuMsg {
 export interface ServiceResponse {
   success?: boolean;
   status_message?: string;
+  message?: string;
 }
 
 export interface KeyValue {
