@@ -31,10 +31,14 @@ export default function useWheelCalibration(): WheelCalibration {
       promise,
       {
         pending: 'Calibrating wheels...',
-        success: 'Wheels calibrated successfully!',
+        success: {
+          render({ data }: { data: ServiceResponse }) {
+            return data.message;
+          },
+        },
         error: {
           render({ data }: { data: Error }) {
-            return `Failed to calibrate wheels: ${data.message}`;
+            return data.message;
           },
         },
       },
