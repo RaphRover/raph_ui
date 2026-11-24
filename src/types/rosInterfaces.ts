@@ -42,6 +42,7 @@ export interface ImuMsg {
   linear_acceleration_covariance: CovarianceArray;
 }
 
+// Triggers use message while custom services use status_message
 export interface ServiceResponse {
   success?: boolean;
   status_message?: string;
