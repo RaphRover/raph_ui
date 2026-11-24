@@ -22,7 +22,7 @@ export default function useWheelCalibration(): WheelCalibration {
   const { callService, isInitialized, isLoading } = useRosService<
     undefined,
     ServiceResponse
-  >('controller/calibrate_servos', 'std_srvs/srv/Trigger');
+  >('controller/calibrate_servos', 'std_srvs/srv/Trigger', 7000);
   const isCalibrated = drivetrainState?.is_servos_calibrated ?? false;
 
   const calibrateWheels = useCallback(async () => {
@@ -31,10 +31,14 @@ export default function useWheelCalibration(): WheelCalibration {
       promise,
       {
         pending: 'Calibrating wheels...',
-        success: 'Wheels calibrated successfully!',
+        success: {
+          render({ data }: { data: ServiceResponse }) {
+            return data.message;
+          },
+        },
         error: {
           render({ data }: { data: Error }) {
-            return `Failed to calibrate wheels: ${data.message}`;
+            return data.message;
           },
         },
       },

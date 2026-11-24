@@ -87,6 +87,7 @@ export default function useRosService<
               reject(
                 new Error(
                   response.status_message ||
+                    response.message ||
                     'Unknown error during service call.',
                 ),
               );
