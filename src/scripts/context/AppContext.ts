@@ -4,6 +4,7 @@ import type { RobotVelocityControl } from '@/scripts/hooks/useRobotVelocityContr
 import type { SteeringModeHook } from '@/scripts/hooks/useSteeringMode';
 import type { WheelCalibration } from '@/scripts/hooks/useWheelCalibration';
 import type { SystemServices } from '@/scripts/hooks/useSystemServices';
+import type { FirmwareStatusHook } from '@/scripts/hooks/useFirmwareStatus';
 
 interface AppContext {
   isMenuVisible: boolean;
@@ -20,6 +21,7 @@ interface AppContext {
   steeringMode: SteeringModeHook;
   wheelCalibration: WheelCalibration;
   systemServices: SystemServices;
+  firmwareStatus: FirmwareStatusHook;
 }
 
 export const AppContext = createContext<AppContext | undefined>(undefined);
