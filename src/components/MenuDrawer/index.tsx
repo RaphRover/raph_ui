@@ -48,14 +48,14 @@ export default function MenuDrawer() {
     callService: callGetControllerInfo,
     isInitialized: isControllerInfoInitialized,
   } = useRosService<undefined, GetControllerInfoResponse>(
-    '/controller/get_controller_info',
+    'controller/get_controller_info',
     'raph_interfaces/srv/GetControllerInfo',
   );
   const {
     callService: callGetOsVersion,
     isInitialized: isOsVersionInitialized,
   } = useRosService<undefined, GetOsVersionResponse>(
-    '/raph_system/get_os_version',
+    'raph_system/get_os_version',
     'raph_interfaces/srv/GetOsVersion',
   );
 
